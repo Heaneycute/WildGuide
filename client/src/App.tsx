@@ -10,6 +10,7 @@ import Animal from './Pages/Animal';
 import Calendar from './Pages/Calendar';
 import Map from './Pages/Map';
 import Weapon from './Pages/Weapon';
+import ExempleReduxPage from './Pages/ExempleReduxPage';
 import { User } from './types';
 
 export const initUser = {
@@ -68,6 +69,10 @@ function App() {
         {
           path: '/weapon',
           element: <Weapon setUser={setUser} />,
+        },
+        {
+          path: '/exemplereduxpage',
+          element: <ExempleReduxPage setUser={setUser} />,
         },
       ],
     },
