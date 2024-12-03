@@ -34,7 +34,42 @@ export default function Navbar({ user, setUser }: NavbarProps) {
             component={RouterLink}
             to="/"
           >
-            На главную
+            На главную (приветствие)
+          </Button>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/Dashboard"
+          >
+            DashBord
+          </Button>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/animal"
+          >
+            Animal
+          </Button>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/calendar"
+          >
+            Calendar
+          </Button>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/map"
+          >
+            Map
+          </Button>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/weapon"
+          >
+            Weapon
           </Button>
         </Typography>
         <Box>
