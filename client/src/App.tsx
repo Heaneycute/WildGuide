@@ -5,6 +5,8 @@ import axiosInstance, { setAccessToken } from './axiosInstance';
 import HomePage from './Pages/HomePage';
 import SigninPage from './Pages/SigninPage';
 import SignupPage from './Pages/SignupPage';
+import ResetPasswordPage from './Pages/ResetPasswordPage';
+import NewPasswordPage from './Pages/NewPasswordPage';
 import Dashboard from './Pages/Dashboard';
 import Animal from './Pages/Animal';
 import Calendar from './Pages/Calendar';
@@ -50,6 +52,14 @@ function App() {
         {
           path: '/signup',
           element: <SignupPage setUser={setUser} />,
+        },
+        {
+          path: '/resetpassword',
+          element: <ResetPasswordPage setUser={setUser} />,
+        },
+        {
+          path: '/newpassword',
+          element: <NewPasswordPage setUser={setUser} />,
         },
         {
           path: '/dashboard',
