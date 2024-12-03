@@ -24,11 +24,11 @@ export default function Navbar({ user, setUser }: NavbarProps) {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.left}>
+    <div >
+      <div>
         <Link to='/'>На главную</Link>
       </div>
-      <div className={styles.right}>
+      <div>
         {user?.username ? (
           <>
             <Link to='/'>{user?.username}</Link>

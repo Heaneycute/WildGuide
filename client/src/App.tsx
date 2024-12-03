@@ -1,8 +1,9 @@
 import Root from './Root';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
-import SigninPage from './SigninPage/SigninPage';
-import SignupPage from './SignupPage/SignupPage';
+import SigninPage from './Pages/SigninPage';
+import SignupPage from './Pages/SignupPage';
+import Calendar from './Pages/Calendar';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axiosInstance, { setAccessToken } from './axiosInstance';
@@ -36,6 +37,10 @@ function App() {
         {
           path: '/',
           element: <HomePage user={user} />,
+        },
+        {
+          path: '/calendar',
+          element: <Calendar />,
         },
         {
           path: '/signin',
