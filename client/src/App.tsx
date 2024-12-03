@@ -1,13 +1,10 @@
-import Root from './Root';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
-import { theme } from './theme';
+import { useState, useEffect } from 'react';
+import Root from './Root';
+import axiosInstance, { setAccessToken } from './axiosInstance';
 import HomePage from './Pages/HomePage';
 import SigninPage from './Pages/SigninPage';
 import SignupPage from './Pages/SignupPage';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import axiosInstance, { setAccessToken } from './axiosInstance';
 import { User } from './types';
 
 export const initUser = {
