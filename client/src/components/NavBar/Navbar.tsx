@@ -1,7 +1,9 @@
+// src/components/NavBar/Navbar.tsx
+import { AppBar, Toolbar, Button, Typography, Box } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { User } from '../../types';
 import { Dispatch, SetStateAction } from 'react';
 import axiosInstance, { setAccessToken } from '../../axiosInstance';
-import { User } from '../../types';
-import { Link, useNavigate } from 'react-router-dom';
 import { initUser } from '../../App';
 
 type NavbarProps = {
@@ -24,23 +26,74 @@ export default function Navbar({ user, setUser }: NavbarProps) {
   };
 
   return (
-    <div >
-      <div>
-        <Link to='/'>На главную</Link>
-      </div>
-      <div>
-        {user?.username ? (
-          <>
-            <Link to='/'>{user?.username}</Link>
-            <Link onClick={logoutHandler} to={''}>Выйти</Link>
-          </>
-        ) : (
-          <>
-            <Link to='/signin'>Войти</Link>
-            <Link to='/signup'>Регистрация</Link>
-          </>
-        )}
-      </div>
-    </div>
+    <AppBar position="fixed">
+      <Toolbar>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/"
+          >
+            На главную (приветствие)
+          </Button>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/Dashboard"
+          >
+            DashBord
+          </Button>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/animal"
+          >
+            Animal
+          </Button>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/calendar"
+          >
+            Calendar
+          </Button>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/map"
+          >
+            Map
+          </Button>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/weapon"
+          >
+            Weapon
+          </Button>
+        </Typography>
+        <Box>
+          {user?.username ? (
+            <>
+              <Button color="inherit" component={RouterLink} to="/">
+                {user.username}
+              </Button>
+              <Button color="inherit" onClick={logoutHandler}>
+                Выйти
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button color="inherit" component={RouterLink} to="/signin">
+                Войти
+              </Button>
+              <Button color="inherit" component={RouterLink} to="/signup">
+                Регистрация
+              </Button>
+            </>
+          )}
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }

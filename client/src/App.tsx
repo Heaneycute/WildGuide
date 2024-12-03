@@ -1,12 +1,15 @@
-import Root from './Root';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Root from './Root';
+import axiosInstance, { setAccessToken } from './axiosInstance';
 import HomePage from './Pages/HomePage';
 import SigninPage from './Pages/SigninPage';
 import SignupPage from './Pages/SignupPage';
+import Dashboard from './Pages/Dashboard';
+import Animal from './Pages/Animal';
 import Calendar from './Pages/Calendar';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import axiosInstance, { setAccessToken } from './axiosInstance';
+import Map from './Pages/Map';
+import Weapon from './Pages/Weapon';
 import { User } from './types';
 
 export const initUser = {
@@ -49,6 +52,26 @@ function App() {
         {
           path: '/signup',
           element: <SignupPage setUser={setUser} />,
+        },
+        {
+          path: '/dashboard',
+          element: <Dashboard setUser={setUser} />,
+        },
+        {
+          path: '/animal',
+          element: <Animal setUser={setUser} />,
+        },
+        {
+          path: '/calendar',
+          element: <Calendar setUser={setUser} />,
+        },
+        {
+          path: '/map',
+          element: <Map setUser={setUser} />,
+        },
+        {
+          path: '/weapon',
+          element: <Weapon setUser={setUser} />,
         },
       ],
     },
