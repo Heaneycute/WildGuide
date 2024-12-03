@@ -1,23 +1,30 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+interface AnimalExample {
+  id: number;
+  name: string;
+  species: string;
+  description: string;
+}
+
 interface ExampleState {
-  data: string[];
+  animals: AnimalExample[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ExampleState = {
-  data: [],
+  animals: [],
   loading: false,
   error: null,
 };
 
-const exampleSlice = createSlice({
-  name: 'example',
+const animalExampleSlice = createSlice({
+  name: 'animalExample',
   initialState,
   reducers: {
-    setData: (state, action: PayloadAction<string[]>) => {
-      state.data = action.payload;
+    setAnimals: (state, action: PayloadAction<AnimalExample[]>) => {
+      state.animals = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
@@ -28,5 +35,5 @@ const exampleSlice = createSlice({
   },
 });
 
-export const { setData, setLoading, setError } = exampleSlice.actions;
-export default exampleSlice.reducer;
+export const { setAnimals, setLoading, setError } = animalExampleSlice.actions;
+export default animalExampleSlice.reducer;

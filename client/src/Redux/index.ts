@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
+import animalExampleReducer from './Slices/animalExampleSlice';
 
 export const store = configureStore({
   reducer: {
-    // здесь будут редьюсеры
+    animalExample: animalExampleReducer,
   },
 });
 

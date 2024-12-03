@@ -1,4 +1,7 @@
-import { Container, Typography, Paper, Box } from '@mui/material';
+import { Container, Typography, Box } from '@mui/material';
+import AnimalExampleList from '../components/HomePage/AnimalExampleList';
+import { ExampleComponent } from '../components/HomePage/ExampleComponent';
+import { User } from '../types';
 
 export default function HomePage({ user }: { user: User }) {
   return (
@@ -7,11 +10,8 @@ export default function HomePage({ user }: { user: User }) {
         <Typography variant="h4" component="h1" gutterBottom>
           WildGuide
         </Typography>
-        <Paper elevation={3} sx={{ p: 3 }}>
-          <Typography variant="body1">
-            Добро пожаловать в WildGuide - ваш помощник для охоты и активного отдыха
-          </Typography>
-        </Paper>
+        <AnimalExampleList />
+        <ExampleComponent />
       </Box>
     </Container>
   );
