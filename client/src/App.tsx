@@ -7,12 +7,12 @@ import SigninPage from './Pages/SigninPage';
 import SignupPage from './Pages/SignupPage';
 import ResetPasswordPage from './Pages/ResetPasswordPage';
 import NewPasswordPage from './Pages/NewPasswordPage';
-import Dashboard from './Pages/Dashboard';
-import Animal from './Pages/Animal';
-import Calendar from './Pages/Calendar';
-import Map from './Pages/Map';
-import Profile from './Pages/Profile';
-import Weapon from './Pages/Weapon';
+import Dashboard from './Pages/DashboardPage';
+import Animal from './Pages/AnimalPage';
+import Calendar from './Pages/CalendarPage';
+import Map from './Pages/MapPage';
+import Profile from './Pages/ProfilePage';
+import Weapon from './Pages/WeaponPage';
 import ExempleReduxPage from './Pages/ExempleReduxPage';
 import { User } from './types';
 
