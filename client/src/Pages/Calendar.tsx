@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, IconButton, Grid2 } from "@mui/material";
+import { Box, Typography, IconButton, Grid2, Tooltip } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -129,9 +129,11 @@ const Calendar: React.FC = () => {
                     {day}
                   </Typography>
                   {dayEvents.map((event) => (
+                    <Tooltip key={event.id} title={`${event.title}: ${event.description}`} placement="top">
                     <IconButton key={event.id} className={classes.eventIcon}>
                       <EventAvailableIcon />
                     </IconButton>
+                    </Tooltip>
                   ))}
                 </Box>
               </Grid2>
