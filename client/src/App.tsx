@@ -9,6 +9,7 @@ import Dashboard from './Pages/Dashboard';
 import Animal from './Pages/Animal';
 import Calendar from './Pages/Calendar';
 import Map from './Pages/Map';
+import Profile from './Pages/Profile';
 import Weapon from './Pages/Weapon';
 import ExempleReduxPage from './Pages/ExempleReduxPage';
 import { User } from './types';
@@ -72,7 +73,11 @@ function App() {
         },
         {
           path: '/exemplereduxpage',
-          element: <ExempleReduxPage user={user} />,
+          element: <ExempleReduxPage user={user} setUser={setUser}/>,
+        },
+        {
+          path: '/profile',
+          element: <Profile user={user} setUser={setUser}/>,
         },
       ],
     },
