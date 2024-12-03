@@ -56,12 +56,12 @@ export default function Navbar({ user, setUser }: NavbarProps) {
         }}
       >
         <Avatar
-          src="/images/logo-default2.png"
+          src="/images/logo-default.png"
           sx={{
             width: 40,
             height: 40,
             border: '2px solid',
-            borderColor: 'primary.light'
+            borderColor: 'primary.dark'
           }}
         />
         <Typography
