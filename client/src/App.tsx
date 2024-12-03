@@ -1,5 +1,7 @@
 import Root from './Root';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from './theme';
 import HomePage from './Pages/HomePage';
 import SigninPage from './Pages/SigninPage';
 import SignupPage from './Pages/SignupPage';

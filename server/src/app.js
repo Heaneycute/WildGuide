@@ -9,10 +9,6 @@ const express = require('express');
 const app = express();
 const { PORT } = process.env;
 
-// app.use((req, res, next) => {
-//   res.locals.test = '123';
-//   next()
-// });
 
 const corsConfig = {
   origin: ['http://localhost:5173'],

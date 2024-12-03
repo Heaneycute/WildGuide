@@ -1,26 +1,18 @@
-import { useState, useEffect } from 'react';
-import axiosInstance from '../axiosInstance';
-import { Entries, User } from '../types';
+import { Container, Typography, Paper, Box } from '@mui/material';
 
 export default function HomePage({ user }: { user: User }) {
-  const [entries, setEntries] = useState<Entries>([]);
-
-  useEffect(() => {
-    axiosInstance
-      .get<Entries>(`${import.meta.env.VITE_API}/tasks`)
-      .then((res) => {
-        setEntries(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-        setEntries([]);
-      });
-  }, [user]);
-
   return (
-    <div className={styles.wrapper}>
-      <Form setEntries={setEntries} />
-      <List data={entries} setEntries={setEntries} />
-    </div>
+    <Container maxWidth="lg">
+      <Box sx={{ mt: 4, mb: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          WildGuide
+        </Typography>
+        <Paper elevation={3} sx={{ p: 3 }}>
+          <Typography variant="body1">
+            Добро пожаловать в WildGuide - ваш помощник для охоты и активного отдыха
+          </Typography>
+        </Paper>
+      </Box>
+    </Container>
   );
 }
