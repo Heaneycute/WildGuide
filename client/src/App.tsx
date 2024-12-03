@@ -6,6 +6,7 @@ import HomePage from './Pages/HomePage';
 import SigninPage from './Pages/SigninPage';
 import SignupPage from './Pages/SignupPage';
 import ResetPasswordPage from './Pages/ResetPasswordPage';
+import FakeEmailPage from './Pages/FakeEmailPage';
 import NewPasswordPage from './Pages/NewPasswordPage';
 import Dashboard from './Pages/DashboardPage';
 import Animal from './Pages/AnimalPage';
@@ -56,6 +57,10 @@ function App() {
         {
           path: '/resetpassword',
           element: <ResetPasswordPage setUser={setUser} />,
+        },
+        {
+          path: '/fake-email',
+          element: <FakeEmailPage setUser={setUser} />,
         },
         {
           path: '/newpassword',

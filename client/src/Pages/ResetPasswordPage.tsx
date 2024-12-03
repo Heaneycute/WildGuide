@@ -1,4 +1,3 @@
-// ResetPasswordPage.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Paper, TextField, Button, Typography, Box, Alert, Snackbar } from '@mui/material';
@@ -9,6 +8,7 @@ export default function ResetPasswordPage() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [resetToken, setResetToken] = useState('');
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
@@ -29,7 +29,8 @@ export default function ResetPasswordPage() {
     }
 
     try {
-      await axiosInstance.post(`${import.meta.env.VITE_API}/auth/reset-password`, { email });
+      const response = await axiosInstance.post(`${import.meta.env.VITE_API}/auth/reset-password`, { email });
+      setResetToken(response.data.token); // Предполагая, что сервер возвращает токен
       setSnackbar({
         open: true,
         message: 'Инструкции по восстановлению пароля отправлены на ваш email',
@@ -45,8 +46,8 @@ export default function ResetPasswordPage() {
     }
   };
 
-  const handleNewPassword = () => {
-    navigate('/newpassword');
+  const handleCheckEmail = () => {
+    navigate(`/fake-email?token=${resetToken}`);
   };
 
   return (
@@ -81,9 +82,9 @@ export default function ResetPasswordPage() {
               variant="contained"
               color="primary"
               sx={{ mt: 3, mb: 2 }}
-              onClick={isSubmitted ? handleNewPassword : undefined}
+              onClick={isSubmitted ? handleCheckEmail : undefined}
             >
-              {isSubmitted ? 'Сменить пароль' : 'Отправить'}
+              {isSubmitted ? 'Перейти на почту' : 'Отправить'}
             </Button>
           </form>
         </Paper>

@@ -42,7 +42,7 @@ export default function NewPasswordPage() {
     if (!validateForm()) return;
 
     try {
-      await axiosInstance.post(`${import.meta.env.VITE_API}/auth/new-password`, {
+      await axiosInstance.post(`${import.meta.env.VITE_API}/auth/newpassword`, {
         token,
         password: formData.password
       });
@@ -54,7 +54,7 @@ export default function NewPasswordPage() {
       });
       
       setTimeout(() => {
-        navigate('/login');
+        navigate('/signin');
       }, 2000);
     } catch (error: any) {
       setSnackbar({
