@@ -72,7 +72,7 @@ function App() {
         },
         {
           path: '/exemplereduxpage',
-          element: <ExempleReduxPage setUser={setUser} />,
+          element: <ExempleReduxPage user={user} />,
         },
       ],
     },

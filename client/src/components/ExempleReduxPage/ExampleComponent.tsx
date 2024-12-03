@@ -1,3 +1,4 @@
+//Очень простой компонент который ничего не делает
 import { Card, CardContent, Typography } from '@mui/material';
 
 export const ExampleComponent = () => {

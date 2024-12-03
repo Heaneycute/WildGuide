@@ -1,7 +1,9 @@
+//Компоненет который работает через Redux, работает с БД, редактирует, обновляется, собирает статистику и так далее.
+
 import { useState, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks';
 import { fetchAnimalExampleThunk, updateAnimalThunk } from '../../Redux/Thunks/animalExampleThunks';
-import { toggleFavorite, setFilters, incrementViews, setSelectedAnimal } from '../../Redux/Slices/animalExampleSlice';
+import { toggleFavorite, setFilters, incrementViews } from '../../Redux/Slices/animalExampleSlice';
 import { AnimalExample } from '../../types/animalExample';
 import axiosInstance from '../../axiosInstance';
 import {
@@ -14,7 +16,7 @@ import { Favorite, FavoriteBorder, LocationOn, Timer, Edit, Visibility } from '@
 
 const AnimalExampleList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { animals, loading, error, filters } = useAppSelector((state) => state.animalExample);
+  const { animals, filters } = useAppSelector((state) => state.animalExample);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingAnimal, setEditingAnimal] = useState<AnimalExample | null>(null);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});

@@ -1,21 +1,31 @@
-import { Container, Typography, Box } from '@mui/material';
+//Пример страницы с экземплярами
+import { Container, Typography, Box, Stack } from '@mui/material';
 import AnimalExampleList from '../components/ExempleReduxPage/AnimalExampleList';
+import CollorExampleCard from '../components/ExempleReduxPage/CollorExampleCard';
 import { ExampleComponent } from '../components/ExempleReduxPage/ExampleComponent';
 import { User } from '../types';
 
-export default function ExempleReduxPage({ user }: { user: User }) {
+type NavbarProps = {
+    user: User;
+};
+
+export default function ExempleReduxPage({ user }: NavbarProps) {
   return (
     <Container maxWidth="lg">
-      <Box sx={{ mt: 4, mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          WildGuide - Расширенный пример Redux
+      <Stack spacing={4}>
+        <Typography variant="h4" component="h1">
+          Привет дорогой, {user.username}
         </Typography>
-        <Typography variant="subtitle1" gutterBottom>
-          Добро пожаловать, {user?.name || 'Гость'}
+        <Typography>
+          Пример функционала Redux
         </Typography>
         <AnimalExampleList />
+        <Typography>
+          Пример функционала Redux
+        </Typography>
+        <CollorExampleCard />
         <ExampleComponent />
-      </Box>
+      </Stack>
     </Container>
   );
 }
