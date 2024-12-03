@@ -20,6 +20,20 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
+      isFavorite: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      location: {
+        type: Sequelize.JSON
+      },
+      huntingSeason: {
+        type: Sequelize.JSON
+      },
+      views: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

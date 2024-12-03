@@ -5,10 +5,11 @@ export const ExampleComponent = () => {
     <Card sx={{ mt: 4 }}>
       <CardContent>
         <Typography variant="h5" gutterBottom>
-          Пример простого компонента
+          Статический компонент
         </Typography>
         <Typography>
-          Этот компонент не использует Redux и просто отображает статический контент
+          Этот компонент демонстрирует разницу между компонентом с Redux и без него.
+          Здесь нет управления состоянием или взаимодействия с данными.
         </Typography>
       </CardContent>
     </Card>

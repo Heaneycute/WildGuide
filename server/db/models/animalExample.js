@@ -8,7 +8,17 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
       species: DataTypes.STRING,
-      description: DataTypes.TEXT
+      description: DataTypes.TEXT,
+      isFavorite: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
+      location: DataTypes.JSON,
+      huntingSeason: DataTypes.JSON,
+      views: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+      }
     },
     {
       sequelize,
