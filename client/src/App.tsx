@@ -1,21 +1,23 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Root from './Root';
-import axiosInstance, { setAccessToken } from './axiosInstance';
-import HomePage from './Pages/HomePage';
-import SigninPage from './Pages/SigninPage';
-import SignupPage from './Pages/SignupPage';
-import Dashboard from './Pages/Dashboard';
-import Animal from './Pages/Animal';
-import Calendar from './Pages/Calendar';
-import Map from './Pages/Map';
-import Weapon from './Pages/Weapon';
-import { User } from './types';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Root from "./Root";
+import axiosInstance, { setAccessToken } from "./axiosInstance";
+import HomePage from "./Pages/HomePage";
+import SigninPage from "./Pages/SigninPage";
+import SignupPage from "./Pages/SignupPage";
+import Dashboard from "./Pages/Dashboard";
+import Animal from "./Pages/Animal";
+import Calendar from "./Pages/Calendar";
+import Map from "./Pages/Map";
+import Weapon from "./Pages/Weapon";
+import { User } from "./types";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const initUser = {
   id: 0,
-  username: '',
-  email: '',
+  username: "",
+  email: "",
 };
 
 function App() {
@@ -34,50 +36,27 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: '/',
+      path: "/",
       element: <Root user={user} setUser={setUser} />,
       children: [
-        {
-          path: '/',
-          element: <HomePage user={user} />,
-        },
-        {
-          path: '/calendar',
-          element: <Calendar />,
-        },
-        {
-          path: '/signin',
-          element: <SigninPage setUser={setUser} />,
-        },
-        {
-          path: '/signup',
-          element: <SignupPage setUser={setUser} />,
-        },
-        {
-          path: '/dashboard',
-          element: <Dashboard setUser={setUser} />,
-        },
-        {
-          path: '/animal',
-          element: <Animal setUser={setUser} />,
-        },
-        {
-          path: '/calendar',
-          element: <Calendar setUser={setUser} />,
-        },
-        {
-          path: '/map',
-          element: <Map setUser={setUser} />,
-        },
-        {
-          path: '/weapon',
-          element: <Weapon setUser={setUser} />,
-        },
+        { path: "/", element: <HomePage user={user} /> },
+        { path: "/calendar", element: <Calendar /> },
+        { path: "/signin", element: <SigninPage setUser={setUser} /> },
+        { path: "/signup", element: <SignupPage setUser={setUser} /> },
+        { path: "/dashboard", element: <Dashboard setUser={setUser} /> },
+        { path: "/animal", element: <Animal setUser={setUser} /> },
+        { path: "/map", element: <Map setUser={setUser} /> },
+        { path: "/weapon", element: <Weapon setUser={setUser} /> },
       ],
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
+  );
 }
 
 export default App;

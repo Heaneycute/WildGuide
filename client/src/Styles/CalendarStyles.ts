@@ -11,17 +11,32 @@ const useStyles = makeStyles({
   controls: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-    gap: "10px",
+    justifyContent: "space-around",
+    gap: "20px",
     marginBottom: "20px",
+  },
+  monthYearContainer: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+  },
+  monthYearText: {
+    fontSize: "1.2rem",
+    fontWeight: 600,
+  },
+  arrowButton: {
+    padding: "10px",
+    "&:hover": {
+      backgroundColor: "#f0f0f0",
+    },
   },
   dayCell: {
     width: "150px",
     height: "150px",
     border: "1px solid #ddd",
-    borderRadius: "8px",    
+    borderRadius: "8px",
     padding: "10px",
-    textAlign: "left",
+    textAlign: "center",
     cursor: "pointer",
     position: "relative",
     "&:hover": {
@@ -32,14 +47,10 @@ const useStyles = makeStyles({
     fontSize: "1rem",
     fontWeight: "bold",
     position: "absolute",
-    top: "5px",
-    left: "5px",
   },
   eventIcon: {
     color: "#4caf50",
     position: "absolute",
-    bottom: "5px",
-    right: "5px",
   },
   modal: {
     position: "absolute",
