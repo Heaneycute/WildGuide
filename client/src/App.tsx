@@ -1,0 +1,56 @@
+import './App.css';
+import Root from './Root';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import HomePage from './HomePage/HomePage';
+import SigninPage from './SigninPage/SigninPage';
+import SignupPage from './SignupPage/SignupPage';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axiosInstance, { setAccessToken } from './axiosInstance';
+import { User } from './types';
+
+export const initUser = {
+  id: 0,
+  username: '',
+  email: '',
+};
+
+function App() {
+  const [user, setUser] = useState<User>(initUser);
+
+  useEffect(() => {
+    axiosInstance
+      .get<{ user: User; accessToken: string }>(
+        `${import.meta.env.VITE_API}/token/refresh`
+      )
+      .then(async (res) => {
+        setUser(res.data.user);
+        setAccessToken(res.data.accessToken);
+      });
+  }, []);
+
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Root user={user} setUser={setUser} />,
+      children: [
+        {
+          path: '/',
+          element: <HomePage user={user} />,
+        },
+        {
+          path: '/signin',
+          element: <SigninPage setUser={setUser} />,
+        },
+        {
+          path: '/signup',
+          element: <SignupPage setUser={setUser} />,
+        },
+      ],
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
+}
+
+export default App;
