@@ -34,6 +34,13 @@ export default function SignupPage({ setUser }: SignupPageProps) {
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
 
   return (
     <Container maxWidth="sm">
@@ -42,33 +49,49 @@ export default function SignupPage({ setUser }: SignupPageProps) {
           <Typography variant="h5" component="h1" gutterBottom>
             Регистрация
           </Typography>
-          <TextField
-            fullWidth
-            label="Имя пользователя"
-            margin="normal"
-            variant="outlined"
-          />
-          <TextField
-            fullWidth
-            label="Email"
-            margin="normal"
-            variant="outlined"
-          />
-          <TextField
-            fullWidth
-            label="Пароль"
-            type="password"
-            margin="normal"
-            variant="outlined"
-          />
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Зарегистрироваться
-          </Button>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              label="Имя пользователя"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              margin="normal"
+              variant="outlined"
+              required
+            />
+            <TextField
+              fullWidth
+              label="Email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              margin="normal"
+              variant="outlined"
+              required
+            />
+            <TextField
+              fullWidth
+              label="Пароль"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              margin="normal"
+              variant="outlined"
+              required
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Зарегистрироваться
+            </Button>
+          </form>
         </Paper>
       </Box>
     </Container>
