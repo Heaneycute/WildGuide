@@ -1,7 +1,6 @@
-import './App.css';
 import Root from './Root';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import HomePage from './HomePage/HomePage';
+import HomePage from './Pages/HomePage';
 import SigninPage from './SigninPage/SigninPage';
 import SignupPage from './SignupPage/SignupPage';
 import { useState } from 'react';
