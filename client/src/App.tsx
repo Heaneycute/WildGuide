@@ -15,12 +15,13 @@ import Map from './Pages/MapPage';
 import Profile from './Pages/ProfilePage';
 import Weapon from './Pages/WeaponPage';
 import ExempleReduxPage from './Pages/ExempleReduxPage';
-import { User } from './types';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const initUser = {
   id: 0,
-  username: '',
-  email: '',
+  username: "",
+  email: "",
 };
 
 function App() {
@@ -39,7 +40,7 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: '/',
+      path: "/",
       element: <Root user={user} setUser={setUser} />,
       children: [
         {
@@ -98,7 +99,12 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
+  );
 }
 
 export default App;
