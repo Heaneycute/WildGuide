@@ -1,0 +1,60 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.wrapper {
+    background: #000;
+  }
+  
+  .mainHeader {
+    text-align: center;
+    color: #fff;
+    position: absolute;
+  }
+
+  .main-header::after {
+	content: '';
+	width: 100%;
+	height: calc(10px * 10);
+	background-image: url(../../img/ground.png);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	bottom: calc(10px * -4.5);
+}
+  
+  .layers {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .layer {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    transition: 0.3s ease-out;
+  }
+  
+  .layersHeader {
+    z-index: 3;
+    color: #fff;
+    text-shadow: 0 0 15px #9d822b;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+  
+  
+  .dungeon {
+    min-height: 100vh;
+    width: 100%;
+    color: #fff;
+  }
+  
