@@ -1,8 +1,6 @@
-// routes/api/animals-example.api.router.js
 const router = require('express').Router();
 const { AnimalExample } = require('../../db/models');
 
-// Получить список всех животных
 router.get('/', async (req, res) => {
   try {
     const animals = await AnimalExample.findAll();
@@ -13,7 +11,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Обновить информацию о животном
 router.put('/:id', async (req, res) => {
   try {
     const animal = await AnimalExample.findByPk(req.params.id);
@@ -29,7 +26,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Обновить количество просмотров
 router.post('/:id/view', async (req, res) => {
   try {
     const animal = await AnimalExample.findByPk(req.params.id);

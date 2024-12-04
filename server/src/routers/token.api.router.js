@@ -5,12 +5,12 @@ const cookieConfig = require('../configs/cookieConfig');
 
 router.get('/refresh', verifyRefreshToken, (req, res) => {
   const { accessToken, refreshToken } = generateToken({
-    user: res.locals.user,
+    user: req.user,
   });
 
   res
     .cookie('refreshToken', refreshToken, cookieConfig.refresh)
-    .json({ user: res.locals.user, accessToken });
+    .json({ user: req.user, accessToken });
 });
 
 module.exports = router;
