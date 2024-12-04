@@ -129,10 +129,14 @@ const Calendar: React.FC = () => {
                     {day}
                   </Typography>
                   {dayEvents.map((event) => (
-                    <Tooltip key={event.id} title={`${event.title}: ${event.description}`} placement="top">
-                    <IconButton key={event.id} className={classes.eventIcon}>
-                      <EventAvailableIcon />
-                    </IconButton>
+                    <Tooltip
+                      key={event.id}
+                      title={`${event.title}: ${event.description}`}
+                      placement="top"
+                    >
+                      <IconButton key={event.id} className={classes.eventIcon}>
+                        <EventAvailableIcon />
+                      </IconButton>
                     </Tooltip>
                   ))}
                 </Box>
