@@ -1,20 +1,12 @@
 // components/MapRoutesList.tsx
 import React from 'react';
 import { Box, Typography } from '@mui/material';
+import { commonBoxStyles } from '../../Styles/MapPageComponents.styles';
 
 export default function MapRoutesList() {
   return (
-    <Box sx={{ 
-      padding: '20px',
-      minHeight: '200px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#B9C096',
-      borderRadius: '8px',
-      color: '#19290C'
-    }}>
-      <Typography variant="h6">
+    <Box sx={commonBoxStyles}>
+      <Typography variant="h6" color="#ffffff">
         Тут будет список маршрутов
       </Typography>
     </Box>

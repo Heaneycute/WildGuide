@@ -1,20 +1,12 @@
 // components/YandexMap.tsx
 import React from 'react';
 import { Box, Typography } from '@mui/material';
+import { mapBoxStyles } from '../../Styles/MapPageComponents.styles';
 
 export default function YandexMap() {
   return (
-    <Box sx={{ 
-      padding: '20px',
-      height: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backdropFilter: 'blur(10px)',
-      backgroundColor: 'rgba(124, 152, 78, 0.1)',
-      borderRadius: '8px'
-    }}>
-      <Typography variant="h6" color="#19290C">
+    <Box sx={mapBoxStyles}>
+      <Typography variant="h6" color="#ffffff">
         Тут будет Яндекс Карта
       </Typography>
     </Box>

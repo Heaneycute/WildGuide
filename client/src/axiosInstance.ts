@@ -1,48 +1,44 @@
-import axios from "axios";
+import axios from 'axios';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
-  withCredentials: true,
 });
 
-let accessToken = "";
+let accessToken = '';
 
-export function setAccessToken(newToken: string) {
+function setAccessToken(newToken: string) {
   accessToken = newToken;
 }
 
 axiosInstance.interceptors.request.use((config) => {
-  if (accessToken) {
+  config.withCredentials = true;
+  if (!config.headers.Authorization) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
   return config;
 });
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (res) => {
+    return res;
+  },
   async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      try {
-        const refreshResponse = await axiosInstance.get(`${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_API}/token/refresh`);
-        const newAccessToken = refreshResponse.data.accessToken;
-
-        setAccessToken(newAccessToken);
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-
-        return axiosInstance(originalRequest);
-      } catch (refreshError: any) {
-        console.error("Ошибка обновления токена:", refreshError);
-        window.location.href = "/signin";
-        return Promise.reject(refreshError);
-      }
+    const prevReq = error.config;
+    if (error.response.status === 403) {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}${
+          import.meta.env.VITE_API
+        }/token/refresh`,
+        { withCredentials: true }
+      );
+      accessToken = response.data.accessToken;
+      prevReq.sent = true;
+      prevReq.headers.Authorization = `Bearer ${accessToken}`;
+      return axiosInstance(prevReq);
     }
-
-    return Promise.reject(error);
   }
 );
 
-export default axiosInstance;
+export { setAccessToken };
 
+export default axiosInstance;

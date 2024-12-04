@@ -1,4 +1,3 @@
-// MapPage.tsx
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import YandexMap from '../components/MapPage/YandexMap';
@@ -12,7 +11,7 @@ export default function MapPage() {
     <Box sx={{
       position: 'relative',
       width: '100vw',
-      height: '100vh',
+      height: 'calc(100vh - 60px)',
       overflow: 'hidden',
       '&::before': {
         content: '""',
@@ -24,13 +23,12 @@ export default function MapPage() {
         backgroundImage: 'url("/images/nature-background.jpg")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        filter: 'brightness(0.8)',
         zIndex: -1
       }
     }}>
       <Box sx={{
-        display: 'flex',
+        display: 'grid',
+        gridTemplateColumns: '1fr 300px 300px',
         padding: '20px',
         gap: '20px',
         height: '100%',
@@ -38,30 +36,33 @@ export default function MapPage() {
         zIndex: 1
       }}>
         <Box sx={{ 
-          flex: '1', 
-          border: '1px solid rgba(124, 152, 78, 0.3)',
-          backdropFilter: 'blur(10px)',
-          backgroundColor: 'rgba(124, 152, 78, 0.1)',
-          borderRadius: '12px'
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          gap: '20px'
         }}>
-          <YandexMap />
+          <Box sx={{ flex: '0 0 auto' }}>
+            <LayersControl />
+          </Box>
+          <Box sx={{ flex: '1' }}>
+            <YandexMap />
+          </Box>
         </Box>
         <Box sx={{ 
-          width: '300px', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: '20px' 
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          gap: '20px'
         }}>
-          <LayersControl />
+          <Box sx={{ flex: '1' }}>
+            <ZoneInfo />
+          </Box>
+          <Box sx={{ flex: '1' }}>
+            <AnimalsList />
+          </Box>
+        </Box>
+        <Box sx={{ height: '100%' }}>
           <MapRoutesList />
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <AnimalsList />
-            </Grid>
-            <Grid item xs={6}>
-              <ZoneInfo />
-            </Grid>
-          </Grid>
         </Box>
       </Box>
     </Box>

@@ -16,6 +16,7 @@
     "@mui/material": "^6.1.9",
     "@mui/styles": "^6.1.9",
     "@mui/x-date-pickers": "^7.23.0",
+    "@pbe/react-yandex-maps": "^1.2.5",
     "@react-three/drei": "^9.119.0",
     "@react-three/fiber": "^8.17.10",
     "@reduxjs/toolkit": "^2.4.0",
