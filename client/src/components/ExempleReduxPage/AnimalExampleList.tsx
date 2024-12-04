@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks';
 import { fetchAnimalExampleThunk, updateAnimalThunk } from '../../Redux/Thunks/animalExampleThunks';
 import { toggleFavorite, setFilters, incrementViews } from '../../Redux/Slices/animalExampleSlice';
-import { AnimalExample } from '../../Types/animalExample';
+import { AnimalExample } from '../../types';
 import axiosInstance from '../../axiosInstance';
 import {
   Box, Card, CardContent, Typography, Grid, IconButton,
