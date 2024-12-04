@@ -1,4 +1,4 @@
-import { Container, Typography, Box, Stack, Paper } from '@mui/material';
+import { Container, Typography, Stack, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import AnimalExampleList from '../components/ExempleReduxPage/AnimalExampleList';
 import CollorExampleCard from '../components/ExempleReduxPage/CollorExampleCard';
