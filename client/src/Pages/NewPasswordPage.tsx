@@ -1,12 +1,14 @@
 // NewPasswordPage.tsx
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Container, Paper, TextField, Button, Typography, Box, Alert, Snackbar } from '@mui/material';
 import axiosInstance from '../axiosInstance';
 
 export default function NewPasswordPage() {
   const navigate = useNavigate();
-  const { token } = useParams();
+  const location = useLocation();
+const searchParams = new URLSearchParams(location.search);
+const token = searchParams.get('token');
   const [formData, setFormData] = useState({
     password: '',
     confirmPassword: ''
@@ -42,7 +44,7 @@ export default function NewPasswordPage() {
     if (!validateForm()) return;
 
     try {
-      await axiosInstance.post(`${import.meta.env.VITE_API}/auth/newpassword`, {
+      await axiosInstance.post(`${import.meta.env.VITE_API}/auth/new-password`, {
         token,
         password: formData.password
       });

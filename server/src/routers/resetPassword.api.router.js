@@ -34,39 +34,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Добавить новый роут для установки пароля
-router.post('/new-password', async (req, res) => {
-    const { token, password } = req.body;
-    
-    try {
-      // Находим токен в базе и проверяем срок действия
-      const resetToken = await PasswordResetToken.findOne({ 
-        where: { 
-          token,
-          expiresAt: { [Op.gt]: new Date() }
-        },
-        include: [User]
-      });
-  
-      if (!resetToken) {
-        return res.status(400).json({ 
-          message: 'Недействительный или просроченный токен' 
-        });
-      }
-  
-      // Обновляем пароль пользователя
-      const hashedPassword = await bcrypt.hash(password, 10);
-      await resetToken.user.update({ password: hashedPassword });
-      
-      // Удаляем использованный токен
-      await resetToken.destroy();
-  
-      res.json({ message: 'Пароль успешно обновлен' });
-      
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Ошибка сервера' });
-    }
-  });
-
 module.exports = router;
