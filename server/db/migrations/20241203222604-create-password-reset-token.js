@@ -1,48 +1,48 @@
-'use strict';
-/** @type {import('sequelize-cli').Migration} */
+"use strict";
+
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('PasswordResetTokens', {
+    await queryInterface.createTable("PasswordResetTokens", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       userId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Users',
-          key: 'id'
+          model: "Users",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       token: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       used: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false
+        defaultValue: false,
       },
       expiresAt: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
-    await queryInterface.addIndex('PasswordResetTokens', ['token']);
+    await queryInterface.addIndex("PasswordResetTokens", ["token"]);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('PasswordResetTokens');
-  }
+    await queryInterface.dropTable("PasswordResetTokens");
+  },
 };

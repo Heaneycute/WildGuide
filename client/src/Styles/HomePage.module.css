@@ -1,0 +1,67 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.wrapper {
+  background: #000;
+  height: 200vh;
+}
+
+.mainHeader {
+  text-align: center;
+  color: #fff;
+  position: absolute;
+  z-index: 10;
+}
+
+.layersTitle {
+  font-size: 3em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 15px #9d822b;
+}
+
+.layers {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.layer {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease-out;
+}
+
+.ground {
+  width: 100%;
+  background-image: url('/img/ground.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  z-index: 115;
+}
+
+.dungeonWrapper {
+  position: relative;
+  z-index: 10;
+}
+
+.dungeon {
+  min-height: 100vh;
+  width: 100%;
+  color: #fff;
+  background-size: cover;
+  background-position: center;
+}

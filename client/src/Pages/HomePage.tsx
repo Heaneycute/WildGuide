@@ -1,18 +1,57 @@
-import { Container, Typography, Box, Paper } from '@mui/material';
-import { User } from '../types';
-export default function HomePage({ user }: { user: User }) {
+import { motion, useScroll, useTransform } from "framer-motion";
+import styles from "../Styles/HomePage.module.css";
+
+const HomePage: React.FC = () => {
+  const { scrollYProgress } = useScroll();
+
+  const baseY = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const middleY = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const frontY = useTransform(scrollYProgress, [0, 1], [0, -300]);
+
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ mt: 4, mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          WildGuide
-        </Typography>
-        <Paper elevation={3} sx={{ p: 3 }}>
-          <Typography variant="body1">
-            Добро пожаловать в WildGuide - ваш помощник для охоты и активного отдыха
-          </Typography>
-        </Paper>
-      </Box>
-    </Container>
+    <div className={styles.wrapper}>
+      <header className={styles.mainHeader}>
+        <h1 className={styles.layersTitle}>Wild Guide</h1>
+      </header>
+
+      <div className={styles.layers}>
+        <motion.div
+          className={`${styles.layer} ${styles.layersBase}`}
+          style={{
+            backgroundImage: `url(/img/layer-base.png)`,
+            y: baseY,
+          }}
+        />
+        <motion.div
+          className={`${styles.layer} ${styles.layersMiddle}`}
+          style={{
+            backgroundImage: `url(/img/layer-middle.png)`,
+            y: middleY,
+          }}
+        />
+        <motion.div
+          className={`${styles.layer} ${styles.layersFront}`}
+          style={{
+            backgroundImage: `url(/img/layer-front.png)`,
+            y: frontY,
+          }}
+        />
+      </div>
+
+      <div className={styles.ground} />
+
+      <div className={styles.dungeonWrapper}>
+        <h2>Welcome to the Map</h2>
+        <motion.div
+          className={`${styles.layer} ${styles.dungeon}`}
+          style={{
+            backgroundImage: `url(/img/dungeon.png)`,
+            y: baseY,
+          }}
+        />
+      </div>
+    </div>
   );
-}
+};
+
+export default HomePage;

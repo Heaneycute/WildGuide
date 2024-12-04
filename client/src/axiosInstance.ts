@@ -1,44 +1,50 @@
-import axios from 'axios';
+import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
+  withCredentials: true,
 });
 
-let accessToken = '';
+let accessToken = "";
 
-function setAccessToken(newToken: string) {
+export function setAccessToken(newToken: string) {
   accessToken = newToken;
 }
 
 axiosInstance.interceptors.request.use((config) => {
-  config.withCredentials = true;
-  if (!config.headers.Authorization) {
+  if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
   return config;
 });
 
 axiosInstance.interceptors.response.use(
-  (res) => {
-    return res;
-  },
+  (response) => response,
   async (error) => {
-    const prevReq = error.config;
-    if (error.response.status === 403) {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}${
-          import.meta.env.VITE_API
-        }/token/refresh`,
-        { withCredentials: true }
-      );
-      accessToken = response.data.accessToken;
-      prevReq.sent = true;
-      prevReq.headers.Authorization = `Bearer ${accessToken}`;
-      return axiosInstance(prevReq);
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const refreshResponse = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}${
+            import.meta.env.VITE_API
+          }/token/refresh`,
+          { withCredentials: true }
+        );
+        setAccessToken(refreshResponse.data.accessToken);
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return axiosInstance(originalRequest);
+      } catch (refreshError: any) {
+        console.error("Refresh token error:", refreshError);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        window.location.href = "/signin";
+        return Promise.reject(refreshError);
+      }
     }
+    return Promise.reject(error);
   }
 );
-
-export { setAccessToken };
 
 export default axiosInstance;

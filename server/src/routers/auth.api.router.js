@@ -69,7 +69,7 @@ router.post('/signin', async (req, res) => {
     res.status(400).json({ message: '' });
   }
 
-  res.end();
+  // res.end();
 });
 
 router.get('/logout', async (req, res) => {

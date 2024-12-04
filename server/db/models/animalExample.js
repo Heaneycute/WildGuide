@@ -1,5 +1,6 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class AnimalExample extends Model {
     static associate() {}
@@ -11,18 +12,18 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.TEXT,
       isFavorite: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false
+        defaultValue: false,
       },
       location: DataTypes.JSON,
       huntingSeason: DataTypes.JSON,
       views: {
         type: DataTypes.INTEGER,
-        defaultValue: 0
-      }
+        defaultValue: 0,
+      },
     },
     {
       sequelize,
-      modelName: 'AnimalExample',
+      modelName: "AnimalExample",
     }
   );
   return AnimalExample;

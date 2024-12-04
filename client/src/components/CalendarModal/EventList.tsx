@@ -11,7 +11,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 
 interface Event {
-  id: string;
+  id: number;
   date: string;
   title: string;
   description: string;
@@ -19,7 +19,7 @@ interface Event {
 
 interface EventListProps {
   events: Event[];
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 }
 
 const EventList: React.FC<EventListProps> = ({ events, onDelete }) => {

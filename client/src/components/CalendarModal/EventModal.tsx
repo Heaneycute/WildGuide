@@ -13,9 +13,10 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import useStyles from "../../Styles/CalendarStyles";
 import { toast } from "react-toastify";
+import axiosInstance from "../../axiosInstance";
 
 interface Event {
-  id: string;
+  id: number;
   date: string;
   title: string;
   description: string;
@@ -26,7 +27,7 @@ interface EventModalProps {
   date: string | null;
   onClose: () => void;
   onSave: (event: Event) => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
   existingEvents: Event[];
 }
 
@@ -42,6 +43,7 @@ const EventModal: React.FC<EventModalProps> = ({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [editEvent, setEditEvent] = useState<Event | null>(null);
+  const apiUrl = import.meta.env.VITE_API;
 
   useEffect(() => {
     if (!open) {
@@ -51,28 +53,32 @@ const EventModal: React.FC<EventModalProps> = ({
     }
   }, [open]);
 
-  const handleSave = () => {
-    if (date && title.trim()) {
-      const updatedEvent = {
-        id: editEvent?.id || `${date}-${Math.random()}`,
-        date,
+  const handleSave = async () => {
+    try {
+      const method = editEvent ? "put" : "post";
+      const url = editEvent ? `/events/${editEvent.id}` : `/events`;
+      const response = await axiosInstance[method](`${apiUrl}${url}`, {
+        date: date!,
         title,
         description,
-      };
-
-      if (editEvent) {
-        toast.success("Событие успешно изменено!");
-      } else {
-        toast.success("Событие успешно добавлено!");
-      }
-
-      onSave(updatedEvent);
+      });
+      toast.success(
+        editEvent ? "Событие успешно изменено!" : "Событие успешно добавлено!"
+      );
+      onSave(response.data);
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || "Ошибка сохранения события");
     }
   };
 
-  const handleDelete = (id: string) => {
-    toast.success("Событие успешно удалено!");
-    onDelete(id);
+  const handleDelete = async (id: number) => {
+    try {
+      await axiosInstance.delete(`${apiUrl}/events/${id}`);
+      toast.success("Событие успешно удалено!");
+      onDelete(id);
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || "Ошибка удаления события");
+    }
   };
 
   return (

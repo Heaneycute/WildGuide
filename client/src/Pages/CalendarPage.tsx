@@ -3,16 +3,16 @@ import { Box, Typography, IconButton, Grid2, Tooltip } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import dayjs, { Dayjs } from "dayjs";
 import EventModal from "../components/CalendarModal/EventModal";
 import EventList from "../components/CalendarModal/EventList";
 import useStyles from "../Styles/CalendarStyles";
+import axiosInstance from "../axiosInstance";
 
 interface Event {
-  id: string;
+  id: number;
   date: string;
   title: string;
   description: string;
@@ -24,17 +24,27 @@ const Calendar: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const apiUrl = import.meta.env.VITE_API;
 
   const daysInMonth = currentDate.daysInMonth();
 
   useEffect(() => {
-    const savedEvents = localStorage.getItem("calendarEvents");
-    if (savedEvents) setEvents(JSON.parse(savedEvents));
-  }, []);
+    const fetchEvents = async () => {
+      try {
+        const response = await axiosInstance.get(`${apiUrl}/events`);
+        setEvents(response.data);
+      } catch (error: any) {
+        setError(error.response?.data?.error || "Ошибка загрузки событий");
+        console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useEffect(() => {
-    localStorage.setItem("calendarEvents", JSON.stringify(events));
-  }, [events]);
+    fetchEvents();
+  }, [currentDate, apiUrl]);
 
   const handleOpenModal = (date: string) => {
     setSelectedDate(date);
@@ -46,17 +56,27 @@ const Calendar: React.FC = () => {
     setOpenModal(false);
   };
 
-  const handleAddOrUpdateEvent = (newEvent: Event) => {
-    setEvents((prevEvents) => [
-      ...prevEvents.filter((event) => event.id !== newEvent.id),
-      newEvent,
-    ]);
-    handleCloseModal();
+  const handleAddOrUpdateEvent = async (newEvent: Event) => {
+    try {
+      const method = newEvent.id ? "put" : "post";
+      await axiosInstance[method](`${apiUrl}/events/${newEvent.id}`, newEvent);
+      const updatedEvents = await axiosInstance.get(`${apiUrl}/events`);
+      setEvents(updatedEvents.data);
+      handleCloseModal();
+    } catch (error: any) {
+      console.error("Error saving event:", error);
+    }
   };
 
-  const handleDeleteEvent = (id: string) => {
-    setEvents((prevEvents) => prevEvents.filter((event) => event.id !== id));
-    handleCloseModal();
+  const handleDeleteEvent = async (id: number) => {
+    try {
+      await axiosInstance.delete(`${apiUrl}/events/${id}`);
+      const updatedEvents = await axiosInstance.get(`${apiUrl}/events`);
+      setEvents(updatedEvents.data);
+      handleCloseModal();
+    } catch (error: any) {
+      console.error("Error deleting event:", error);
+    }
   };
 
   const handleDateChange = (newDate: Dayjs | null) => {
@@ -85,7 +105,6 @@ const Calendar: React.FC = () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               views={["year"]}
-              label="Выберите год"
               value={currentDate}
               onChange={handleDateChange}
               sx={{ marginRight: "2rem" }}
@@ -100,14 +119,16 @@ const Calendar: React.FC = () => {
               onClick={handlePrevMonth}
               size="large"
             >
-              <ChevronLeftIcon sx={{ fontSize: 30 }} />
+              <DoubleArrowIcon
+                sx={{ fontSize: 30, transform: "rotate(180deg)" }}
+              />
             </IconButton>
             <IconButton
               aria-label="next month"
               onClick={handleNextMonth}
               size="large"
             >
-              <ChevronRightIcon sx={{ fontSize: 30 }} />
+              <DoubleArrowIcon sx={{ fontSize: 30 }} />
             </IconButton>
           </Box>
         </Box>
@@ -145,11 +166,9 @@ const Calendar: React.FC = () => {
           })}
         </Grid2>
       </Box>
-
       <Box flex="1">
         <EventList events={events} onDelete={handleDeleteEvent} />
       </Box>
-
       <EventModal
         open={openModal}
         date={selectedDate}
