@@ -27,6 +27,7 @@ export const initUser = {
 function App() {
   const [user, setUser] = useState<User>(initUser);
 
+  
   useEffect(() => {
     axiosInstance
       .get<{ user: User; accessToken: string }>(
