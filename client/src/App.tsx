@@ -1,20 +1,20 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Root from './Root';
-import axiosInstance, { setAccessToken } from './axiosInstance';
-import HomePage from './Pages/HomePage';
-import SigninPage from './Pages/SigninPage';
-import SignupPage from './Pages/SignupPage';
-import ResetPasswordPage from './Pages/ResetPasswordPage';
-import FakeEmailPage from './Pages/FakeEmailPage';
-import NewPasswordPage from './Pages/NewPasswordPage';
-import Dashboard from './Pages/DashboardPage';
-import Animal from './Pages/AnimalPage';
-import Calendar from './Pages/CalendarPage';
-import Map from './Pages/MapPage';
-import Profile from './Pages/ProfilePage';
-import Weapon from './Pages/WeaponPage';
-import ExempleReduxPage from './Pages/ExempleReduxPage';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Root from "./Root";
+import axiosInstance, { setAccessToken } from "./axiosInstance";
+import HomePage from "./Pages/HomePage";
+import SigninPage from "./Pages/SigninPage";
+import SignupPage from "./Pages/SignupPage";
+import ResetPasswordPage from "./Pages/ResetPasswordPage";
+import FakeEmailPage from "./Pages/FakeEmailPage";
+import NewPasswordPage from "./Pages/NewPasswordPage";
+import Dashboard from "./Pages/DashboardPage";
+import Animal from "./Pages/AnimalPage";
+import Calendar from "./Pages/CalendarPage";
+import Map from "./Pages/MapPage";
+import Profile from "./Pages/ProfilePage";
+import Weapon from "./Pages/WeaponPage";
+import ExempleReduxPage from "./Pages/ExempleReduxPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -26,16 +26,23 @@ export const initUser = {
 
 function App() {
   const [user, setUser] = useState<User>(initUser);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axiosInstance
-      .get<{ user: User; accessToken: string }>(
-        `${import.meta.env.VITE_API}/token/refresh`
-      )
-      .then(async (res) => {
-        setUser(res.data.user);
-        setAccessToken(res.data.accessToken);
-      });
+    const fetchUser = async () => {
+      try {
+        const response = await axiosInstance.get("/token/refresh");
+        setUser(response.data.user);
+        setAccessToken(response.data.accessToken);
+      } catch (err: any) {
+        setError(err.response?.data?.message || "Ошибка авторизации");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   const router = createBrowserRouter([
@@ -44,56 +51,56 @@ function App() {
       element: <Root user={user} setUser={setUser} />,
       children: [
         {
-          path: '/',
+          path: "/",
           element: <HomePage user={user} />,
         },
         {
-          path: '/signin',
+          path: "/signin",
           element: <SigninPage setUser={setUser} />,
         },
         {
-          path: '/signup',
+          path: "/signup",
           element: <SignupPage setUser={setUser} />,
         },
         {
-          path: '/resetpassword',
+          path: "/resetpassword",
           element: <ResetPasswordPage setUser={setUser} />,
         },
         {
-          path: '/fake-email',
+          path: "/fake-email",
           element: <FakeEmailPage setUser={setUser} />,
         },
         {
-          path: '/newpassword',
+          path: "/newpassword",
           element: <NewPasswordPage setUser={setUser} />,
         },
         {
-          path: '/dashboard',
+          path: "/dashboard",
           element: <Dashboard setUser={setUser} />,
         },
         {
-          path: '/animal',
+          path: "/animal",
           element: <Animal setUser={setUser} />,
         },
         {
-          path: '/calendar',
+          path: "/calendar",
           element: <Calendar setUser={setUser} />,
         },
         {
-          path: '/map',
+          path: "/map",
           element: <Map setUser={setUser} />,
         },
         {
-          path: '/weapon',
+          path: "/weapon",
           element: <Weapon setUser={setUser} />,
         },
         {
-          path: '/exemplereduxpage',
-          element: <ExempleReduxPage user={user} setUser={setUser}/>,
+          path: "/exemplereduxpage",
+          element: <ExempleReduxPage user={user} setUser={setUser} />,
         },
         {
-          path: '/profile',
-          element: <Profile user={user} setUser={setUser}/>,
+          path: "/profile",
+          element: <Profile user={user} setUser={setUser} />,
         },
       ],
     },
