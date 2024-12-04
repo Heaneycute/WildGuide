@@ -14,6 +14,7 @@ import Calendar from './Pages/CalendarPage';
 import Map from './Pages/MapPage';
 import Profile from './Pages/ProfilePage';
 import Weapon from './Pages/WeaponPage';
+import WeaponDetails from './Pages/WeaponDetailsPage';
 import ExempleReduxPage from './Pages/ExempleReduxPage';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -86,6 +87,9 @@ function App() {
         {
           path: '/weapon',
           element: <Weapon setUser={setUser} />,
+        }, {
+          path: '/weapon/:id',
+          element: <WeaponDetails setUser={setUser} />,
         },
         {
           path: '/exemplereduxpage',
