@@ -1,5 +1,5 @@
-import { Container, Typography, Paper, Box } from '@mui/material';
-
+import { Container, Typography, Box, Paper } from '@mui/material';
+import { User } from '../types';
 export default function HomePage({ user }: { user: User }) {
   return (
     <Container maxWidth="lg">

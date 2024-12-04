@@ -71,6 +71,13 @@ export default function Navbar({ user, setUser }: NavbarProps) {
           >
             Weapon
           </Button>
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/exemplereduxpage"
+          >
+            ExempleReduxPage
+          </Button>
         </Typography>
         <Box>
           {user?.username ? (

@@ -11,6 +11,7 @@ import Calendar from "./Pages/Calendar";
 import Map from "./Pages/Map";
 import Weapon from "./Pages/Weapon";
 import { User } from "./types";
+import ExempleReduxPage from './Pages/ExempleReduxPage';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -39,14 +40,42 @@ function App() {
       path: "/",
       element: <Root user={user} setUser={setUser} />,
       children: [
-        { path: "/", element: <HomePage user={user} /> },
-        { path: "/calendar", element: <Calendar /> },
-        { path: "/signin", element: <SigninPage setUser={setUser} /> },
-        { path: "/signup", element: <SignupPage setUser={setUser} /> },
-        { path: "/dashboard", element: <Dashboard setUser={setUser} /> },
-        { path: "/animal", element: <Animal setUser={setUser} /> },
-        { path: "/map", element: <Map setUser={setUser} /> },
-        { path: "/weapon", element: <Weapon setUser={setUser} /> },
+        {
+          path: '/',
+          element: <HomePage user={user} />,
+        },
+        {
+          path: '/signin',
+          element: <SigninPage setUser={setUser} />,
+        },
+        {
+          path: '/signup',
+          element: <SignupPage setUser={setUser} />,
+        },
+        {
+          path: '/dashboard',
+          element: <Dashboard setUser={setUser} />,
+        },
+        {
+          path: '/animal',
+          element: <Animal setUser={setUser} />,
+        },
+        {
+          path: '/calendar',
+          element: <Calendar setUser={setUser} />,
+        },
+        {
+          path: '/map',
+          element: <Map setUser={setUser} />,
+        },
+        {
+          path: '/weapon',
+          element: <Weapon setUser={setUser} />,
+        },
+        {
+          path: '/exemplereduxpage',
+          element: <ExempleReduxPage setUser={setUser} />,
+        },
       ],
     },
   ]);
