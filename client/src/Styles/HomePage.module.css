@@ -4,6 +4,8 @@
   box-sizing: border-box;
 }
 
+/* стили со звездочкой не удалять*/
+
 .wrapper {
   background: #000;
   height: 200vh;
@@ -45,7 +47,7 @@
 
 .ground {
   width: 100%;
-  background-image: url('/img/ground.png');
+  background-image: url("/img/ground.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

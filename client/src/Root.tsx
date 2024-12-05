@@ -12,7 +12,7 @@ export default function Root({ user, setUser }: RootProps) {
   return (
     <>
       <Navbar user={user} setUser={setUser} />
-      <div style={{ margin: "0" }}>
+      <div style={{ margin: "60px" }}>
         <Outlet />
       </div>
     </>
