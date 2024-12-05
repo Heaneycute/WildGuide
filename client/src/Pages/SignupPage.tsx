@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import { 
   AccountCircle,
+  Lock,
   Visibility,
   VisibilityOff,
   GitHub,
@@ -182,6 +183,11 @@ export default function SignupPage({ setUser }: SignupPageProps) {
               error={!!errors.password}
               helperText={errors.password || 'Минимум 8 символов, заглавные и строчные буквы, цифры'}
               InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock />
+                  </InputAdornment>
+                ),
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
@@ -208,6 +214,11 @@ export default function SignupPage({ setUser }: SignupPageProps) {
               error={!!errors.confirmPassword}
               helperText={errors.confirmPassword || 'Повторите пароль'}
               InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock />
+                  </InputAdornment>
+                ),
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton

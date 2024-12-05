@@ -149,9 +149,13 @@ export default function SigninPage({ setUser }: SigninPageProps) {
               error={!!errors.password}
               helperText={errors.password || 'Введите ваш пароль'}
               InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock />
+                  </InputAdornment>
+                ),
                 endAdornment: (
                   <InputAdornment position="end">
-                    
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={() => setShowPassword(!showPassword)}
