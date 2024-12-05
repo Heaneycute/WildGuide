@@ -6,36 +6,31 @@ import { HuntingAreasLayer } from './YandexMap/HuntingAreasLayer';
 import { AnimalsLayer } from './YandexMap/AnimalsLayer';
 import { RoutesLayer } from './YandexMap/RoutesLayer';
 import { CabinsLayer } from './YandexMap/CabinsLayer';
+import { customMapStyle } from './MapStyles';
+
 
 const YandexMap: React.FC = () => {
   const mapState = {
-    center: [55.75, 37.57],
-    zoom: 9
-  };
-
-  const mapOptions = {
-    suppressMapOpenBlock: true,
-    yandexMapDisablePoiInteractivity: true,
-    scrollZoom: false
+    center: [59.56, 150.80],
+    zoom: 9,
+    controls: []
   };
 
   return (
-    <Box sx={{ ...mapBoxStyles }}>
+    <Box sx={{ ...mapBoxStyles, ...customMapStyle }}>
       <YMaps query={{ 
         apikey: import.meta.env.VITE_YANDEX_MAPS_API_KEY,
         lang: 'ru_RU'
       }}>
         <Map
           defaultState={mapState}
-          options={mapOptions}
+          options={{
+            suppressMapOpenBlock: true,
+            yandexMapDisablePoiInteractivity: true
+          }}
           width="100%"
           height="100%"
-        >
-          <HuntingAreasLayer visible={true} />
-          <AnimalsLayer visible={true} />
-          <RoutesLayer visible={true} />
-          <CabinsLayer visible={true} />
-        </Map>
+        />
       </YMaps>
     </Box>
   );
