@@ -1,18 +1,21 @@
 // NewPasswordPage.tsx
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Container, Paper, TextField, Button, Typography, Box, Alert, Snackbar } from '@mui/material';
+import { Container, Paper, TextField, Button, Typography, Box, Alert, Snackbar, InputAdornment, IconButton } from '@mui/material';
+import { Visibility, VisibilityOff, Lock } from '@mui/icons-material';
 import axiosInstance from '../axiosInstance';
 
 export default function NewPasswordPage() {
   const navigate = useNavigate();
   const location = useLocation();
-const searchParams = new URLSearchParams(location.search);
-const token = searchParams.get('token');
+  const searchParams = new URLSearchParams(location.search);
+  const token = searchParams.get('token');
   const [formData, setFormData] = useState({
     password: '',
     confirmPassword: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -92,7 +95,7 @@ const token = searchParams.get('token');
               fullWidth
               label="Новый пароль"
               name="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               value={formData.password}
               onChange={handleChange}
               margin="normal"
@@ -100,12 +103,30 @@ const token = searchParams.get('token');
               required
               error={!!errors.password}
               helperText={errors.password || 'Минимум 8 символов, заглавные и строчные буквы, цифры'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               fullWidth
               label="Подтвердите новый пароль"
               name="confirmPassword"
-              type="password"
+              type={showConfirmPassword ? 'text' : 'password'}
               value={formData.confirmPassword}
               onChange={handleChange}
               margin="normal"
@@ -113,6 +134,24 @@ const token = searchParams.get('token');
               required
               error={!!errors.confirmPassword}
               helperText={errors.confirmPassword || 'Повторите пароль'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               type="submit"
