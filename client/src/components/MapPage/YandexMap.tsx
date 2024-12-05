@@ -1,4 +1,4 @@
-// YandexMap.tsx
+// components/MapPage/YandexMap.tsx
 import React from 'react';
 import { Box } from '@mui/material';
 import { YMaps, Map } from '@pbe/react-yandex-maps';

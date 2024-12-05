@@ -51,7 +51,7 @@ export default function Dashboard() {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundImage: 'url("/images/nature-background.jpg")',
+        backgroundImage: 'url("/images/nature-background-DashboardPage.jpg")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         filter: 'brightness(0.8)',

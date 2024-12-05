@@ -1,6 +1,6 @@
 // components/LayersControl.tsx
 import React from 'react';
-import { Box, Typography, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import { Box, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { commonBoxStyles } from '../../Styles/MapPageComponents.styles';
 import {
   TerrainRounded,
