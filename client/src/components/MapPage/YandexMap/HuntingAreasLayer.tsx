@@ -1,5 +1,4 @@
-// components/MapPage/YandexMap/HuntingAreasLayer.tsx
-
+import React from 'react';
 import { Polygon } from '@pbe/react-yandex-maps';
 
 interface HuntingAreasLayerProps {
@@ -8,10 +7,10 @@ interface HuntingAreasLayerProps {
 
 export const HuntingAreasLayer: React.FC<HuntingAreasLayerProps> = ({ visible }) => {
   if (!visible) return null;
-
+  
   return (
     <>
-      {/* Здесь будет логика отрисовки полигонов охотничьих угодий */}
+      {/* Полигоны охотничьих угодий */}
     </>
   );
 };
