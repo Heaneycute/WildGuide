@@ -9,7 +9,8 @@ export const commonBoxStyles: SxProps = {
   backdropFilter: 'blur(10px)',
   backgroundColor: 'rgba(15, 31, 12, 0.2)',
   borderRadius: '12px',
-  padding: '20px'
+  padding: '20px',
+  overflow: 'hidden'
 };
 
 export const mapBoxStyles: SxProps = {

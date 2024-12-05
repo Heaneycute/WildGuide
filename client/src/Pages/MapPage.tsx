@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Grid } from '@mui/material';
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
 import YandexMap from '../components/MapPage/YandexMap';
 import LayersControl from '../components/MapPage/LayersControl';
 import MapRoutesList from '../components/MapPage/MapRoutesList';
@@ -7,6 +7,35 @@ import AnimalsList from '../components/MapPage/AnimalsList';
 import ZoneInfo from '../components/MapPage/ZoneInfo';
 
 export default function MapPage() {
+  const [layers, setLayers] = useState({
+    hunting: true,
+    animals: true,
+    cabins: true,
+    trails: true
+  });
+
+  const [mapLayers, setMapLayers] = useState({
+    satellite: false,
+    scheme: true,
+    hybrid: false
+  });
+
+  const handleMapTypeChange = (type: string) => {
+    const newLayers = {
+      satellite: false,
+      scheme: false,
+      hybrid: false,
+      [type]: true
+    };
+    setMapLayers(newLayers);
+  };
+
+  const handleLayerToggle = (layer: string) => {
+    setLayers(prev => ({
+      ...prev,
+      [layer]: !prev[layer]
+    }));
+  };
   return (
     <Box sx={{
       position: 'relative',
@@ -42,7 +71,12 @@ export default function MapPage() {
           gap: '20px'
         }}>
           <Box sx={{ flex: '0 0 auto' }}>
-            <LayersControl />
+          <LayersControl 
+            layers={layers} 
+            onLayerToggle={handleLayerToggle}
+            mapLayers={mapLayers}
+            onMapTypeChange={handleMapTypeChange}
+          />
           </Box>
           <Box sx={{ flex: '1' }}>
             <YandexMap />
