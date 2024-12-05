@@ -1,46 +1,109 @@
-import React, { useRef, Suspense } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, useGLTF, Environment, Html } from "@react-three/drei";
-import { TextureLoader } from "three";
+import React, { useState, useEffect } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation"; 
+import "swiper/css/autoplay";
+import axiosInstance from "../axiosInstance";
+import styles from "../Styles/Weapon.module.css";
+import Weapon3dModel from "../components/WeaponComponents/Weapon3dModel"; 
 
-const ThreeDModel = () => {
-  const { scene } = useGLTF('/m9_bayonet.glb');
-  const modelRef = useRef();
-
-  useFrame(() => {
-    if (modelRef.current) {
-      modelRef.current.rotation.y += 0.01;
-    }
-  });
-
-  return <primitive ref={modelRef} object={scene} scale={[2, 2, 2]} position={[0, -1, 0]} />;
+const getWeapons = async () => {
+  const response = await axiosInstance.get("/api/v1/weapons");
+  return response.data;
 };
 
-const Background = () => {
-  const texture = useLoader(TextureLoader, '/images/1.jpg');
-  return (
-    <mesh scale={[100, 100, 1]} position={[0, 0, -10]}>
-      <planeGeometry args={[1, 1]} />
-      <meshBasicMaterial map={texture} />
-    </mesh>
-  );
-};
+interface Weapon {
+  id: number;
+  model: string;
+  description: string;
+  model_link: string;
+  img_link: string;
+}
 
-export default function App() {
+const WeaponGalleryPage: React.FC = () => {
+  const [weapons, setWeapons] = useState<Weapon[]>([]);
+  const [selectedWeapon, setSelectedWeapon] = useState<Weapon | null>(null); 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getWeapons()
+      .then((data) => {
+        setWeapons(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div>Загрузка...</div>;
+  }
+
+  const handleWeaponClick = (weapon: Weapon) => {
+    setSelectedWeapon(weapon); 
+  };
+
   return (
-    <div className="about_page">
-      <div>
-        <Canvas style={{ height: "100vh" }} camera={{ position: [5, 2, 10], fov: 50 }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <Environment preset="forest" background={true} />
-          <OrbitControls enableDamping dampingFactor={0.05} enableZoom={true} />
-          <Suspense fallback={<Html center>Loading...</Html>}>
-            <Background />
-            <ThreeDModel />
-          </Suspense>
-        </Canvas>
+    <div className={styles.wrapper}>
+      <div className={styles.contentContainer}>
+        {selectedWeapon && (
+          <div className={styles.detailsContainer}>
+            <h2>Подробности об оружии: {selectedWeapon.model}</h2>
+            <p>{selectedWeapon.description}</p>
+            <p><strong>Модель:</strong> {selectedWeapon.model}</p>
+            <div className={styles.modelLink}>
+              <a href={selectedWeapon.model_link} target="_blank" rel="noopener noreferrer">
+                Ссылка на 3D модель
+              </a>
+            </div>
+          </div>
+        )}
+
+        {selectedWeapon && selectedWeapon.model_link && (
+          <div className={styles.modelContainer}>
+            <Weapon3dModel key={selectedWeapon.id} modelLink={selectedWeapon.model_link} />
+          </div>
+        )}
+      </div>
+
+      <div className={styles.sliderContainer}>
+        <Swiper
+          spaceBetween={20}
+          slidesPerView={3}
+          loop={true}
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          navigation={true} 
+          breakpoints={{
+            320: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+        >
+          {weapons.map((weapon) => (
+            <SwiperSlide key={weapon.id} className={styles.slide}>
+              <div
+                onClick={() => handleWeaponClick(weapon)}
+                className={styles.item}
+              >
+                <div
+                  className={styles.imageWrapper}
+                  style={{
+                    backgroundImage: `url(${weapon.img_link})`,
+                  }}
+                ></div>
+                <p>{weapon.model}</p>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </div>
   );
-}
+};
+
+export default WeaponGalleryPage;

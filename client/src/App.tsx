@@ -1,3 +1,5 @@
+
+import WeaponDetails from './Pages/WeaponDetailsPage';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Root from "./Root";

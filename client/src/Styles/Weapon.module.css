@@ -1,0 +1,64 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  background-image: url("/images/forest.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 100%;
+  height: 100vh;
+}
+
+.detailsContainer {
+  width: 30%;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.modelContainer {
+  width: 70%;
+  height: 100vh;
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.sliderContainer {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 30%;
+  z-index: 10;
+}
+
+.imageWrapper {
+  width: 100%;
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+}
+
+.item {
+  text-align: center;
+  cursor: pointer;
+}
+
+.slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modelLink {
+  margin-top: 10px;
+}
