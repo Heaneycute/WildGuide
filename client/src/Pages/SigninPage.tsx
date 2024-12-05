@@ -4,7 +4,29 @@ import { useNavigate, Link } from 'react-router-dom';
 import axiosInstance, { setAccessToken } from '../axiosInstance';
 import { Dispatch, SetStateAction } from 'react';
 import { User } from '../types';
-import { Container, Paper, TextField, Button, Typography, Box, Alert, Snackbar } from '@mui/material';
+import { 
+  Container, 
+  Paper, 
+  TextField, 
+  Button, 
+  Typography, 
+  Box, 
+  Alert, 
+  Snackbar,
+  InputAdornment,
+  IconButton,
+  FormControlLabel,
+  Checkbox,
+  Divider
+} from '@mui/material';
+import { 
+  AccountCircle,
+  Lock,
+  Visibility,
+  VisibilityOff,
+  GitHub,
+  Google
+} from '@mui/icons-material';
 
 type SigninPageProps = {
   setUser: Dispatch<SetStateAction<User>>
@@ -15,7 +37,9 @@ export default function SigninPage({ setUser }: SigninPageProps) {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    rememberMe: false
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -69,7 +93,7 @@ export default function SigninPage({ setUser }: SigninPageProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
     });
     if (errors[e.target.name]) {
       setErrors({
@@ -77,6 +101,11 @@ export default function SigninPage({ setUser }: SigninPageProps) {
         [e.target.name]: ''
       });
     }
+  };
+
+  const handleSocialLogin = (provider: string) => {
+    // Implement social login logic here
+    console.log(`Logging in with ${provider}`);
   };
 
   return (
@@ -99,12 +128,19 @@ export default function SigninPage({ setUser }: SigninPageProps) {
               required
               error={!!errors.email}
               helperText={errors.email || 'Введите ваш email'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               fullWidth
               label="Пароль"
               name="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               value={formData.password}
               onChange={handleChange}
               margin="normal"
@@ -112,15 +148,41 @@ export default function SigninPage({ setUser }: SigninPageProps) {
               required
               error={!!errors.password}
               helperText={errors.password || 'Введите ваш пароль'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <Button
-              component={Link}
-              to="/resetpassword"
-              color="primary"
-              sx={{ mt: 1 }}
-            >
-              Забыли пароль?
-            </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="rememberMe"
+                    checked={formData.rememberMe}
+                    onChange={handleChange}
+                    color="primary"
+                  />
+                }
+                label="Запомнить меня"
+              />
+              <Button
+                component={Link}
+                to="/resetpassword"
+                color="primary"
+              >
+                Забыли пароль?
+              </Button>
+            </Box>
             <Button
               type="submit"
               fullWidth
@@ -130,6 +192,31 @@ export default function SigninPage({ setUser }: SigninPageProps) {
             >
               Войти
             </Button>
+            <Divider sx={{ my: 2 }}>или</Divider>
+            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+              <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<Google />}
+                onClick={() => handleSocialLogin('google')}
+              >
+                Google
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<GitHub />}
+                onClick={() => handleSocialLogin('github')}
+              >
+                GitHub
+              </Button>
+            </Box>
+            <Typography align="center" variant="body2">
+              Нет аккаунта?{' '}
+              <Link component={Link} to="/signup">
+                Зарегистрируйтесь
+              </Link>
+            </Typography>
           </form>
         </Paper>
       </Box>
