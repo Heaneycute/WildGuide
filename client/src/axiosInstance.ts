@@ -26,25 +26,23 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const refreshResponse = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}${
-            import.meta.env.VITE_API
-          }/token/refresh`,
-          { withCredentials: true }
-        );
-        setAccessToken(refreshResponse.data.accessToken);
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        const refreshResponse = await axiosInstance.get(`${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_API}/token/refresh`);
+        const newAccessToken = refreshResponse.data.accessToken;
+
+        setAccessToken(newAccessToken);
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
         return axiosInstance(originalRequest);
       } catch (refreshError: any) {
-        console.error("Refresh token error:", refreshError);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+        console.error("Ошибка обновления токена:", refreshError);
         window.location.href = "/signin";
         return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   }
 );
 
 export default axiosInstance;
+

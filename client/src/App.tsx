@@ -4,6 +4,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Root from "./Root";
 import axiosInstance, { setAccessToken } from "./axiosInstance";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import HomePage from "./Pages/HomePage";
 import SigninPage from "./Pages/SigninPage";
 import SignupPage from "./Pages/SignupPage";
@@ -17,10 +19,14 @@ import Map from "./Pages/MapPage";
 import Profile from "./Pages/ProfilePage";
 import Weapon from "./Pages/WeaponPage";
 import ExempleReduxPage from "./Pages/ExempleReduxPage";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
-export const initUser = {
+interface User {
+  id: number;
+  username: string;
+  email: string;
+}
+
+export const initUser: User = {
   id: 0,
   username: "",
   email: "",
@@ -28,20 +34,18 @@ export const initUser = {
 
 function App() {
   const [user, setUser] = useState<User>(initUser);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axiosInstance.get("/token/refresh");
+        const response = await axiosInstance.get(`${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_API}/token/refresh`);
+
         setUser(response.data.user);
         setAccessToken(response.data.accessToken);
-      } catch (err: any) {
-        setError(err.response?.data?.message || "Ошибка авторизации");
-      } finally {
-        setLoading(false);
-      }
+      } catch (err) {
+        console.error("Ошибка при авторизации:", err);
+        setUser(initUser);
+      } 
     };
 
     fetchUser();
@@ -52,61 +56,19 @@ function App() {
       path: "/",
       element: <Root user={user} setUser={setUser} />,
       children: [
-        {
-          path: "/",
-          element: <HomePage user={user} />,
-        },
-        {
-          path: "/signin",
-          element: <SigninPage setUser={setUser} />,
-        },
-        {
-          path: "/signup",
-          element: <SignupPage setUser={setUser} />,
-        },
-        {
-          path: "/resetpassword",
-          element: <ResetPasswordPage setUser={setUser} />,
-        },
-        {
-          path: "/fake-email",
-          element: <FakeEmailPage setUser={setUser} />,
-        },
-        {
-          path: "/newpassword",
-          element: <NewPasswordPage setUser={setUser} />,
-        },
-        {
-          path: "/dashboard",
-          element: <Dashboard setUser={setUser} />,
-        },
-        {
-          path: "/animal",
-          element: <Animal setUser={setUser} />,
-        },
-        {
-          path: "/calendar",
-          element: <Calendar setUser={setUser} />,
-        },
-        {
-          path: "/map",
-          element: <Map setUser={setUser} />,
-        },
-        {
-          path: "/weapon",
-          element: <Weapon setUser={setUser} />,
-        }, {
-          path: '/weapon/:id',
-          element: <WeaponDetails setUser={setUser} />,
-        },
-        {
-          path: "/exemplereduxpage",
-          element: <ExempleReduxPage user={user} setUser={setUser} />,
-        },
-        {
-          path: "/profile",
-          element: <Profile user={user} setUser={setUser} />,
-        },
+        { path: "/", element: <HomePage user={user} /> },
+        { path: "/signin", element: <SigninPage setUser={setUser} /> },
+        { path: "/signup", element: <SignupPage setUser={setUser} /> },
+        { path: "/resetpassword", element: <ResetPasswordPage /> },
+        { path: "/fake-email", element: <FakeEmailPage /> },
+        { path: "/newpassword", element: <NewPasswordPage /> },
+        { path: "/dashboard", element: <Dashboard /> },
+        { path: "/animal", element: <Animal /> },
+        { path: "/calendar", element: <Calendar /> },
+        { path: "/map", element: <Map /> },
+        { path: "/weapon", element: <Weapon /> },
+        { path: "/exemplereduxpage", element: <ExempleReduxPage user={user} /> },
+        { path: "/profile", element: <Profile user={user} /> },
       ],
     },
   ]);
@@ -120,3 +82,4 @@ function App() {
 }
 
 export default App;
+
