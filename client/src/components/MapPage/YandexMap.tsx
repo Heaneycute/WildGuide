@@ -64,17 +64,6 @@ const YandexMap: React.FC = () => {
           width="100%"
           height="100%"
         >
-          {/* Круг */}
-          <Circle 
-            geometry={[[59.56, 150.80], 300]}
-            options={{
-              fillColor: 'rgba(13, 0, 102, 0.5)',
-              strokeColor: '#FF0000',
-              strokeWidth: 4
-            }}
-          />
-          
-          {/* Полигон */}
           <Polygon
             geometry={[
               [

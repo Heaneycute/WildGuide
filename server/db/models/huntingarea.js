@@ -1,26 +1,41 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class HuntingArea extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
+  const HuntingArea = sequelize.define('HuntingArea', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    coordinates: {
+      type: DataTypes.JSONB,
+      allowNull: false
     }
-  }
-  HuntingArea.init({
-    name: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    coordinates: DataTypes.JSONB
   }, {
-    sequelize,
     modelName: 'HuntingArea',
-    underscored: true,
+    timestamps: true
   });
+
+  HuntingArea.associate = (models) => {
+    HuntingArea.belongsTo(models.User, {
+      foreignKey: 'userId',
+      as: 'user'
+    });
+  };
+  
   return HuntingArea;
 };

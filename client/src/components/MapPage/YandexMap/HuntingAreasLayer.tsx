@@ -14,3 +14,7 @@ export const HuntingAreasLayer: React.FC<HuntingAreasLayerProps> = ({ visible })
     </>
   );
 };
+
+
+
+HuntingAreasLayer.tsx

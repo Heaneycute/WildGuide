@@ -1,34 +1,42 @@
-'use strict';
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('HuntingAreas', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('huntingAreas', {
       id: {
-        allowNull: false,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
+        primaryKey: true
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       description: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: false
       },
       coordinates: {
-        type: Sequelize.JSONB
+        type: Sequelize.JSONB,
+        allowNull: false
       },
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false
       },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false
       }
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('HuntingAreas');
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('huntingAreas');
   }
 };
