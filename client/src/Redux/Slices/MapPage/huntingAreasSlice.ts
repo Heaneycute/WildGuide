@@ -1,63 +1,63 @@
-// Импортируем createSlice из Redux Toolkit для создания слайса
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { fetchHuntingAreas } from '../../Thunks/MapPage/huntingAreasThunks';
+import { RootState } from '../../index';
 
-// Определяем интерфейс для охотничьих угодий
 interface HuntingArea {
-  id: string;
+  id: number;
   name: string;
+  description: string;
   coordinates: number[][];
-  description?: string;
+  userId: number | null;
 }
 
-// Определяем структуру состояния для слайса охотничьих угодий
 interface HuntingAreasState {
-  // Массив охотничьих угодий, получаемый из API
   areas: HuntingArea[];
-  // Флаг загрузки данных
+  selectedArea: HuntingArea | null;
   loading: boolean;
-  // Сообщение об ошибке, если что-то пошло не так
   error: string | null;
-  // Выбранная область на карте
-  selectedArea: string | null;
 }
 
-// Начальное состояние слайса
 const initialState: HuntingAreasState = {
   areas: [],
+  selectedArea: null,
   loading: false,
   error: null,
-  selectedArea: null
 };
 
-// Создаем слайс для управления охотничьими угодьями
 export const huntingAreasSlice = createSlice({
   name: 'huntingAreas',
   initialState,
   reducers: {
-    // Действие при начале загрузки данных
-    setLoading: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    // Действие при успешной загрузке данных
-    setAreas: (state, action: PayloadAction<HuntingArea[]>) => {
-      state.areas = action.payload;
-      state.loading = false;
-    },
-    // Действие при возникновении ошибки
-    setError: (state, action: PayloadAction<string>) => {
-      state.error = action.payload;
-      state.loading = false;
-    },
-    // Действие при выборе области на карте
-    setSelectedArea: (state, action: PayloadAction<string | null>) => {
+    selectArea: (state, action: PayloadAction<HuntingArea>) => {
       state.selectedArea = action.payload;
-    }
+    },
+    clearSelectedArea: (state) => {
+      state.selectedArea = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchHuntingAreas.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchHuntingAreas.fulfilled, (state, action) => {
+        state.areas = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchHuntingAreas.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
-// Экспортируем actions для использования в компонентах
-export const { setLoading, setAreas, setError, setSelectedArea } = huntingAreasSlice.actions;
+export const { selectArea, clearSelectedArea } = huntingAreasSlice.actions;
 
-// Экспортируем reducer для использования в store
+// Селекторы
+export const selectAllAreas = (state: RootState) => state.huntingAreas.areas;
+export const selectSelectedArea = (state: RootState) => state.huntingAreas.selectedArea;
+export const selectAreasLoading = (state: RootState) => state.huntingAreas.loading;
+export const selectAreasError = (state: RootState) => state.huntingAreas.error;
+
 export default huntingAreasSlice.reducer;
