@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Polygon } from '@pbe/react-yandex-maps';
+import { Polygon, Placemark } from '@pbe/react-yandex-maps';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../Redux/index';
 import { fetchHuntingAreas } from '../../../Redux/Thunks/MapPage/huntingAreasThunks';
@@ -10,53 +10,57 @@ interface HuntingAreasLayerProps {
   visible: boolean;
 }
 
+const getCenterCoordinates = (coordinates: number[][]) => {
+  const lats = coordinates.map(coord => coord[0]);
+  const lons = coordinates.map(coord => coord[1]);
+  
+  const centerLat = (Math.max(...lats) + Math.min(...lats)) / 2;
+  const centerLon = (Math.max(...lons) + Math.min(...lons)) / 2;
+  
+  return [centerLat, centerLon];
+};
+
 export const HuntingAreasLayer: React.FC<HuntingAreasLayerProps> = ({ visible }) => {
   const dispatch = useDispatch<AppDispatch>();
   const areas = useSelector(selectAllAreas);
 
   useEffect(() => {
-    console.log('Все зоны:', areas);
-    areas.forEach(area => {
-      console.log('Координаты зоны:', area.id, area.coordinates);
-      console.log('Тип координат:', typeof area.coordinates);
-      if (Array.isArray(area.coordinates)) {
-        console.log('Структура координат:', {
-          isArray: Array.isArray(area.coordinates),
-          length: area.coordinates.length,
-          firstElement: area.coordinates[0]
-        });
-      }
-    });
-  }, [areas]);
-  
-  useEffect(() => {
-    console.log('Отправка запроса на получение охотничьих зон');
     dispatch(fetchHuntingAreas());
   }, [dispatch]);
-  
+
   const handlePolygonClick = (e: any, area: HuntingArea) => {
-    console.log('Клик по полигону:', area);
     e.preventDefault();
     dispatch(selectArea(area));
   };
 
   if (!visible || !areas || !Array.isArray(areas)) return null;
-  
+
   return (
     <>
       {areas.map((area) => (
-        <Polygon
-          key={area.id}
-          geometry={[area.coordinates]}
-          options={{
-            fillColor: 'rgba(0, 255, 0, 0.3)',
-            strokeColor: '#00FF00',
-            strokeWidth: 2
-          }}
-          onClick={(e) => handlePolygonClick(e, area)}
-        />
+        <React.Fragment key={area.id}>
+          <Polygon
+            geometry={[area.coordinates]}
+            options={{
+              fillColor: 'rgba(0, 255, 0, 0.3)',
+              strokeColor: '#00FF00',
+              strokeWidth: 2
+            }}
+            onClick={(e) => handlePolygonClick(e, area)}
+          />
+          <Placemark
+            geometry={getCenterCoordinates(area.coordinates)}
+            properties={{
+              iconCaption: area.name || 'Охотничья зона',
+              hintContent: area.description || 'Описание отсутствует',
+            }}
+            options={{
+              preset: 'islands#transparent',
+              zIndex: 1000
+            }}
+          />
+        </React.Fragment>
       ))}
     </>
   );
 };
-
