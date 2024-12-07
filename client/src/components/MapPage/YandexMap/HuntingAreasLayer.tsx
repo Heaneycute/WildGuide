@@ -25,6 +25,7 @@ export const HuntingAreasLayer: React.FC = () => {
   const areas = useSelector(selectAllAreas);
   const selectedArea = useSelector(selectSelectedArea);
   const isVisible = useSelector((state: RootState) => state.layers.hunting);
+  const showPoints = useSelector((state: RootState) => state.layers.points);
 
   useEffect(() => {
     dispatch(fetchHuntingAreas());
@@ -41,14 +42,20 @@ export const HuntingAreasLayer: React.FC = () => {
     <>
       {areas.map((area) => {
         const isSelected = selectedArea?.id === area.id;
-        const polygonOptions = {
-          fillColor: isSelected 
-            ? 'rgba(0, 255, 0, 0.4)' // Светлее для выбранной
-            : 'rgba(0, 255, 0, 0.7)', // Темнее для невыбранных
-          strokeColor: isSelected ? '#00FF00' : '#00DE2A',
-          strokeWidth: 2,
-          strokeStyle: isSelected ? 'dash' : 'solid'
-        };
+        const polygonOptions = selectedArea 
+          ? {
+              fillColor: isSelected 
+                ? 'rgba(0, 255, 0, 0.4)' // Светлее для выбранной
+                : 'rgba(0, 255, 0, 0.7)', // Темнее для невыбранных
+              strokeColor: isSelected ? '#00FF00' : '#00DE2A',
+              strokeWidth: 2,
+              strokeStyle: isSelected ? 'dash' : 'solid'
+            }
+          : {
+              fillColor: 'rgba(0, 255, 0, 0.3)',
+              strokeColor: '#00FF00',
+              strokeWidth: 2
+            };
 
         return (
           <React.Fragment key={area.id}>
@@ -57,18 +64,20 @@ export const HuntingAreasLayer: React.FC = () => {
               options={polygonOptions}
               onClick={(e) => handlePolygonClick(e, area)}
             />
-            <Placemark
-              geometry={getCenterCoordinates(area.coordinates)}
-              properties={{
-                iconCaption: area.name || 'Охотничья зона',
-                hintContent: area.description || 'Описание отсутствует',
-              }}
-              options={{
-                preset: 'islands#transparent',
-                zIndex: 1000
-              }}
-              onClick={(e) => handlePolygonClick(e, area)}
-            />
+            {showPoints && (
+              <Placemark
+                geometry={getCenterCoordinates(area.coordinates)}
+                properties={{
+                  iconCaption: area.name || 'Охотничья зона',
+                  hintContent: area.description || 'Описание отсутствует',
+                }}
+                options={{
+                  preset: 'islands#transparent',
+                  zIndex: 1000
+                }}
+                onClick={(e) => handlePolygonClick(e, area)}
+              />
+            )}
           </React.Fragment>
         );
       })}
