@@ -4,6 +4,7 @@ const verifyRefreshToken = (req, res, next) => {
   try {
     const refreshToken = req.cookies?.refreshToken;
     if (!refreshToken) {
+      console.warn("Refresh token is missing");
       return res.status(401).json({ message: "Refresh token is required" });
     }
 
@@ -15,6 +16,8 @@ const verifyRefreshToken = (req, res, next) => {
 
     if (error.name === "TokenExpiredError") {
       return res.status(401).json({ message: "Refresh token expired" });
+    } else if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({ message: "Invalid token signature" });
     }
     res.status(401).json({ message: "Invalid refresh token" });
   }
@@ -23,10 +26,9 @@ const verifyRefreshToken = (req, res, next) => {
 const verifyAccessToken = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res
-        .status(401)
-        .json({ message: "Authorization header is missing" });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      console.warn("Authorization header is missing or invalid");
+      return res.status(401).json({ message: "Authorization header is invalid" });
     }
 
     const accessToken = authHeader.split(" ")[1];
@@ -42,6 +44,8 @@ const verifyAccessToken = (req, res, next) => {
 
     if (error.name === "TokenExpiredError") {
       return res.status(401).json({ message: "Access token expired" });
+    } else if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({ message: "Invalid token signature" });
     }
     res.status(401).json({ message: "Invalid access token" });
   }
