@@ -13,6 +13,21 @@ interface HuntingAreasLayerProps {
 export const HuntingAreasLayer: React.FC<HuntingAreasLayerProps> = ({ visible }) => {
   const dispatch = useDispatch<AppDispatch>();
   const areas = useSelector(selectAllAreas);
+
+  useEffect(() => {
+    console.log('Все зоны:', areas);
+    areas.forEach(area => {
+      console.log('Координаты зоны:', area.id, area.coordinates);
+      console.log('Тип координат:', typeof area.coordinates);
+      if (Array.isArray(area.coordinates)) {
+        console.log('Структура координат:', {
+          isArray: Array.isArray(area.coordinates),
+          length: area.coordinates.length,
+          firstElement: area.coordinates[0]
+        });
+      }
+    });
+  }, [areas]);
   
   useEffect(() => {
     console.log('Отправка запроса на получение охотничьих зон');
@@ -32,7 +47,7 @@ export const HuntingAreasLayer: React.FC<HuntingAreasLayerProps> = ({ visible })
       {areas.map((area) => (
         <Polygon
           key={area.id}
-          geometry={area.coordinates}
+          geometry={[area.coordinates]}
           options={{
             fillColor: 'rgba(0, 255, 0, 0.3)',
             strokeColor: '#00FF00',
