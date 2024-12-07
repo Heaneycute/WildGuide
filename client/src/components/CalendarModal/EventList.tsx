@@ -9,13 +9,9 @@ import {
 } from "@mui/material";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import { useAppSelector, useAppDispatch } from "../../Redux/hooks";
-import { deleteEvent } from "../../Redux/Slices/calendarSlice";
+import { deleteEventFromDB } from "../../Redux/Thunks/calendarThunks";
 
-interface EventListProps {
-  onDelete: (id: number) => void;
-}
-
-const EventList: React.FC<EventListProps> = () => {
+const EventList: React.FC = () => {
   const events = useAppSelector((state) => state.calendar.events);
   const dispatch = useAppDispatch();
 
@@ -36,9 +32,20 @@ const EventList: React.FC<EventListProps> = () => {
                 marginBottom: "0.5rem",
               }}
             >
-              <EventAvailableIcon sx={{ marginRight: "1rem", color: "#4caf50" }} />
-              <ListItemText primary={event.title} secondary={`${event.date} — ${event.description}`} />
-              <IconButton aria-label="delete event" size="small" sx={{ marginLeft: "1rem" }} onClick={() => dispatch(deleteEvent(event.id))}>
+              <EventAvailableIcon
+                sx={{ marginRight: "1rem", color: "#4caf50" }}
+              />
+              <ListItemText
+                primary={event.title}
+                secondary={`${event.date} — ${event.description}`}
+              />
+              <IconButton
+                aria-label="delete event"
+                size="small"
+                sx={{ marginLeft: "1rem" }}
+                onClick={() => dispatch(deleteEventFromDB(event.id))}
+              >
+                Удалить
               </IconButton>
             </ListItem>
           ))

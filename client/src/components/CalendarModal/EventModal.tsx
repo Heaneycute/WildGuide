@@ -14,14 +14,23 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import useStyles from "../../Styles/CalendarStyles";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../Redux/hooks";
-import { updateEvent, deleteEvent } from "../../Redux/Slices/calendarSlice";
+import {
+  createEvent,
+  updateEventInDB,
+  deleteEventFromDB,
+} from "../../Redux/Thunks/calendarThunks";
+
+interface Event {
+  id: number;
+  date: string;
+  title: string;
+  description: string;
+}
 
 interface EventModalProps {
   open: boolean;
   date: string | null;
   onClose: () => void;
-  onSave: (event:Event) => void;
-  onDelete: (id: number) => void;
   existingEvents: Event[];
 }
 
@@ -29,8 +38,6 @@ const EventModal: React.FC<EventModalProps> = ({
   open,
   date,
   onClose,
-  onSave,
-  onDelete,
   existingEvents,
 }) => {
   const classes = useStyles();
@@ -48,20 +55,52 @@ const EventModal: React.FC<EventModalProps> = ({
   }, [open]);
 
   const handleSave = async () => {
-    if (!date) return;
+    if (!date) {
+      toast.error("Дата события отсутствует!");
+      return;
+    }
+
+    if (!title.trim() || !description.trim()) {
+      toast.error("Все поля обязательны для заполнения.");
+      return;
+    }
+
     try {
-      dispatch(updateEvent({id: editEvent?.id || 0, date: date, title, description}))
-      toast.success(editEvent ? "Событие успешно изменено!" : "Событие успешно добавлено!");
+      if (editEvent) {
+        await dispatch(
+          updateEventInDB({
+            ...editEvent,
+            date,
+            title: title.trim(),
+            description: description.trim(),
+          })
+        ).unwrap();
+        toast.success("Событие успешно изменено!");
+      } else {
+        await dispatch(
+          createEvent({
+            date,
+            title: title.trim(),
+            description: description.trim(),
+          })
+        ).unwrap();
+        toast.success("Событие успешно добавлено!");
+      }
+
       onClose();
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Ошибка сохранения события");
     }
   };
 
-  const handleDelete = (id: number) => {
-    dispatch(deleteEvent(id));
-    toast.success("Событие успешно удалено!");
-    onClose();
+  const handleDelete = async (id: number) => {
+    try {
+      await dispatch(deleteEventFromDB(id)).unwrap();
+      toast.success("Событие успешно удалено!");
+      onClose();
+    } catch (error: any) {
+      toast.error("Ошибка удаления события");
+    }
   };
 
   return (
@@ -74,29 +113,56 @@ const EventModal: React.FC<EventModalProps> = ({
         <List>
           {existingEvents.map((event) => (
             <ListItem key={event.id}>
-              <ListItemText primary={event.title} secondary={event.description} />
-              <IconButton edge="end" color="primary" onClick={() => {
+              <ListItemText
+                primary={event.title}
+                secondary={event.description}
+              />
+              <IconButton
+                edge="end"
+                color="primary"
+                onClick={() => {
                   setTitle(event.title);
                   setDescription(event.description);
                   setEditEvent(event);
-                }}>
+                }}
+              >
                 Редактировать
               </IconButton>
-              <IconButton edge="end" color="error" onClick={() => handleDelete(event.id)}>
+              <IconButton
+                edge="end"
+                color="error"
+                onClick={() => handleDelete(event.id)}
+              >
                 <DeleteIcon />
               </IconButton>
             </ListItem>
           ))}
         </List>
 
-        <TextField label="Название" value={title} onChange={(e) => setTitle(e.target.value)} fullWidth margin="normal" />
-        <TextField label="Описание" value={description} onChange={(e) => setDescription(e.target.value)} fullWidth margin="normal" multiline rows={4} />
+        <TextField
+          label="Название"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Описание"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          fullWidth
+          margin="normal"
+          multiline
+          rows={4}
+        />
 
         <Box className={classes.modalActions}>
           <Button onClick={handleSave} variant="contained" color="primary">
             {editEvent ? "Сохранить" : "Добавить"}
           </Button>
-          <Button onClick={onClose} variant="outlined">Закрыть</Button>
+          <Button onClick={onClose} variant="outlined">
+            Закрыть
+          </Button>
         </Box>
       </Box>
     </Modal>

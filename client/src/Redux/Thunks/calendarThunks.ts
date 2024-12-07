@@ -1,21 +1,43 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import axiosInstance from '../../axiosInstance';
-import { setEvents, setIsLoading, setError } from '../Slices/calendarSlice';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import axiosInstance from "../../axiosInstance";
+import { Event } from "../Slices/calendarSlice";
 
-export const fetchEvents = createAsyncThunk(
-  'calendar/fetchEvents',
-  async (_, { dispatch }) => {
-    try {
-      dispatch(setIsLoading(true));
-      dispatch(setError(null));
-      const response = await axiosInstance.get(`${import.meta.env.VITE_API}/events`);
-      dispatch(setEvents(response.data));
-      return response.data;
-    } catch (error: any) {
-      dispatch(setError(error.message));
-      throw error;
-    } finally {
-      dispatch(setIsLoading(false));
-    }
+export const fetchEvents = createAsyncThunk<Event[]>(
+  "calendar/fetchEvents",
+  async () => {
+    const response = await axiosInstance.get(
+      `${import.meta.env.VITE_API}/events`
+    );
+    return response.data;
+  }
+);
+
+export const createEvent = createAsyncThunk<Event, Event>(
+  "calendar/createEvent",
+  async (newEvent) => {
+    const response = await axiosInstance.post(
+      `${import.meta.env.VITE_API}/events`,
+      newEvent
+    );
+    return response.data;
+  }
+);
+
+export const updateEventInDB = createAsyncThunk<Event, Event>(
+  "calendar/updateEvent",
+  async (updatedEvent) => {
+    const response = await axiosInstance.put(
+      `${import.meta.env.VITE_API}/events/${updatedEvent.id}`,
+      updatedEvent
+    );
+    return response.data;
+  }
+);
+
+export const deleteEventFromDB = createAsyncThunk<number, number>(
+  "calendar/deleteEvent",
+  async (eventId) => {
+    await axiosInstance.delete(`${import.meta.env.VITE_API}/events/${eventId}`);
+    return eventId;
   }
 );
