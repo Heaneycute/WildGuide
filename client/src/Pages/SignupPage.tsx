@@ -1,10 +1,31 @@
 // SignupPage.tsx
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axiosInstance, { setAccessToken } from '../axiosInstance';
 import { Dispatch, SetStateAction } from 'react';
 import { User } from '../types';
-import { Container, Paper, TextField, Button, Typography, Box, Alert, Snackbar } from '@mui/material';
+import { 
+  Container, 
+  Paper, 
+  TextField, 
+  Button, 
+  Typography, 
+  Box, 
+  Alert, 
+  Snackbar,
+  InputAdornment,
+  IconButton,
+  Divider
+} from '@mui/material';
+import { 
+  AccountCircle,
+  Lock,
+  Visibility,
+  VisibilityOff,
+  GitHub,
+  Email,
+  Google
+} from '@mui/icons-material';
 
 type SignupPageProps = {
   setUser: Dispatch<SetStateAction<User>>
@@ -18,6 +39,8 @@ export default function SignupPage({ setUser }: SignupPageProps) {
     password: '',
     confirmPassword: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -95,6 +118,11 @@ export default function SignupPage({ setUser }: SignupPageProps) {
     }
   };
 
+  const handleSocialSignup = (provider: string) => {
+    // Implement social signup logic here
+    console.log(`Signing up with ${provider}`);
+  };
+
   return (
     <Container maxWidth="sm">
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -114,6 +142,13 @@ export default function SignupPage({ setUser }: SignupPageProps) {
               required
               error={!!errors.username}
               helperText={errors.username || 'Минимум 3 символа'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               fullWidth
@@ -127,12 +162,19 @@ export default function SignupPage({ setUser }: SignupPageProps) {
               required
               error={!!errors.email}
               helperText={errors.email || 'Введите ваш email'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Email />
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               fullWidth
               label="Пароль"
               name="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               value={formData.password}
               onChange={handleChange}
               margin="normal"
@@ -140,12 +182,30 @@ export default function SignupPage({ setUser }: SignupPageProps) {
               required
               error={!!errors.password}
               helperText={errors.password || 'Минимум 8 символов, заглавные и строчные буквы, цифры'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               fullWidth
               label="Подтвердите пароль"
               name="confirmPassword"
-              type="password"
+              type={showConfirmPassword ? 'text' : 'password'}
               value={formData.confirmPassword}
               onChange={handleChange}
               margin="normal"
@@ -153,6 +213,24 @@ export default function SignupPage({ setUser }: SignupPageProps) {
               required
               error={!!errors.confirmPassword}
               helperText={errors.confirmPassword || 'Повторите пароль'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               type="submit"
@@ -163,6 +241,31 @@ export default function SignupPage({ setUser }: SignupPageProps) {
             >
               Зарегистрироваться
             </Button>
+            <Divider sx={{ my: 2 }}>или</Divider>
+            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+              <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<Google />}
+                onClick={() => handleSocialSignup('google')}
+              >
+                Google
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<GitHub />}
+                onClick={() => handleSocialSignup('github')}
+              >
+                GitHub
+              </Button>
+            </Box>
+            <Typography align="center" variant="body2">
+              Уже есть аккаунт?{' '}
+              <Link component={Link} to="/signin">
+                Войдите
+              </Link>
+            </Typography>
           </form>
         </Paper>
       </Box>

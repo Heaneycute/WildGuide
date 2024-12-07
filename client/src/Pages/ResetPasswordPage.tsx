@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Paper, TextField, Button, Typography, Box, Alert, Snackbar } from '@mui/material';
+import { Container, Paper, TextField, Button, Typography, Box, Alert, Snackbar, InputAdornment } from '@mui/material';
+import { Email } from '@mui/icons-material';
 import axiosInstance from '../axiosInstance';
 
 export default function ResetPasswordPage() {
@@ -15,6 +16,10 @@ export default function ResetPasswordPage() {
     severity: 'error' as 'error' | 'success'
   });
 
+  const validateEmail = (email: string) => {
+    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -23,14 +28,14 @@ export default function ResetPasswordPage() {
       return;
     }
     
-    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+    if (!validateEmail(email)) {
       setError('Введите корректный email адрес');
       return;
     }
 
     try {
       const response = await axiosInstance.post(`${import.meta.env.VITE_API}/auth/reset-password`, { email });
-      setResetToken(response.data.token); // Предполагая, что сервер возвращает токен
+      setResetToken(response.data.token);
       setSnackbar({
         open: true,
         message: 'Инструкции по восстановлению пароля отправлены на ваш email',
@@ -75,6 +80,13 @@ export default function ResetPasswordPage() {
               required
               error={!!error}
               helperText={error || 'Введите email, указанный при регистрации'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Email />
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               type={isSubmitted ? "button" : "submit"}
