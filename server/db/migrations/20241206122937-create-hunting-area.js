@@ -1,28 +1,30 @@
-// Миграция для обновления таблицы Users
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('HuntingAreas', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
       },
-      username: {
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
+      },
+      name: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true
-      },
-      password: {
-        type: Sequelize.STRING,
+      description: {
+        type: Sequelize.TEXT,
         allowNull: false
       },
-      role: {
-        type: Sequelize.ENUM('user', 'admin'),
-        defaultValue: 'user'
+      coordinates: {
+        type: Sequelize.JSONB,
+        allowNull: false
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -35,6 +37,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('HuntingAreas');
   }
 };
