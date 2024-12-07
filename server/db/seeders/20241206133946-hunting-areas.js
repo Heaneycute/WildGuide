@@ -85,17 +85,17 @@ module.exports = {
     ];
 
     // Сначала вставляем системные зоны
-    await queryInterface.bulkInsert('huntingAreas', systemAreas);
+    await queryInterface.bulkInsert('HuntingAreas', systemAreas);
     
     // Затем пробуем вставить пользовательские зоны
     try {
-      await queryInterface.bulkInsert('huntingAreas', userAreas);
+      await queryInterface.bulkInsert('HuntingAreas', userAreas);
     } catch (error) {
       console.log('Пользовательские зоны не были добавлены: отсутствует пользователь');
     }
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('huntingAreas', null, {});
+    return queryInterface.bulkDelete('HuntingAreas', null, {});
   }
 };

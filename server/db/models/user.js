@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models.HuntingArea, {
         foreignKey: 'userId',
-        as: 'huntingAreas'
+        as: 'HuntingAreas'
       });
       User.hasMany(models.PasswordResetToken, {
         foreignKey: 'userId'

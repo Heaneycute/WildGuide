@@ -15,10 +15,12 @@ export const HuntingAreasLayer: React.FC<HuntingAreasLayerProps> = ({ visible })
   const areas = useSelector(selectAllAreas);
   
   useEffect(() => {
+    console.log('Отправка запроса на получение охотничьих зон');
     dispatch(fetchHuntingAreas());
   }, [dispatch]);
   
   const handlePolygonClick = (e: any, area: HuntingArea) => {
+    console.log('Клик по полигону:', area);
     e.preventDefault();
     dispatch(selectArea(area));
   };
@@ -42,3 +44,4 @@ export const HuntingAreasLayer: React.FC<HuntingAreasLayerProps> = ({ visible })
     </>
   );
 };
+

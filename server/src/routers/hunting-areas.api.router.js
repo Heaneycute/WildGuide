@@ -4,11 +4,14 @@ const { verifyAccessToken, verifyAdmin } = require('../middlewares/verifyTokens'
 
 // Получение списка всех зон
 router.get('/', async (req, res) => {
+  console.log('Получен GET-запрос на /api/hunting-areas');
   try {
     const areas = await HuntingArea.findAll();
+    console.log('Отправка данных клиенту:', areas);
     res.json(areas);
   } catch (error) {
     console.error(error);
+    console.error('Ошибка при получении данных:', error);
     res.status(500).json({ message: 'Ошибка сервера: не удалось получить список зон' });
   }
 });

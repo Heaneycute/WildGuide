@@ -38,14 +38,17 @@ export const huntingAreasSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchHuntingAreas.pending, (state) => {
+        console.log('Загрузка охотничьих зон...');
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchHuntingAreas.fulfilled, (state, action) => {
+        console.log('Охотничьи зоны загружены:', action.payload);
         state.areas = action.payload;
         state.loading = false;
       })
       .addCase(fetchHuntingAreas.rejected, (state, action) => {
+        console.error('Ошибка при загрузке охотничьих зон:', action.payload);
         state.loading = false;
         state.error = action.payload as string;
       });
