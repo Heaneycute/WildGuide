@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Root from "./Root";
 import axiosInstance, { setAccessToken } from "./axiosInstance";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import HomePage from "./Pages/HomePage";
 import SigninPage from "./Pages/SigninPage";
@@ -32,18 +32,23 @@ export const initUser: User = {
 
 function App() {
   const [user, setUser] = useState<User>(initUser);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axiosInstance.get(`${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_API}/token/refresh`);
-
+        const response = await axiosInstance.get(
+          `${import.meta.env.VITE_API}/token/refresh`
+        );
         setUser(response.data.user);
         setAccessToken(response.data.accessToken);
+        toast.success("Вы успешно авторизованы!");
       } catch (err) {
         console.error("Ошибка при авторизации:", err);
         setUser(initUser);
-      } 
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchUser();
@@ -65,11 +70,18 @@ function App() {
         { path: "/calendar", element: <Calendar /> },
         { path: "/map", element: <Map /> },
         { path: "/weapon", element: <Weapon /> },
-        { path: "/exemplereduxpage", element: <ExempleReduxPage user={user} /> },
+        {
+          path: "/exemplereduxpage",
+          element: <ExempleReduxPage user={user} />,
+        },
         { path: "/profile", element: <Profile user={user} /> },
       ],
     },
   ]);
+
+  if (loading) {
+    return <div>Загрузка...</div>;
+  }
 
   return (
     <>
@@ -80,4 +92,3 @@ function App() {
 }
 
 export default App;
-
