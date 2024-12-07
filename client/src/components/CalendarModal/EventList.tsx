@@ -8,19 +8,17 @@ import {
   IconButton,
 } from "@mui/material";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-
-interface Event {
-  id: number;
-  date: string;
-  title: string;
-  description: string;
-}
+import { useAppSelector, useAppDispatch } from "../../Redux/hooks";
+import { deleteEvent } from "../../Redux/Slices/calendarSlice";
 
 interface EventListProps {
-  events: Event[];
+  onDelete: (id: number) => void;
 }
 
-const EventList: React.FC<EventListProps> = ({ events }) => {
+const EventList: React.FC<EventListProps> = () => {
+  const events = useAppSelector((state) => state.calendar.events);
+  const dispatch = useAppDispatch();
+
   return (
     <Box sx={{ width: "100%", padding: "1rem", borderLeft: "1px solid #ddd" }}>
       <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
@@ -38,18 +36,9 @@ const EventList: React.FC<EventListProps> = ({ events }) => {
                 marginBottom: "0.5rem",
               }}
             >
-              <EventAvailableIcon
-                sx={{ marginRight: "1rem", color: "#4caf50" }}
-              />
-              <ListItemText
-                primary={event.title}
-                secondary={`${event.date} — ${event.description}`}
-              />
-              <IconButton
-                aria-label="delete event"
-                size="small"
-                sx={{ marginLeft: "1rem" }}
-              >
+              <EventAvailableIcon sx={{ marginRight: "1rem", color: "#4caf50" }} />
+              <ListItemText primary={event.title} secondary={`${event.date} — ${event.description}`} />
+              <IconButton aria-label="delete event" size="small" sx={{ marginLeft: "1rem" }} onClick={() => dispatch(deleteEvent(event.id))}>
               </IconButton>
             </ListItem>
           ))
