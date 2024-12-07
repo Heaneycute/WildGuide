@@ -13,7 +13,12 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import useStyles from "../../Styles/CalendarStyles";
 import { toast } from "react-toastify";
-import axiosInstance from "../../axiosInstance";
+import { useAppDispatch } from "../../Redux/hooks";
+import {
+  createEvent,
+  updateEventInDB,
+  deleteEventFromDB,
+} from "../../Redux/Thunks/calendarThunks";
 
 interface Event {
   id: number;
@@ -26,8 +31,6 @@ interface EventModalProps {
   open: boolean;
   date: string | null;
   onClose: () => void;
-  onSave: (event: Event) => void;
-  onDelete: (id: number) => void;
   existingEvents: Event[];
 }
 
@@ -35,15 +38,13 @@ const EventModal: React.FC<EventModalProps> = ({
   open,
   date,
   onClose,
-  onSave,
-  onDelete,
   existingEvents,
 }) => {
   const classes = useStyles();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [editEvent, setEditEvent] = useState<Event | null>(null);
-  const apiUrl = import.meta.env.VITE_API;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!open) {
@@ -54,18 +55,39 @@ const EventModal: React.FC<EventModalProps> = ({
   }, [open]);
 
   const handleSave = async () => {
+    if (!date) {
+      toast.error("Дата события отсутствует!");
+      return;
+    }
+
+    if (!title.trim() || !description.trim()) {
+      toast.error("Все поля обязательны для заполнения.");
+      return;
+    }
+
     try {
-      const method = editEvent ? "put" : "post";
-      const url = editEvent ? `/events/${editEvent.id}` : `/events`;
-      const response = await axiosInstance[method](`${apiUrl}${url}`, {
-        date: date!,
-        title,
-        description,
-      });
-      toast.success(
-        editEvent ? "Событие успешно изменено!" : "Событие успешно добавлено!"
-      );
-      onSave(response.data);
+      if (editEvent) {
+        await dispatch(
+          updateEventInDB({
+            ...editEvent,
+            date,
+            title: title.trim(),
+            description: description.trim(),
+          })
+        ).unwrap();
+        toast.success("Событие успешно изменено!");
+      } else {
+        await dispatch(
+          createEvent({
+            date,
+            title: title.trim(),
+            description: description.trim(),
+          })
+        ).unwrap();
+        toast.success("Событие успешно добавлено!");
+      }
+
+      onClose();
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Ошибка сохранения события");
     }
@@ -73,11 +95,11 @@ const EventModal: React.FC<EventModalProps> = ({
 
   const handleDelete = async (id: number) => {
     try {
-      await axiosInstance.delete(`${apiUrl}/events/${id}`);
+      await dispatch(deleteEventFromDB(id)).unwrap();
       toast.success("Событие успешно удалено!");
-      onDelete(id);
+      onClose();
     } catch (error: any) {
-      toast.error(error.response?.data?.error || "Ошибка удаления события");
+      toast.error("Ошибка удаления события");
     }
   };
 

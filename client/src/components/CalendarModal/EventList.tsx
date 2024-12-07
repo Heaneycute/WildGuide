@@ -7,22 +7,14 @@ import {
   ListItemText,
   IconButton,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import { useAppSelector, useAppDispatch } from "../../Redux/hooks";
+import { deleteEventFromDB } from "../../Redux/Thunks/calendarThunks";
 
-interface Event {
-  id: number;
-  date: string;
-  title: string;
-  description: string;
-}
+const EventList: React.FC = () => {
+  const events = useAppSelector((state) => state.calendar.events);
+  const dispatch = useAppDispatch();
 
-interface EventListProps {
-  events: Event[];
-  onDelete: (id: number) => void;
-}
-
-const EventList: React.FC<EventListProps> = ({ events, onDelete }) => {
   return (
     <Box sx={{ width: "100%", padding: "1rem", borderLeft: "1px solid #ddd" }}>
       <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
@@ -49,11 +41,11 @@ const EventList: React.FC<EventListProps> = ({ events, onDelete }) => {
               />
               <IconButton
                 aria-label="delete event"
-                onClick={() => onDelete(event.id)}
                 size="small"
                 sx={{ marginLeft: "1rem" }}
+                onClick={() => dispatch(deleteEventFromDB(event.id))}
               >
-                <DeleteIcon color="error" />
+                Удалить
               </IconButton>
             </ListItem>
           ))

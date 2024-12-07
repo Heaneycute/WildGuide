@@ -1,4 +1,3 @@
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Root from "./Root";
@@ -33,7 +32,6 @@ export const initUser: User = {
 
 function App() {
   const [user, setUser] = useState<User>(initUser);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -43,12 +41,8 @@ function App() {
         );
         setUser(response.data.user);
         setAccessToken(response.data.accessToken);
-        toast.success("Вы успешно авторизованы!");
       } catch (err) {
-        console.error("Ошибка при авторизации:", err);
-        setUser(initUser);
-      } finally {
-        setLoading(false);
+        console.error(err);
       }
     };
 
@@ -79,10 +73,6 @@ function App() {
       ],
     },
   ]);
-
-  if (loading) {
-    return <div>Загрузка...</div>;
-  }
 
   return (
     <>
