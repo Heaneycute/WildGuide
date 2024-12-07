@@ -1,4 +1,3 @@
-// components/LayersControl.tsx
 import React from 'react';
 import { Box, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { commonBoxStyles } from '../../Styles/MapPageComponents.styles';
@@ -6,6 +5,7 @@ import {
   TerrainRounded,
   PetsRounded,
   CabinRounded,
+  LocationOnRounded,
 } from '@mui/icons-material';
 
 interface LayersControlProps {
@@ -14,6 +14,7 @@ interface LayersControlProps {
     animals: boolean;
     cabins: boolean;
     trails: boolean;
+    points: boolean;
   };
   onLayerToggle: (layer: string) => void;
 }
@@ -28,6 +29,15 @@ export default function LayersControl({ layers, onLayerToggle }: LayersControlPr
             <Box sx={{ display: 'flex', alignItems: 'center', color: '#ffffff' }}>
               <TerrainRounded sx={{ mr: 1 }} />
               Зоны охоты
+            </Box>
+          }
+        />
+        <FormControlLabel
+          control={<Checkbox checked={layers.points} onChange={() => onLayerToggle('points')} />}
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center', color: '#ffffff' }}>
+              <LocationOnRounded sx={{ mr: 1 }} />
+              Названия зон
             </Box>
           }
         />

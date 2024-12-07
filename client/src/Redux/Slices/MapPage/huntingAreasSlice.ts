@@ -13,6 +13,7 @@ interface HuntingArea {
 interface HuntingAreasState {
   areas: HuntingArea[];
   selectedArea: HuntingArea | null;
+  isVisible: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -20,6 +21,7 @@ interface HuntingAreasState {
 const initialState: HuntingAreasState = {
   areas: [],
   selectedArea: null,
+  isVisible: true,
   loading: false,
   error: null,
 };
@@ -34,6 +36,9 @@ export const huntingAreasSlice = createSlice({
     clearSelectedArea: (state) => {
       state.selectedArea = null;
     },
+    setVisibility: (state, action: PayloadAction<boolean>) => {
+      state.isVisible = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -62,5 +67,6 @@ export const selectAllAreas = (state: RootState) => state.huntingAreas.areas;
 export const selectSelectedArea = (state: RootState) => state.huntingAreas.selectedArea;
 export const selectAreasLoading = (state: RootState) => state.huntingAreas.loading;
 export const selectAreasError = (state: RootState) => state.huntingAreas.error;
+export const setVisibility = (state: RootState) => state.huntingAreas.selectedArea;
 
 export default huntingAreasSlice.reducer;
