@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { Polygon, Placemark } from '@pbe/react-yandex-maps';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../../Redux/index';
+import { AppDispatch, RootState } from '../../../Redux/index';
 import { fetchHuntingAreas } from '../../../Redux/Thunks/MapPage/huntingAreasThunks';
-import { selectAllAreas, selectArea, selectSelectedArea } from '../../../Redux/Slices/MapPage/huntingAreasSlice';
+import { 
+  selectAllAreas, 
+  selectArea, 
+  selectSelectedArea 
+} from '../../../Redux/Slices/MapPage/huntingAreasSlice';
 import { HuntingArea } from '../../../types/MapPage/HuntingAreaType';
-
-interface HuntingAreasLayerProps {
-  visible: boolean;
-}
 
 const getCenterCoordinates = (coordinates: number[][]) => {
   const lats = coordinates.map(coord => coord[0]);
@@ -20,11 +20,11 @@ const getCenterCoordinates = (coordinates: number[][]) => {
   return [centerLat, centerLon];
 };
 
-export const HuntingAreasLayer: React.FC<HuntingAreasLayerProps> = ({ visible }) => {
+export const HuntingAreasLayer: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const areas = useSelector(selectAllAreas);
   const selectedArea = useSelector(selectSelectedArea);
-  const isVisible = useSelector((state: RootState) => state.huntingAreas.isVisible);
+  const isVisible = useSelector((state: RootState) => state.layers.hunting);
 
   useEffect(() => {
     dispatch(fetchHuntingAreas());
@@ -35,26 +35,20 @@ export const HuntingAreasLayer: React.FC<HuntingAreasLayerProps> = ({ visible })
     dispatch(selectArea(area));
   };
 
-  if (!visible || !areas || !Array.isArray(areas)) return null;
-  if (!isVisible) return null;
+  if (!isVisible || !areas || !Array.isArray(areas)) return null;
+
   return (
     <>
       {areas.map((area) => {
         const isSelected = selectedArea?.id === area.id;
-        const polygonOptions = selectedArea 
-          ? {
-              fillColor: isSelected 
-                ? 'rgba(0, 255, 0, 0.4)' // Светлее для выбранной
-                : 'rgba(0, 255, 0, 0.7)', // Темнее для невыбранных
-              strokeColor: isSelected ? '#00FF00' : '#00DE2A',
-              strokeWidth: 2,
-              strokeStyle: isSelected ? 'dash' : 'solid'
-            }
-          : {
-              fillColor: 'rgba(0, 255, 0, 0.3)',
-              strokeColor: '#00FF00',
-              strokeWidth: 2
-            };
+        const polygonOptions = {
+          fillColor: isSelected 
+            ? 'rgba(0, 255, 0, 0.4)' // Светлее для выбранной
+            : 'rgba(0, 255, 0, 0.7)', // Темнее для невыбранных
+          strokeColor: isSelected ? '#00FF00' : '#00DE2A',
+          strokeWidth: 2,
+          strokeStyle: isSelected ? 'dash' : 'solid'
+        };
 
         return (
           <React.Fragment key={area.id}>

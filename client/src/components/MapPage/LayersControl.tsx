@@ -1,4 +1,6 @@
-import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../Redux';
+import { toggleLayer } from '../../Redux/Slices/layersSlice';
 import { Box, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { commonBoxStyles } from '../../Styles/MapPageComponents.styles';
 import {
@@ -8,23 +10,32 @@ import {
   LocationOnRounded,
 } from '@mui/icons-material';
 
-interface LayersControlProps {
-  layers: {
-    hunting: boolean;
-    animals: boolean;
-    cabins: boolean;
-    trails: boolean;
-    points: boolean;
-  };
-  onLayerToggle: (layer: string) => void;
+interface LayersState {
+  hunting: boolean;
+  animals: boolean;
+  cabins: boolean;
+  trails: boolean;
+  points: boolean;
 }
 
-export default function LayersControl({ layers, onLayerToggle }: LayersControlProps) {
+export default function LayersControl() {
+  const layers = useSelector((state: RootState) => state.layers);
+  const dispatch = useDispatch();
+
+  const handleLayerToggle = (layer: keyof LayersState) => {
+    dispatch(toggleLayer(layer));
+  };
+
   return (
     <Box sx={commonBoxStyles}>
       <FormGroup sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
         <FormControlLabel
-          control={<Checkbox checked={layers.hunting} onChange={() => onLayerToggle('hunting')} />}
+          control={
+            <Checkbox 
+              checked={layers.hunting}
+              onChange={() => handleLayerToggle('hunting')}
+            />
+          }
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', color: '#ffffff' }}>
               <TerrainRounded sx={{ mr: 1 }} />
@@ -33,7 +44,12 @@ export default function LayersControl({ layers, onLayerToggle }: LayersControlPr
           }
         />
         <FormControlLabel
-          control={<Checkbox checked={layers.points} onChange={() => onLayerToggle('points')} />}
+          control={
+            <Checkbox 
+              checked={layers.points}
+              onChange={() => handleLayerToggle('points')}
+            />
+          }
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', color: '#ffffff' }}>
               <LocationOnRounded sx={{ mr: 1 }} />
@@ -42,7 +58,12 @@ export default function LayersControl({ layers, onLayerToggle }: LayersControlPr
           }
         />
         <FormControlLabel
-          control={<Checkbox checked={layers.animals} onChange={() => onLayerToggle('animals')} />}
+          control={
+            <Checkbox 
+              checked={layers.animals}
+              onChange={() => handleLayerToggle('animals')}
+            />
+          }
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', color: '#ffffff' }}>
               <PetsRounded sx={{ mr: 1 }} />
@@ -51,7 +72,12 @@ export default function LayersControl({ layers, onLayerToggle }: LayersControlPr
           }
         />
         <FormControlLabel
-          control={<Checkbox checked={layers.cabins} onChange={() => onLayerToggle('cabins')} />}
+          control={
+            <Checkbox 
+              checked={layers.cabins}
+              onChange={() => handleLayerToggle('cabins')}
+            />
+          }
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', color: '#ffffff' }}>
               <CabinRounded sx={{ mr: 1 }} />
@@ -60,7 +86,12 @@ export default function LayersControl({ layers, onLayerToggle }: LayersControlPr
           }
         />
         <FormControlLabel
-          control={<Checkbox checked={layers.trails} onChange={() => onLayerToggle('trails')} />}
+          control={
+            <Checkbox 
+              checked={layers.trails}
+              onChange={() => handleLayerToggle('trails')}
+            />
+          }
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', color: '#ffffff' }}>
               Тропы и маршруты
