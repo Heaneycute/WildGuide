@@ -7,7 +7,6 @@ import {
   ListItemText,
   IconButton,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 
 interface Event {
@@ -19,10 +18,9 @@ interface Event {
 
 interface EventListProps {
   events: Event[];
-  onDelete: (id: number) => void;
 }
 
-const EventList: React.FC<EventListProps> = ({ events, onDelete }) => {
+const EventList: React.FC<EventListProps> = ({ events }) => {
   return (
     <Box sx={{ width: "100%", padding: "1rem", borderLeft: "1px solid #ddd" }}>
       <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
@@ -49,11 +47,9 @@ const EventList: React.FC<EventListProps> = ({ events, onDelete }) => {
               />
               <IconButton
                 aria-label="delete event"
-                onClick={() => onDelete(event.id)}
                 size="small"
                 sx={{ marginLeft: "1rem" }}
               >
-                <DeleteIcon color="error" />
               </IconButton>
             </ListItem>
           ))

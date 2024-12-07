@@ -43,7 +43,7 @@ const useStyles = makeStyles({
       "linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2))",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1)",
     "&:hover": {
-      background: "linear-gradient(90deg, #abb1b1, #5c5c5c)",
+      background: "#abb1b1",
     },
   },
   dayNumber: {

@@ -24,8 +24,6 @@ const Calendar: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const apiUrl = import.meta.env.VITE_API;
 
   const daysInMonth = currentDate.daysInMonth();
@@ -35,11 +33,8 @@ const Calendar: React.FC = () => {
       try {
         const response = await axiosInstance.get(`${apiUrl}/events`);
         setEvents(response.data);
-      } catch (error: any) {
-        setError(error.response?.data?.error || "Ошибка загрузки событий");
-        console.error("Error fetching events:", error);
-      } finally {
-        setLoading(false);
+      } catch (error) {
+        console.error(error);
       }
     };
 
@@ -141,7 +136,7 @@ const Calendar: React.FC = () => {
             const dayEvents = events.filter((e) => e.date === date);
 
             return (
-              <Grid2 item xs={12} sm={6} md={4} lg={3} key={day}>
+              <Grid2 xs={12} sm={6} md={4} lg={3} key={day}>
                 <Box
                   className={classes.dayCell}
                   onClick={() => handleOpenModal(date)}

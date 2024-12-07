@@ -52,4 +52,3 @@ const verifyAccessToken = (req, res, next) => {
 };
 
 module.exports = { verifyAccessToken, verifyRefreshToken };
-
