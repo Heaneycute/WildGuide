@@ -1,9 +1,11 @@
 import React from 'react';
 import { Box } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import { YMaps, Map } from '@pbe/react-yandex-maps';
 import { mapBoxStyles } from '../../Styles/MapPageComponents.styles';
 import { HuntingAreasLayer } from './YandexMap/HuntingAreasLayer';
 import { customMapStyle } from '../../Styles/MapStyles';
+import { clearSelectedArea } from '../../Redux/Slices/MapPage/huntingAreasSlice';
 
 
 interface MapState {
@@ -14,6 +16,25 @@ interface MapState {
 }
 
 const YandexMap: React.FC = () => {
+  const dispatch = useDispatch();
+  
+  const handleMapClick = (e: any) => {
+    console.log('Произошел клик по карте:', {
+      target: e.get('target'),
+      тип: e.get('target').constructor.name,
+      координаты: e.get('coords'),
+      время: new Date().toLocaleString()
+    });
+  
+    if (!e.get('target').geometry) {
+      console.log('Начинаем очистку выбранной области...', {
+        предыдущаяОбласть: 'Будет удалена',
+        статус: 'В процессе очистки',
+        действие: 'Вызов dispatch(clearSelectedArea())'
+      });
+      dispatch(clearSelectedArea());
+    }
+  };
   const mapState: MapState = {
     center: [59.56, 150.80],
     zoom: 9,
@@ -29,6 +50,7 @@ const YandexMap: React.FC = () => {
       }}>
         <Map
           defaultState={mapState}
+          onClick={handleMapClick}
           options={{
             suppressMapOpenBlock: true,
             yandexMapDisablePoiInteractivity: true,

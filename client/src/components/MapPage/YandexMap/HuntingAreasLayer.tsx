@@ -42,20 +42,21 @@ export const HuntingAreasLayer: React.FC = () => {
     <>
       {areas.map((area) => {
         const isSelected = selectedArea?.id === area.id;
-        const polygonOptions = selectedArea 
-          ? {
-              fillColor: isSelected 
-                ? 'rgba(0, 255, 0, 0.4)' // Светлее для выбранной
-                : 'rgba(0, 255, 0, 0.7)', // Темнее для невыбранных
-              strokeColor: isSelected ? '#00FF00' : '#00DE2A',
-              strokeWidth: 2,
-              strokeStyle: isSelected ? 'dash' : 'solid'
-            }
-          : {
-              fillColor: 'rgba(0, 255, 0, 0.3)',
-              strokeColor: '#00FF00',
-              strokeWidth: 2
-            };
+        const polygonOptions = selectedArea
+  ? {
+      fillColor: isSelected 
+        ? 'rgba(0, 255, 0, 0.4)'  // Светлый для выбранного
+        : 'rgba(0, 255, 0, 0.7)',  // Темный для остальных при наличии выбранного
+      strokeColor: isSelected ? '#00FF00' : '#00DE2A',
+      strokeWidth: 2,
+      strokeStyle: isSelected ? 'dash' : 'solid'
+    }
+  : {
+      fillColor: 'rgba(0, 255, 0, 0.3)',  // Светлый для всех, когда ничего не выбрано
+      strokeColor: '#00FF00',
+      strokeWidth: 2,
+      strokeStyle: 'solid'
+    };
 
         return (
           <React.Fragment key={area.id}>
