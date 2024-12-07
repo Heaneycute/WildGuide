@@ -51,4 +51,16 @@ const verifyAccessToken = (req, res, next) => {
   }
 };
 
-module.exports = { verifyAccessToken, verifyRefreshToken };
+  const verifyAdmin = (req, res, next) => {
+    try {
+      if (!res.locals.user || res.locals.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(403).json({ message: 'Admin verification failed' });
+    }
+  };
+
+module.exports = { verifyAccessToken, verifyRefreshToken , verifyAdmin};
