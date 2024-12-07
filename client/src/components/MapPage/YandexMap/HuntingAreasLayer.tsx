@@ -3,11 +3,7 @@ import { Polygon, Placemark } from '@pbe/react-yandex-maps';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../Redux/index';
 import { fetchHuntingAreas } from '../../../Redux/Thunks/MapPage/huntingAreasThunks';
-import { 
-  selectAllAreas, 
-  selectArea, 
-  selectSelectedArea 
-} from '../../../Redux/Slices/MapPage/huntingAreasSlice';
+import { selectAllAreas, selectArea, selectSelectedArea } from '../../../Redux/Slices/MapPage/huntingAreasSlice';
 import { HuntingArea } from '../../../types/MapPage/HuntingAreaType';
 
 const getCenterCoordinates = (coordinates: number[][]) => {
