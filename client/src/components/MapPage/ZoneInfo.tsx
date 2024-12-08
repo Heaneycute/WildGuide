@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Typography, Divider, Accordion, AccordionSummary, AccordionDetails, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import { Box, Typography, Divider, Accordion, AccordionSummary, AccordionDetails, Dialog, DialogTitle, DialogContent, DialogActions, Button, IconButton, Stack } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useSelector } from 'react-redux';
 import { selectSelectedArea } from '../../Redux/Slices/MapPage/huntingAreasSlice';
 import { commonBoxStyles } from '../../Styles/MapPageComponents.styles';
@@ -120,7 +124,7 @@ export default function ZoneInfo() {
       ...commonBoxStyles,
       display: 'flex',
       flexDirection: 'column',
-      height: '450px',
+      height: '500px',
       width: '100%'
     }}>
       <Box sx={{ 
@@ -174,6 +178,9 @@ export default function ZoneInfo() {
               <Box 
                 key={cabin.id} 
                 sx={{ 
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   cursor: 'pointer', 
                   '&:hover': { 
                     bgcolor: 'rgba(255, 255, 255, 0.1)'
@@ -182,11 +189,31 @@ export default function ZoneInfo() {
                   borderRadius: 1,
                   mt: 1
                 }}
-                onClick={() => handleCabinClick(cabin)}
               >
                 <Typography>
                   • {cabin.name} ({cabin.type === 'permanent' ? 'Постоянный' : 'Временный'})
                 </Typography>
+                <Stack direction="row" spacing={1}>
+                  <IconButton 
+                    size="small" 
+                    sx={{ color: '#ffffff' }}
+                    onClick={() => handleCabinClick(cabin)}
+                  >
+                    <InfoOutlinedIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton 
+                    size="small" 
+                    sx={{ color: '#ffffff' }}
+                  >
+                    <StarOutlineIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton 
+                    size="small" 
+                    sx={{ color: '#ffffff' }}
+                  >
+                    <CommentOutlinedIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
               </Box>
             ))}
           </AccordionDetails>
