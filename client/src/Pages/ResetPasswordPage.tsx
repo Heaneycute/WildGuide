@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Paper, TextField, Button, Typography, Box, Alert, Snackbar, InputAdornment } from '@mui/material';
 import { Email } from '@mui/icons-material';
+import { authPageContainerStyles } from '../Styles/AuthPages.styles';
 import axiosInstance from '../axiosInstance';
 
 export default function ResetPasswordPage() {
@@ -56,6 +57,15 @@ export default function ResetPasswordPage() {
   };
 
   return (
+    <Container maxWidth={false} disableGutters sx={{
+      ...authPageContainerStyles,
+      minHeight: '100vh',
+      backgroundColor: 'rgba(0,0,0,0.4)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+
     <Container maxWidth="sm">
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
@@ -110,6 +120,7 @@ export default function ResetPasswordPage() {
           {snackbar.message}
         </Alert>
       </Snackbar>
+    </Container>
     </Container>
   );
 }

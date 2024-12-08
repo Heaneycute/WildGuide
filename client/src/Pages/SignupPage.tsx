@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axiosInstance, { setAccessToken } from '../axiosInstance';
 import { Dispatch, SetStateAction } from 'react';
+import { authPageContainerStyles } from '../Styles/AuthPages.styles';
 import { User } from '../types';
 import { 
   Container, 
@@ -124,164 +125,173 @@ export default function SignupPage({ setUser }: SignupPageProps) {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
-          <Typography variant="h5" component="h1" gutterBottom align="center">
-            Регистрация
-          </Typography>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              fullWidth
-              label="Имя пользователя"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              margin="normal"
-              variant="outlined"
-              required
-              error={!!errors.username}
-              helperText={errors.username || 'Минимум 3 символа'}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AccountCircle />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              margin="normal"
-              variant="outlined"
-              required
-              error={!!errors.email}
-              helperText={errors.email || 'Введите ваш email'}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Email />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              fullWidth
-              label="Пароль"
-              name="password"
-              type={showPassword ? 'text' : 'password'}
-              value={formData.password}
-              onChange={handleChange}
-              margin="normal"
-              variant="outlined"
-              required
-              error={!!errors.password}
-              helperText={errors.password || 'Минимум 8 символов, заглавные и строчные буквы, цифры'}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              fullWidth
-              label="Подтвердите пароль"
-              name="confirmPassword"
-              type={showConfirmPassword ? 'text' : 'password'}
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              margin="normal"
-              variant="outlined"
-              required
-              error={!!errors.confirmPassword}
-              helperText={errors.confirmPassword || 'Повторите пароль'}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      edge="end"
-                    >
-                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Зарегистрироваться
-            </Button>
-            <Divider sx={{ my: 2 }}>или</Divider>
-            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<Google />}
-                onClick={() => handleSocialSignup('google')}
-              >
-                Google
-              </Button>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<GitHub />}
-                onClick={() => handleSocialSignup('github')}
-              >
-                GitHub
-              </Button>
-            </Box>
-            <Typography align="center" variant="body2">
-              Уже есть аккаунт?{' '}
-              <Button
-                component={Link}
-                to="/signin"
-                color="primary"
-              >
-                Войдите
-              </Button>
+    <Container maxWidth={false} disableGutters sx={{
+      ...authPageContainerStyles,
+      minHeight: '100vh',
+      backgroundColor: 'rgba(0,0,0,0.4)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <Container maxWidth="sm">
+        <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
+            <Typography variant="h5" component="h1" gutterBottom align="center">
+              Регистрация
             </Typography>
-          </form>
-        </Paper>
-      </Box>
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-      >
-        <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                label="Имя пользователя"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+                required
+                error={!!errors.username}
+                helperText={errors.username || 'Минимум 3 символа'}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+                required
+                error={!!errors.email}
+                helperText={errors.email || 'Введите ваш email'}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Email />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Пароль"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                value={formData.password}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+                required
+                error={!!errors.password}
+                helperText={errors.password || 'Минимум 8 символов, заглавные и строчные буквы, цифры'}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Подтвердите пароль"
+                name="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+                required
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword || 'Повторите пароль'}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Зарегистрироваться
+              </Button>
+              <Divider sx={{ my: 2 }}>или</Divider>
+              <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  startIcon={<Google />}
+                  onClick={() => handleSocialSignup('google')}
+                >
+                  Google
+                </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  startIcon={<GitHub />}
+                  onClick={() => handleSocialSignup('github')}
+                >
+                  GitHub
+                </Button>
+              </Box>
+              <Typography align="center" variant="body2">
+                Уже есть аккаунт?{' '}
+                <Button
+                  component={Link}
+                  to="/signin"
+                  color="primary"
+                >
+                  Войдите
+                </Button>
+              </Typography>
+            </form>
+          </Paper>
+        </Box>
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+        >
+          <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Container>
     </Container>
   );
 }

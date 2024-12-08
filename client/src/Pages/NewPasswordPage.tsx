@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Container, Paper, TextField, Button, Typography, Box, Alert, Snackbar, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff, Lock } from '@mui/icons-material';
 import axiosInstance from '../axiosInstance';
+import { authPageContainerStyles } from '../Styles/AuthPages.styles';
 
 export default function NewPasswordPage() {
   const navigate = useNavigate();
@@ -84,6 +85,14 @@ export default function NewPasswordPage() {
   };
 
   return (
+    <Container maxWidth={false} disableGutters sx={{
+      ...authPageContainerStyles,
+      minHeight: '100vh',
+      backgroundColor: 'rgba(0,0,0,0.4)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
     <Container maxWidth="sm">
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
@@ -174,6 +183,7 @@ export default function NewPasswordPage() {
           {snackbar.message}
         </Alert>
       </Snackbar>
+    </Container>
     </Container>
   );
 }

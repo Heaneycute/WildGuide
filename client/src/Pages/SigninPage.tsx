@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axiosInstance, { setAccessToken } from '../axiosInstance';
 import { Dispatch, SetStateAction } from 'react';
 import { User } from '../types';
+import { authPageContainerStyles } from '../Styles/AuthPages.styles';
 import { 
   Container, 
   Paper, 
@@ -109,134 +110,143 @@ export default function SigninPage({ setUser }: SigninPageProps) {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
-          <Typography variant="h5" component="h1" gutterBottom align="center">
-            Вход
-          </Typography>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              margin="normal"
-              variant="outlined"
-              required
-              error={!!errors.email}
-              helperText={errors.email || 'Введите ваш email'}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AccountCircle />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              fullWidth
-              label="Пароль"
-              name="password"
-              type={showPassword ? 'text' : 'password'}
-              value={formData.password}
-              onChange={handleChange}
-              margin="normal"
-              variant="outlined"
-              required
-              error={!!errors.password}
-              helperText={errors.password || 'Введите ваш пароль'}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="rememberMe"
-                    checked={formData.rememberMe}
-                    onChange={handleChange}
-                    color="primary"
-                  />
-                }
-                label="Запомнить меня"
-              />
-              <Button
-                component={Link}
-                to="/resetpassword"
-                color="primary"
-              >
-                Забыли пароль?
-              </Button>
-            </Box>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Войти
-            </Button>
-            <Divider sx={{ my: 2 }}>или</Divider>
-            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<Google />}
-                onClick={() => handleSocialLogin('google')}
-              >
-                Google
-              </Button>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<GitHub />}
-                onClick={() => handleSocialLogin('github')}
-              >
-                GitHub
-              </Button>
-            </Box>
-            <Typography align="center" variant="body2">
-              Нет аккаунта?{' '}
-              <Button
-                component={Link}
-                to="/signup"
-                color="primary"
-              >
-                Зарегистрируйтесь
-              </Button>
+    <Container maxWidth={false} disableGutters sx={{
+      ...authPageContainerStyles,
+      minHeight: '100vh',
+      backgroundColor: 'rgba(0,0,0,0.4)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <Container maxWidth="sm">
+        <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
+            <Typography variant="h5" component="h1" gutterBottom align="center">
+              Вход
             </Typography>
-          </form>
-        </Paper>
-      </Box>
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-      >
-        <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+                required
+                error={!!errors.email}
+                helperText={errors.email || 'Введите ваш email'}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Пароль"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                value={formData.password}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+                required
+                error={!!errors.password}
+                helperText={errors.password || 'Введите ваш пароль'}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="rememberMe"
+                      checked={formData.rememberMe}
+                      onChange={handleChange}
+                      color="primary"
+                    />
+                  }
+                  label="Запомнить меня"
+                />
+                <Button
+                  component={Link}
+                  to="/resetpassword"
+                  color="primary"
+                >
+                  Забыли пароль?
+                </Button>
+              </Box>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Войти
+              </Button>
+              <Divider sx={{ my: 2 }}>или</Divider>
+              <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  startIcon={<Google />}
+                  onClick={() => handleSocialLogin('google')}
+                >
+                  Google
+                </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  startIcon={<GitHub />}
+                  onClick={() => handleSocialLogin('github')}
+                >
+                  GitHub
+                </Button>
+              </Box>
+              <Typography align="center" variant="body2">
+                Нет аккаунта?{' '}
+                <Button
+                  component={Link}
+                  to="/signup"
+                  color="primary"
+                >
+                  Зарегистрируйтесь
+                </Button>
+              </Typography>
+            </form>
+          </Paper>
+        </Box>
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+        >
+          <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Container>
     </Container>
   );
 }
