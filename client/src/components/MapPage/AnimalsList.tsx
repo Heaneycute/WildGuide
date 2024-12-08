@@ -1,68 +1,61 @@
 import React, { useState } from 'react';
-import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, Accordion, AccordionSummary, AccordionDetails, Stack } from '@mui/material';
+import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import LocalDiningIcon from '@mui/icons-material/LocalDining';
+import TerrainIcon from '@mui/icons-material/Terrain';
+import PetsIcon from '@mui/icons-material/Pets';
+import InfoIcon from '@mui/icons-material/Info';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { commonBoxStyles } from '../../Styles/MapPageComponents.styles';
 
-// Mock data for animals
 const mockAnimals = {
-  categories: [
+  animals: [
     {
-      name: "Копытные",
-      animals: [
+      id: 1,
+      name: "Лось",
+      type: "Копытные",
+      migration: "Сезонная, весна-осень",
+      breedingSeason: "Сентябрь-Октябрь",
+      diet: "Травоядное: побеги деревьев, кустарники, травы",
+      behavior: [
+        "Активны в сумерках",
+        "Предпочитают влажные места",
+        "Территориальны в период гона"
+      ],
+      huntingSeasons: ["Сентябрь", "Октябрь", "Ноябрь"],
+      requirements: [
         {
-          id: 1,
-          name: "Лось",
-          latinName: "Alces alces",
-          description: "Крупное парнокопытное животное семейства оленевых",
-          habitat: "Лесные массивы, болота",
-          diet: "Травоядное: побеги деревьев, кустарники, травы",
-          huntingSeasons: ["Сентябрь", "Октябрь", "Ноябрь"],
-          huntingMethods: ["Загонная охота", "С подхода", "На реву"],
-          requirements: ["Лицензия на копытных", "Охотничий билет"]
+          name: "Лицензия на копытных",
+          description: "Лицензия выдается в региональном охотничьем департаменте. Адрес: ул. Лесная, 123. Тел: +7 (123) 456-7890. Необходимые документы: паспорт, охотничий билет, заявление.",
         },
         {
-          id: 2,
-          name: "Кабан",
-          latinName: "Sus scrofa",
-          description: "Парнокопытное млекопитающее из семейства свиных",
-          habitat: "Смешанные леса, заросли кустарника",
-          diet: "Всеядное: корни, плоды, мелкие животные",
-          huntingSeasons: ["Июнь", "Июль", "Август"],
-          huntingMethods: ["Загонная охота", "На приваде", "С вышки"],
-          requirements: ["Лицензия на копытных", "Охотничий билет"]
+          name: "Охотничий билет",
+          description: "Единый федеральный охотничий билет можно получить в МФЦ или через портал Госуслуг. Необходимо пройти охотминимум и предоставить паспорт.",
         }
       ]
     },
     {
-      name: "Пернатая дичь",
-      animals: [
+      id: 2,
+      name: "Кабан",
+      type: "Копытные",
+      migration: "Локальная",
+      breedingSeason: "Ноябрь-Январь",
+      diet: "Всеядное: корни, плоды, мелкие животные",
+      behavior: [
+        "Ночная активность",
+        "Любят грязевые ванны",
+        "Живут группами"
+      ],
+      huntingSeasons: ["Июнь", "Июль", "Август"],
+      requirements: [
         {
-          id: 3,
-          name: "Утка кряква",
-          latinName: "Anas platyrhynchos",
-          description: "Водоплавающая птица из семейства утиных",
-          habitat: "Водоемы, болота",
-          diet: "Растительная пища, мелкие водные организмы",
-          huntingSeasons: ["Август", "Сентябрь", "Октябрь"],
-          huntingMethods: ["С подхода", "На перелете", "С чучелами"],
-          requirements: ["Охотничий билет", "Разрешение на добычу"]
-        }
-      ]
-    },
-    {
-      name: "Пушные звери",
-      animals: [
+          name: "Лицензия на копытных",
+          description: "Лицензия выдается в региональном охотничьем департаменте. Адрес: ул. Лесная, 123. Тел: +7 (123) 456-7890. Необходимые документы: паспорт, охотничий билет, заявление.",
+        },
         {
-          id: 4,
-          name: "Лиса",
-          latinName: "Vulpes vulpes",
-          description: "Хищное млекопитающее семейства псовых",
-          habitat: "Леса, поля, окраины населенных пунктов",
-          diet: "Хищник: грызуны, птицы, насекомые",
-          huntingSeasons: ["Октябрь", "Ноябрь", "Декабрь", "Январь"],
-          huntingMethods: ["С гончими", "На приваде", "Троплением"],
-          requirements: ["Охотничий билет"]
+          name: "Охотничий билет",
+          description: "Единый федеральный охотничий билет можно получить в МФЦ или через портал Госуслуг. Необходимо пройти охотминимум и предоставить паспорт.",
         }
       ]
     }
@@ -70,140 +63,144 @@ const mockAnimals = {
 };
 
 export default function AnimalsList() {
-  const [selectedAnimal, setSelectedAnimal] = useState(null);
-
-  const handleAnimalClick = (animal) => {
-    setSelectedAnimal(animal);
-  };
+  const [selectedDocument, setSelectedDocument] = useState(null);
 
   return (
-    <Box sx={commonBoxStyles}>
-      <Typography variant="h5" color="#ffffff" gutterBottom>
-        ЖИВОТНЫЙ МИР
-      </Typography>
+    <Box sx={{
+      ...commonBoxStyles,
+      display: 'flex',
+      flexDirection: 'column',
+      height: '350px',
+      width: '100%'
+    }}>
+      <Box sx={{
+        flex: '0 0 auto',
+        width: '100%',
+        marginBottom: 2
+      }}>
+        <Typography variant="h5" color="#ffffff" gutterBottom>
+          Список обитаемых животных в этом мире
+        </Typography>
+      </Box>
 
-      <Stack spacing={2}>
-        {mockAnimals.categories.map((category) => (
+      <Box sx={{
+        flex: '1 1 auto',
+        overflowY: 'auto',
+        width: '100%',
+        '&::-webkit-scrollbar': {
+          width: '8px'
+        },
+        '&::-webkit-scrollbar-track': {
+          background: 'rgba(255, 255, 255, 0.1)'
+        },
+        '&::-webkit-scrollbar-thumb': {
+          background: 'rgba(255, 255, 255, 0.2)',
+          borderRadius: '4px'
+        }
+      }}>
+        {mockAnimals.animals.map((animal) => (
           <Accordion 
-            key={category.name}
+            key={animal.id}
             sx={{ 
               bgcolor: 'rgba(0, 0, 0, 0.3)',
               color: '#ffffff',
+              mb: 1,
+              minWidth: 0
             }}
           >
             <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: '#ffffff' }} />}>
-              <Typography>{category.name}</Typography>
+              <Typography noWrap><b>{animal.name}</b></Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Stack spacing={1}>
-                {category.animals.map((animal) => (
-                  <Box
-                    key={animal.id}
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      p: 1,
-                      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                      '&:hover': {
-                        bgcolor: 'rgba(255, 255, 255, 0.1)',
-                        cursor: 'pointer'
-                      }
-                    }}
-                  >
-                    <Typography>{animal.name}</Typography>
-                    <IconButton
-                      size="small"
-                      sx={{ color: '#ffffff' }}
-                      onClick={() => handleAnimalClick(animal)}
-                    >
-                      <InfoOutlinedIcon />
-                    </IconButton>
-                  </Box>
-                ))}
-              </Stack>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <PetsIcon sx={{ mr: 1 }} />
+                <Typography>Тип: {animal.type}</Typography>
+              </Box>
+              
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <TerrainIcon sx={{ mr: 1 }} />
+                <Typography>Миграция: {animal.migration}</Typography>
+              </Box>
+              
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <CalendarMonthIcon sx={{ mr: 1 }} />
+                <Typography>Период размножения: {animal.breedingSeason}</Typography>
+              </Box>
+              
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <LocalDiningIcon sx={{ mr: 1 }} />
+                <Typography>Питание: {animal.diet}</Typography>
+              </Box>
+
+              <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>Повадки:</Typography>
+              {animal.behavior.map((item, index) => (
+                <Typography key={index}>• {item}</Typography>
+              ))}
+
+              <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>Сезоны охоты:</Typography>
+              {animal.huntingSeasons.map((season, index) => (
+                <Typography key={index}>• {season}</Typography>
+              ))}
+
+              <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>Необходимые документы:</Typography>
+              {animal.requirements.map((req, index) => (
+                <Box 
+                  key={index}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      bgcolor: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    p: 1,
+                    borderRadius: 1,
+                    mt: 1
+                  }}
+                  onClick={() => setSelectedDocument(req)}
+                >
+                  <InfoOutlinedIcon sx={{ mr: 1 }} />
+                  <Typography>• {req.name}</Typography>
+                </Box>
+              ))}
             </AccordionDetails>
           </Accordion>
         ))}
-      </Stack>
+      </Box>
 
       <Dialog
-        open={Boolean(selectedAnimal)}
-        onClose={() => setSelectedAnimal(null)}
+        open={Boolean(selectedDocument)}
+        onClose={() => setSelectedDocument(null)}
         maxWidth="sm"
         fullWidth
         PaperProps={{
           sx: {
             bgcolor: 'rgba(0, 0, 0, 0.8)',
             backdropFilter: 'blur(10px)',
+            borderRadius: '16px',
             color: '#ffffff'
           }
         }}
       >
-        {selectedAnimal && (
+        {selectedDocument && (
           <>
-            <DialogTitle>
-              {selectedAnimal.name}
-              <Typography variant="subtitle2" color="gray">
-                {selectedAnimal.latinName}
-              </Typography>
+            <DialogTitle sx={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+              {selectedDocument.name}
             </DialogTitle>
             <DialogContent>
-              <Typography variant="body1" paragraph>
-                {selectedAnimal.description}
+              <Typography sx={{ mt: 2 }}>
+                {selectedDocument.description}
               </Typography>
-
-              <Typography variant="h6" gutterBottom>
-                Среда обитания
-              </Typography>
-              <Typography variant="body1" paragraph>
-                {selectedAnimal.habitat}
-              </Typography>
-
-              <Typography variant="h6" gutterBottom>
-                Питание
-              </Typography>
-              <Typography variant="body1" paragraph>
-                {selectedAnimal.diet}
-              </Typography>
-
-              <Typography variant="h6" gutterBottom>
-                Сезоны охоты
-              </Typography>
-              <Stack spacing={1}>
-                {selectedAnimal.huntingSeasons.map((season, index) => (
-                  <Typography key={index} variant="body1">
-                    • {season}
-                  </Typography>
-                ))}
-              </Stack>
-
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                Способы охоты
-              </Typography>
-              <Stack spacing={1}>
-                {selectedAnimal.huntingMethods.map((method, index) => (
-                  <Typography key={index} variant="body1">
-                    • {method}
-                  </Typography>
-                ))}
-              </Stack>
-
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                Необходимые документы
-              </Typography>
-              <Stack spacing={1}>
-                {selectedAnimal.requirements.map((req, index) => (
-                  <Typography key={index} variant="body1">
-                    • {req}
-                  </Typography>
-                ))}
-              </Stack>
             </DialogContent>
-            <DialogActions>
+            <DialogActions sx={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
               <Button
-                onClick={() => setSelectedAnimal(null)}
-                sx={{ color: '#ffffff' }}
+                onClick={() => setSelectedDocument(null)}
+                sx={{
+                  color: '#ffffff',
+                  '&:hover': {
+                    bgcolor: 'rgba(255, 255, 255, 0.1)'
+                  }
+                }}
               >
                 Закрыть
               </Button>

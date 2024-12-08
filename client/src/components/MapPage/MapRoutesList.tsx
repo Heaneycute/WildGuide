@@ -102,7 +102,7 @@ export default function MapRoutesList() {
     </Stack>
       <Stack spacing={2} direction="column" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h5" color="#ffffff">
-          СПИСОК МАРШРУТОВ
+          Список маршрутов зоны
         </Typography>
         <Button
           variant="contained"
