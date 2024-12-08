@@ -37,7 +37,13 @@ export default function ExempleReduxPage({ user }: NavbarProps) {
       alignItems: 'center',
       justifyContent: 'center'
     }}>
-    <StyledContainer maxWidth="lg">
+    <StyledContainer sx={{
+          height: 'calc(100vh - 70px)',
+          marginTop: '70px',
+          position: 'relative',
+          zIndex: 1,
+          overflow: 'auto'
+        }}>
       <Stack spacing={4}>
         <WelcomePaper elevation={3}>
           <Typography 

@@ -26,7 +26,8 @@ export const dashboardGridStyles: SxProps = {
   gridTemplateColumns: '2fr 1fr',
   gap: '24px',
   padding: '24px',
-  height: '100%',
+  height: 'calc(100vh - 70px)',
+  marginTop: '70px',
   position: 'relative',
   zIndex: 1
 };

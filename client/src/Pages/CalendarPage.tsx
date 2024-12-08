@@ -64,7 +64,36 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <Box className={classes.calendarContainer} display="flex">
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: 'url("/images/nature-background-DashboardPage.jpg")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'brightness(0.4)',
+          zIndex: -1
+        }
+      }}
+    >
+    <Box sx={{
+          height: 'calc(100vh - 70px)',
+          width: '100vw',
+          marginTop: '70px',
+          position: 'relative',
+          zIndex: 1,
+          overflow: 'auto',
+          display: 'flex',
+        }}className={classes.calendarContainer} display="flex">
       <Box flex="3" marginRight="2rem">
         <Box
           className={classes.controls}
@@ -148,6 +177,8 @@ const Calendar: React.FC = () => {
           events.filter((event) => event.date === selectedDate) || []
         }
       />
+    </Box>
+
     </Box>
   );
 };
