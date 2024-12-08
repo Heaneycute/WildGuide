@@ -4,7 +4,7 @@ import { SxProps } from '@mui/material';
 export const dashboardContainerStyles: SxProps = {
   position: 'relative',
   width: '100vw',
-  height: 'calc(100vh - 60px)',
+  height: '100vh',
   overflow: 'hidden',
   '&::before': {
     content: '""',

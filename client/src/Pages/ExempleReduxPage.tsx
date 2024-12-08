@@ -5,6 +5,7 @@ import AnimalExampleList from '../components/ExempleReduxPage/AnimalExampleList'
 import CollorExampleCard from '../components/ExempleReduxPage/CollorExampleCard';
 import { ExampleComponent } from '../components/ExempleReduxPage/ExampleComponent';
 import { User } from '../types';
+import { authPageContainerStyles } from '../Styles/AuthPages.styles';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   paddingTop: theme.spacing(4),
@@ -28,6 +29,14 @@ type NavbarProps = {
 
 export default function ExempleReduxPage({ user }: NavbarProps) {
   return (
+    <Container maxWidth={false} disableGutters sx={{
+      ...authPageContainerStyles,
+      minHeight: '100vh',
+      backgroundColor: 'rgba(0,0,0,0.4)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
     <StyledContainer maxWidth="lg">
       <Stack spacing={4}>
         <WelcomePaper elevation={3}>
@@ -56,5 +65,6 @@ export default function ExempleReduxPage({ user }: NavbarProps) {
         <ExampleComponent />
       </Stack>
     </StyledContainer>
+    </Container>
   );
 }

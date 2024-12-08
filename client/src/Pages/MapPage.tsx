@@ -37,24 +37,34 @@ export default function MapPage() {
     }));
   };
   return (
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: 'url("/images/nature-background.jpg")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'brightness(0.8)',
+          zIndex: -1
+        }
+      }}
+    >
     <Box sx={{
-      position: 'relative',
-      width: '100vw',
-      height: 'calc(100vh - 60px)',
-      overflow: 'hidden',
-      '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundImage: 'url("/images/nature-background.jpg")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        zIndex: -1
-      }
-    }}>
+          height: 'calc(100vh - 70px)',
+          marginTop: '70px',
+          position: 'relative',
+          zIndex: 1,
+          overflow: 'auto'
+        }}>
       <Box sx={{
         display: 'grid',
         gridTemplateColumns: '1fr 400px 500px',
@@ -99,6 +109,7 @@ export default function MapPage() {
           <MapRoutesList />
         </Box>
       </Box>
+    </Box>
     </Box>
   );
 }
