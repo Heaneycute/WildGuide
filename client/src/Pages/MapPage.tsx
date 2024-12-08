@@ -57,7 +57,7 @@ export default function MapPage() {
     }}>
       <Box sx={{
         display: 'grid',
-        gridTemplateColumns: '1fr 300px 300px',
+        gridTemplateColumns: '1fr 400px 500px',
         padding: '20px',
         gap: '20px',
         height: '100%',

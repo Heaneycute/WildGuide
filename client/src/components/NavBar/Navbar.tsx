@@ -1,3 +1,4 @@
+// components/Navbar/index.tsx
 import { AppBar, Toolbar, Button, Typography, Box, IconButton, Menu, MenuItem, Avatar, Stack } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { User } from '../../types';
@@ -5,6 +6,16 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import axiosInstance, { setAccessToken } from '../../axiosInstance';
 import { initUser } from '../../App';
 import { Home as HomeIcon, Person as PersonIcon, Logout as LogoutIcon } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+
+// Создаем стилизованную кнопку без обводки
+const BorderlessButton = styled(Button)({
+  border: 'none',
+  '&:hover': {
+    border: 'none',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)'
+  }
+});
 
 type NavbarProps = {
   user: User;
@@ -43,38 +54,39 @@ export default function Navbar({ user, setUser }: NavbarProps) {
     <AppBar position="fixed">
       <Toolbar>
         {/* Логотип */}
-      <Stack 
-        direction="row" 
-        spacing={1} 
-        alignItems="center" 
-        component={RouterLink}
-        to="/"
-        sx={{ 
-          textDecoration: 'none', 
-          color: 'inherit',
-          mr: 3 
-        }}
-      >
-        <Avatar
-          src="/images/logo-default.png"
+        <Stack 
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          component={RouterLink}
+          to="/"
           sx={{
-            width: 40,
-            height: 40,
-            border: '2px solid',
-            borderColor: 'primary.dark'
-          }}
-        />
-        <Typography
-          variant="h6"
-          component="span"
-          sx={{
-            fontWeight: 'bold',
-            display: { xs: 'none', sm: 'block' }
+            textDecoration: 'none',
+            color: 'inherit',
+            mr: 3
           }}
         >
-          WildGuide
-        </Typography>
-      </Stack>
+          <Avatar
+            src="/images/logo-default.png"
+            sx={{
+              width: 40,
+              height: 40,
+              border: '2px solid',
+              borderColor: 'primary.dark'
+            }}
+          />
+          <Typography
+            variant="h6"
+            component="span"
+            sx={{
+              fontWeight: 'bold',
+              display: { xs: 'none', sm: 'block' }
+            }}
+          >
+            WildGuide
+          </Typography>
+        </Stack>
+
         {/* Иконка домой */}
         <IconButton
           size="large"
@@ -82,55 +94,62 @@ export default function Navbar({ user, setUser }: NavbarProps) {
           color="inherit"
           component={RouterLink}
           to="/"
-          sx={{ mr: 2 }}
+          sx={{ 
+            mr: 2,
+            border: 'none',
+            '&:hover': {
+              border: 'none',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)'
+            }
+          }}
         >
           <HomeIcon />
         </IconButton>
 
         {/* Навигационные кнопки */}
         <Box sx={{ flexGrow: 1 }}>
-          <Button
+          <BorderlessButton
             color="inherit"
             component={RouterLink}
             to="/Dashboard"
           >
             DashBord
-          </Button>
-          <Button
+          </BorderlessButton>
+          <BorderlessButton
             color="inherit"
             component={RouterLink}
             to="/animal"
           >
             Animal
-          </Button>
-          <Button
+          </BorderlessButton>
+          <BorderlessButton
             color="inherit"
             component={RouterLink}
             to="/calendar"
           >
             Calendar
-          </Button>
-          <Button
+          </BorderlessButton>
+          <BorderlessButton
             color="inherit"
             component={RouterLink}
             to="/map"
           >
             Map
-          </Button>
-          <Button
+          </BorderlessButton>
+          <BorderlessButton
             color="inherit"
             component={RouterLink}
             to="/weapon"
           >
             Weapon
-          </Button>
-          <Button
+          </BorderlessButton>
+          <BorderlessButton
             color="inherit"
             component={RouterLink}
             to="/exemplereduxpage"
           >
             ExempleReduxPage
-          </Button>
+          </BorderlessButton>
         </Box>
 
         {/* Пользовательское меню */}
@@ -144,13 +163,20 @@ export default function Navbar({ user, setUser }: NavbarProps) {
                 size="large"
                 onClick={handleMenu}
                 color="inherit"
-                sx={{ p: 0.5 }}
+                sx={{ 
+                  p: 0.5,
+                  border: 'none',
+                  '&:hover': {
+                    border: 'none',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                  }
+                }}
               >
                 <Avatar 
-                  src="/images/avatar-default.jpg" 
+                  src="/images/avatar-default.jpg"
                   alt={user.username}
-                  sx={{ 
-                    width: 40, 
+                  sx={{
+                    width: 40,
                     height: 40,
                     bgcolor: 'secondary.main'
                   }}
@@ -176,19 +202,26 @@ export default function Navbar({ user, setUser }: NavbarProps) {
               <IconButton
                 color="inherit"
                 onClick={logoutHandler}
-                sx={{ ml: 1 }}
+                sx={{ 
+                  ml: 1,
+                  border: 'none',
+                  '&:hover': {
+                    border: 'none',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                  }
+                }}
               >
                 <LogoutIcon />
               </IconButton>
             </Stack>
           ) : (
             <>
-              <Button color="inherit" component={RouterLink} to="/signin">
+              <BorderlessButton color="inherit" component={RouterLink} to="/signin">
                 Войти
-              </Button>
-              <Button color="inherit" component={RouterLink} to="/signup">
+              </BorderlessButton>
+              <BorderlessButton color="inherit" component={RouterLink} to="/signup">
                 Регистрация
-              </Button>
+              </BorderlessButton>
             </>
           )}
         </Box>

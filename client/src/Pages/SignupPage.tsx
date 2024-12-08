@@ -262,9 +262,13 @@ export default function SignupPage({ setUser }: SignupPageProps) {
             </Box>
             <Typography align="center" variant="body2">
               Уже есть аккаунт?{' '}
-              <Link component={Link} to="/signin">
+              <Button
+                component={Link}
+                to="/signin"
+                color="primary"
+              >
                 Войдите
-              </Link>
+              </Button>
             </Typography>
           </form>
         </Paper>
