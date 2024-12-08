@@ -124,7 +124,7 @@ export default function ZoneInfo() {
       ...commonBoxStyles,
       display: 'flex',
       flexDirection: 'column',
-      height: '500px',
+      height: '458px',
       width: '100%'
     }}>
       <Box sx={{ 

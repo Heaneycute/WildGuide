@@ -70,7 +70,7 @@ export default function AnimalsList() {
       ...commonBoxStyles,
       display: 'flex',
       flexDirection: 'column',
-      height: '350px',
+      height: '340px',
       width: '100%'
     }}>
       <Box sx={{
