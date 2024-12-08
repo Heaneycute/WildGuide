@@ -1,5 +1,5 @@
 import { SxProps } from '@mui/material';
-
+//Верстка отцентровка без стиля и цветов
 export const authPageContainerStyles: SxProps = {
   position: 'relative',
   width: '100vw',

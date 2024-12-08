@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation"; 
-import "swiper/css/autoplay";
+import { Box, Typography, CircularProgress, Container } from "@mui/material";
 import axiosInstance from "../axiosInstance";
-import styles from "../Styles/Weapon.module.css";
-import Weapon3dModel from "../components/WeaponComponents/Weapon3dModel"; 
-
-const getWeapons = async () => {
-  const response = await axiosInstance.get("/api/v1/weapons");
-  return response.data;
-};
+import {pageWrapperStyles, mainContentStyles, modelViewerStyles, weaponCardStyles, loadingContainerStyles, childrenColumnStyles, weaponInfoStyles, weaponCarouselStyles } from "../Styles/WeaponPages.styles";
+import Weapon3dModel from "../components/WeaponComponents/Weapon3dModel";
 
 interface Weapon {
   id: number;
@@ -18,17 +10,26 @@ interface Weapon {
   description: string;
   model_link: string;
   img_link: string;
+  characteristics?: {
+    caliber?: string;
+    weight?: string;
+    length?: string;
+    capacity?: string;
+  };
 }
 
 const WeaponGalleryPage: React.FC = () => {
   const [weapons, setWeapons] = useState<Weapon[]>([]);
-  const [selectedWeapon, setSelectedWeapon] = useState<Weapon | null>(null); 
+  const [selectedWeapon, setSelectedWeapon] = useState<Weapon | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getWeapons()
-      .then((data) => {
-        setWeapons(data);
+    axiosInstance.get("/api/v1/weapons")
+      .then((response) => {
+        setWeapons(response.data);
+        if (response.data.length > 0) {
+          setSelectedWeapon(response.data[0]);
+        }
         setLoading(false);
       })
       .catch((error) => {
@@ -38,71 +39,73 @@ const WeaponGalleryPage: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Загрузка...</div>;
+    return (
+      <Box sx={loadingContainerStyles}>
+        <CircularProgress sx={{ color: '#8B4513' }}/>
+      </Box>
+    );
   }
 
-  const handleWeaponClick = (weapon: Weapon) => {
-    setSelectedWeapon(weapon); 
-  };
-
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.contentContainer}>
-        {selectedWeapon && (
-          <div className={styles.detailsContainer}>
-            <h2>Подробности об оружии: {selectedWeapon.model}</h2>
-            <p>{selectedWeapon.description}</p>
-            <p><strong>Модель:</strong> {selectedWeapon.model}</p>
-            <div className={styles.modelLink}>
-              <a href={selectedWeapon.model_link} target="_blank" rel="noopener noreferrer">
-                Ссылка на 3D модель
-              </a>
-            </div>
-          </div>
-        )}
-
-        {selectedWeapon && selectedWeapon.model_link && (
-          <div className={styles.modelContainer}>
-            <Weapon3dModel key={selectedWeapon.id} modelLink={selectedWeapon.model_link} />
-          </div>
-        )}
-      </div>
-
-      <div className={styles.sliderContainer}>
-        <Swiper
-          spaceBetween={20}
-          slidesPerView={3}
-          loop={true}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
-          navigation={true} 
-          breakpoints={{
-            320: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-        >
-          {weapons.map((weapon) => (
-            <SwiperSlide key={weapon.id} className={styles.slide}>
-              <div
-                onClick={() => handleWeaponClick(weapon)}
-                className={styles.item}
-              >
-                <div
-                  className={styles.imageWrapper}
-                  style={{
-                    backgroundImage: `url(${weapon.img_link})`,
-                  }}
-                ></div>
-                <p>{weapon.model}</p>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-    </div>
+    <Box sx={pageWrapperStyles}>
+      <Box sx={mainContentStyles}>
+        <Box sx={{ ...modelViewerStyles, width: '50%' }}>
+          {selectedWeapon?.model_link && (
+            <Weapon3dModel modelLink={selectedWeapon.model_link} />
+          )}
+        </Box>
+        <Box sx={{ ...childrenColumnStyles, width: '50%' }}>
+          <Box sx={weaponInfoStyles}>
+            {selectedWeapon && (
+              <>
+                <Typography variant="h4" sx={{ mb: 3, color: '#8B4513' }}>
+                  {selectedWeapon.model}
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 3 }}>
+                  {selectedWeapon.description}
+                </Typography>
+                {selectedWeapon.characteristics && (
+                  <Box sx={{ mt: 3 }}>
+                    <Typography variant="h6" sx={{ color: '#8B4513', mb: 2 }}>
+                      Характеристики:
+                    </Typography>
+                    {selectedWeapon.characteristics.caliber && (
+                      <Typography>Калибр: {selectedWeapon.characteristics.caliber}</Typography>
+                    )}
+                    {selectedWeapon.characteristics.weight && (
+                      <Typography>Вес: {selectedWeapon.characteristics.weight}</Typography>
+                    )}
+                    {selectedWeapon.characteristics.length && (
+                      <Typography>Длина: {selectedWeapon.characteristics.length}</Typography>
+                    )}
+                    {selectedWeapon.characteristics.capacity && (
+                      <Typography>Ёмкость магазина: {selectedWeapon.characteristics.capacity}</Typography>
+                    )}
+                  </Box>
+                )}
+              </>
+            )}
+          </Box>
+          <Box sx={weaponCarouselStyles}>
+            {weapons.map((weapon) => (
+              <Box
+                key={weapon.id}
+                onClick={() => setSelectedWeapon(weapon)}
+                sx={{
+                  ...weaponCardStyles,
+                  minWidth: '150px',
+                  height: '100px',
+                  backgroundImage: `url(${weapon.img_link})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  flexShrink: 0,
+                }}
+              />
+            ))}
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

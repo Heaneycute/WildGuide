@@ -1,5 +1,7 @@
-// styles/theme.ts
 import { createTheme } from '@mui/material/styles';
+import { createGlobalStyle } from 'styled-components';
+
+//Стили цветов глобальные без самой верстки и размеров
 
 export const theme = createTheme({
   palette: {
@@ -94,3 +96,16 @@ export const theme = createTheme({
     }
   }
 });
+
+//Удаление полос прокруток
+const GlobalStyle = createGlobalStyle`
+  * {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+  }
+`;
+
+export default GlobalStyle;

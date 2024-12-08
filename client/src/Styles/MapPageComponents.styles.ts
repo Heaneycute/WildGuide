@@ -1,3 +1,5 @@
+//MapPageComponents.styles.ts
+
 import { SxProps } from '@mui/material';
 
 export const commonBoxStyles: SxProps = {
@@ -5,9 +7,9 @@ export const commonBoxStyles: SxProps = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  border: '1px solid rgba(124, 152, 78, 0.4)',
+  border: '1px solid rgba(139, 69, 19, 0.4)',
   backdropFilter: 'blur(10px)',
-  backgroundColor: 'rgba(15, 31, 12, 0.2)',
+  backgroundColor: 'rgba(43, 24, 16, 0.4)',
   borderRadius: '12px',
   padding: '20px',
   overflow: 'hidden'

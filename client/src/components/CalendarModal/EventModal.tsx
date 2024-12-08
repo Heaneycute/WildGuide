@@ -11,7 +11,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import useStyles from "../../Styles/CalendarStyles";
+import useStyles from "../../Styles/CalendarPages.styles";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../Redux/hooks";
 import {

@@ -17,6 +17,7 @@ import Map from "./Pages/MapPage";
 import Profile from "./Pages/ProfilePage";
 import Weapon from "./Pages/WeaponPage";
 import ExempleReduxPage from "./Pages/ExempleReduxPage";
+import GlobalStyle from './Styles/globalStyle'
 
 interface User {
   id: number;
@@ -76,6 +77,7 @@ function App() {
 
   return (
     <>
+      <GlobalStyle />
       <RouterProvider router={router} />
       <ToastContainer position="top-right" autoClose={3000} />
     </>

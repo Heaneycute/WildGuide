@@ -37,10 +37,10 @@ export const commonBoxStyles: SxProps = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  border: '1px solid rgba(124, 152, 78, 0.4)',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
   backdropFilter: 'blur(10px)',
-  backgroundColor: 'rgba(15, 31, 12, 0.2)',
-  borderRadius: '12px',
+  backgroundColor: 'rgba(43, 24, 16, 0.8)',
+  borderRadius: '16px',
   padding: '20px',
   overflow: 'hidden'
 };
@@ -65,6 +65,7 @@ export const dashboardCardStyles: SxProps = {
   padding: '24px',
   '&:hover': {
     transform: 'translateY(-5px)',
-    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)'
+    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(43, 24, 16, 0.9)'
   }
 };

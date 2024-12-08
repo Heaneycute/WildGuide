@@ -8,7 +8,7 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import dayjs from "dayjs";
 import EventModal from "../components/CalendarModal/EventModal";
 import EventList from "../components/CalendarModal/EventList";
-import useStyles from "../Styles/CalendarStyles";
+import useStyles from "../Styles/CalendarPages.styles";
 import { useAppDispatch, useAppSelector } from "../Redux/hooks";
 import { setCurrentDate, setSelectedDate } from "../Redux/Slices/calendarSlice";
 import {
