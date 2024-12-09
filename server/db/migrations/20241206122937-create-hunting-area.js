@@ -27,12 +27,14 @@ module.exports = {
         allowNull: false
       },
       terrainType: {
-        type: Sequelize.ENUM('forest', 'mountain', 'plain', 'wetland', 'mixed', 'taiga'),
-        allowNull: false
+        type: Sequelize.ENUM('лесной', 'горный', 'равнинный', 'водно-болотный', 'смешанный', 'тайга'),
+        allowNull: false,
+        comment: 'Тип местности'
       },
       landscape: {
-        type: Sequelize.ENUM('forest', 'field', 'wetland', 'mixed', 'mountainous'),
-        allowNull: false
+        type: Sequelize.ENUM('лесной', 'полевой', 'водно-болотный', 'смешанный', 'горный'),
+        allowNull: false,
+        comment: 'Тип ландшафта'
       },
       elevation: {
         type: Sequelize.INTEGER,

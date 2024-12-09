@@ -26,12 +26,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     terrainType: {
-      type: DataTypes.ENUM('forest', 'mountain', 'plain', 'wetland', 'mixed', 'taiga'),
-      allowNull: false
+      type: DataTypes.ENUM('лесной', 'горный', 'равнинный', 'водно-болотный', 'смешанный', 'тайга'),
+      allowNull: false,
     },
     landscape: {
-      type: DataTypes.ENUM('forest', 'field', 'wetland', 'mixed', 'mountainous'),
-      allowNull: false
+      type: DataTypes.ENUM('лесной', 'полевой', 'водно-болотный', 'смешанный', 'горный'),
+      allowNull: false,
     },
     elevation: {
       type: DataTypes.INTEGER,
@@ -76,14 +76,6 @@ module.exports = (sequelize, DataTypes) => {
     allowedWeapons: {
       type: DataTypes.JSONB,
       allowNull: false
-    },
-    createdAt: {
-    allowNull: false,
-    type: DataTypes.DATE
-    },
-      updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
     }
   }, {
     modelName: 'HuntingArea',
