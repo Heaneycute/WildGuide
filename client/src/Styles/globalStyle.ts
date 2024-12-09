@@ -344,6 +344,89 @@ export const yellowTheme = createTheme({
   }
 });
 
+export const pinkTheme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#FF69B4',  // Hot pink
+      light: '#FFB6C1',  // Light pink
+      dark: '#FF1493'   // Deep pink
+    },
+    secondary: {
+      main: '#FF69B4',
+      light: '#FFC0CB',
+      dark: '#DB7093'
+    },
+    background: {
+      default: '#FFF0F5',  // Lavender blush
+      paper: 'rgba(255, 240, 245, 0.6)'
+    },
+    text: {
+      primary: '#4A0024',
+      secondary: 'rgba(74, 0, 36, 0.9)'
+    }
+  },
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgba(255, 105, 180, 0.6)',
+          backdropFilter: 'blur(10px)',
+          borderBottom: '1px solid rgba(219, 112, 147, 0.2)',
+          borderRadius: '0 0 16px 16px'
+        }
+      }
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          borderRadius: '12px',
+          color: '#4A0024',
+          '&:hover': {
+            color: 'rgba(74, 0, 36, 0.8)'
+          }
+        },
+        containedPrimary: {
+          backgroundColor: '#FF69B4',
+          color: '#FFFFFF',
+          '&:hover': {
+            backgroundColor: '#FF1493'
+          }
+        }
+      },
+      variants: [{
+        props: { className: 'register-link' },
+        style: {
+          backgroundColor: '#FF69B4',
+          color: '#FFFFFF',
+          '&:hover': {
+            backgroundColor: '#FF1493'
+          }
+        }
+      }]
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: '12px',
+          color: '#4A0024',
+          '&:hover': {
+            color: 'rgba(74, 0, 36, 0.8)'
+          }
+        }
+      }
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: '16px'
+        }
+      }
+    }
+  }
+});
+
 //Удаление полос прокруток
 const GlobalStyle = createGlobalStyle`
   * {

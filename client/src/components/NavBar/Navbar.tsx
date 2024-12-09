@@ -24,7 +24,7 @@ export default function Navbar({ user, setUser }: NavbarProps) {
     setThemeMenu(event.currentTarget);
   };
 
-  const handleThemeSelect = (themeName: 'brown' | 'green' | 'white' | 'yellow') => {
+  const handleThemeSelect = (themeName: 'brown' | 'green' | 'white' | 'yellow' | 'pink') => {
     setTheme(themeName);
     setThemeMenu(null);
   };
@@ -152,6 +152,7 @@ export default function Navbar({ user, setUser }: NavbarProps) {
           <MenuItem onClick={() => handleThemeSelect('green')}>Зеленая</MenuItem>
           <MenuItem onClick={() => handleThemeSelect('white')}>Белая</MenuItem>
           <MenuItem onClick={() => handleThemeSelect('yellow')}>Желтая</MenuItem>
+          <MenuItem onClick={() => handleThemeSelect('pink')}>Розовая</MenuItem>
 
         </Menu>
 

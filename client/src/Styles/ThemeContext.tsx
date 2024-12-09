@@ -1,6 +1,6 @@
 import { createContext, useState, ReactNode } from 'react';
 import { Theme } from '@mui/material';
-import { whiteTheme, yellowTheme, brownTheme, greenTheme } from './globalStyle';
+import { whiteTheme, yellowTheme, brownTheme, greenTheme, pinkTheme } from './globalStyle';
 
 type ThemeContextType = {
   currentTheme: Theme;
@@ -24,6 +24,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
       case 'white': return whiteTheme;
       case 'yellow': return yellowTheme;
       case 'green': return greenTheme;
+      case 'pink': return pinkTheme;
       default: return brownTheme;
     }
   });
@@ -41,6 +42,9 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
         break;
       case 'green':
         setCurrentTheme(greenTheme);
+        break;
+      case 'pink':
+        setCurrentTheme(pinkTheme);
         break;
       default:
         setCurrentTheme(brownTheme);
