@@ -1,8 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import { ThemeContext } from './Styles/ThemeContext';
 import Root from "./Root";
 import axiosInstance, { setAccessToken } from "./axiosInstance";
-import { ToastContainer} from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import HomePage from "./Pages/HomePage";
 import SigninPage from "./Pages/SigninPage";
@@ -17,7 +19,7 @@ import Map from "./Pages/MapPage";
 import Profile from "./Pages/ProfilePage";
 import Weapon from "./Pages/WeaponPage";
 import ExempleReduxPage from "./Pages/ExempleReduxPage";
-import GlobalStyle from './Styles/globalStyle'
+import GlobalStyle from './Styles/globalStyle';
 
 interface User {
   id: number;
@@ -32,6 +34,7 @@ export const initUser: User = {
 };
 
 function App() {
+  const { currentTheme } = useContext(ThemeContext);
   const [user, setUser] = useState<User>(initUser);
 
   useEffect(() => {
@@ -46,7 +49,6 @@ function App() {
         console.error(err);
       }
     };
-
     fetchUser();
   }, []);
 
@@ -76,11 +78,11 @@ function App() {
   ]);
 
   return (
-    <>
+    <MuiThemeProvider theme={currentTheme}>
       <GlobalStyle />
       <RouterProvider router={router} />
       <ToastContainer position="top-right" autoClose={3000} />
-    </>
+    </MuiThemeProvider>
   );
 }
 

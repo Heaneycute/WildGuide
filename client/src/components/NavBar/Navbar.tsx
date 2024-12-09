@@ -1,21 +1,15 @@
-// components/Navbar/index.tsx
+import React from 'react';
+import { ThemeContext } from '../../Styles/ThemeContext';
 import { AppBar, Toolbar, Button, Typography, Box, IconButton, Menu, MenuItem, Avatar, Stack } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { User } from '../../types';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import axiosInstance, { setAccessToken } from '../../axiosInstance';
 import { initUser } from '../../App';
 import { Home as HomeIcon, Person as PersonIcon, Logout as LogoutIcon } from '@mui/icons-material';
-import { styled } from '@mui/material/styles';
-
-// Создаем стилизованную кнопку без обводки
-const BorderlessButton = styled(Button)({
-  border: 'none',
-  '&:hover': {
-    border: 'none',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)'
-  }
-});
+import { Palette as PaletteIcon, Dashboard as DashboardIcon, Pets as PetsIcon, 
+  CalendarMonth as CalendarIcon, Map as MapIcon, GpsFixed as WeaponIcon,
+  Science as ExampleIcon } from '@mui/icons-material';
 
 type NavbarProps = {
   user: User;
@@ -23,6 +17,19 @@ type NavbarProps = {
 };
 
 export default function Navbar({ user, setUser }: NavbarProps) {
+  const [themeMenu, setThemeMenu] = useState<null | HTMLElement>(null);
+  const { setTheme } = useContext(ThemeContext);
+
+  const handleThemeMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setThemeMenu(event.currentTarget);
+  };
+
+  const handleThemeSelect = (themeName: 'brown' | 'green' | 'white' | 'yellow') => {
+    setTheme(themeName);
+    setThemeMenu(null);
+  };
+
+
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -108,49 +115,45 @@ export default function Navbar({ user, setUser }: NavbarProps) {
 
         {/* Навигационные кнопки */}
         <Box sx={{ flexGrow: 1 }}>
-          <BorderlessButton
-            color="inherit"
-            component={RouterLink}
-            to="/Dashboard"
-          >
-            DashBord
-          </BorderlessButton>
-          <BorderlessButton
-            color="inherit"
-            component={RouterLink}
-            to="/animal"
-          >
-            Animal
-          </BorderlessButton>
-          <BorderlessButton
-            color="inherit"
-            component={RouterLink}
-            to="/calendar"
-          >
-            Calendar
-          </BorderlessButton>
-          <BorderlessButton
-            color="inherit"
-            component={RouterLink}
-            to="/map"
-          >
-            Map
-          </BorderlessButton>
-          <BorderlessButton
-            color="inherit"
-            component={RouterLink}
-            to="/weapon"
-          >
-            Weapon
-          </BorderlessButton>
-          <BorderlessButton
-            color="inherit"
-            component={RouterLink}
-            to="/exemplereduxpage"
-          >
-            ExempleReduxPage
-          </BorderlessButton>
+          <Button color="inherit" component={RouterLink} to="/dashboard">
+            <DashboardIcon />
+          </Button>
+          
+          <Button color="inherit" component={RouterLink} to="/animal">
+            <PetsIcon />
+          </Button>
+          
+          <Button color="inherit" component={RouterLink} to="/calendar">
+            <CalendarIcon />
+          </Button>
+          
+          <Button color="inherit" component={RouterLink} to="/map">
+            <MapIcon />
+          </Button>
+          
+          <Button color="inherit" component={RouterLink} to="/weapon">
+            <WeaponIcon />
+          </Button>
+          
+          <Button color="inherit" component={RouterLink} to="/exemplereduxpage">
+            <ExampleIcon />
+          </Button>
+
+          <IconButton onClick={handleThemeMenu}>
+            <PaletteIcon />
+          </IconButton>
         </Box>
+        <Menu
+          anchorEl={themeMenu}
+          open={Boolean(themeMenu)}
+          onClose={() => setThemeMenu(null)}
+        >
+          <MenuItem onClick={() => handleThemeSelect('brown')}>Коричневая</MenuItem>
+          <MenuItem onClick={() => handleThemeSelect('green')}>Зеленая</MenuItem>
+          <MenuItem onClick={() => handleThemeSelect('white')}>Белая</MenuItem>
+          <MenuItem onClick={() => handleThemeSelect('yellow')}>Желтая</MenuItem>
+
+        </Menu>
 
         {/* Пользовательское меню */}
         <Box>
@@ -216,12 +219,12 @@ export default function Navbar({ user, setUser }: NavbarProps) {
             </Stack>
           ) : (
             <>
-              <BorderlessButton color="inherit" component={RouterLink} to="/signin">
+              <Button color="inherit" component={RouterLink} to="/signin">
                 Войти
-              </BorderlessButton>
-              <BorderlessButton color="inherit" component={RouterLink} to="/signup">
+              </Button>
+              <Button color="inherit" component={RouterLink} to="/signup">
                 Регистрация
-              </BorderlessButton>
+              </Button>
             </>
           )}
         </Box>
