@@ -1,4 +1,3 @@
-// Миграция для обновления таблицы Users
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Users', {
