@@ -5,7 +5,19 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models.HuntingArea, {
         foreignKey: 'userId',
-        as: 'HuntingAreas'
+        as: 'huntingAreas'
+      });
+      User.hasMany(models.Route, {
+        foreignKey: 'createdBy',
+        as: 'routes'
+      });
+      User.hasMany(models.Animal, {
+        foreignKey: 'createdBy',
+        as: 'animals'
+      });
+      User.hasMany(models.Favorite, {
+        foreignKey: 'userId',
+        as: 'favorites'
       });
       User.hasMany(models.PasswordResetToken, {
         foreignKey: 'userId'
@@ -21,24 +33,43 @@ module.exports = (sequelize, DataTypes) => {
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      validate: {
+        isEmail: true
+      }
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
     },
     role: {
       type: DataTypes.ENUM('user', 'admin'),
-      defaultValue: 'user'
+      defaultValue: 'user',
+      allowNull: false
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false
     }
   }, {
     sequelize,
     modelName: 'User',
+    timestamps: true,
   });
   
   return User;

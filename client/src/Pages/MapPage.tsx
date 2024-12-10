@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
+import { useSelector } from 'react-redux';
 import YandexMap from '../components/MapPage/YandexMap';
 import LayersControl from '../components/MapPage/LayersControl';
 import MapRoutesList from '../components/MapPage/MapRoutesList';
 import AnimalsList from '../components/MapPage/AnimalsList';
 import ZoneInfo from '../components/MapPage/ZoneInfo';
+import { selectSelectedArea } from '../Redux/Slices/MapPage/huntingAreasSlice';
 
 export default function MapPage() {
+  const selectedArea = useSelector(selectSelectedArea); //ВыводЗонСостояние
   const [layers, setLayers] = useState({
     hunting: true,
     animals: true,

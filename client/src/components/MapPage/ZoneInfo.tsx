@@ -4,7 +4,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useSelector } from 'react-redux';
 import { selectSelectedArea } from '../../Redux/Slices/MapPage/huntingAreasSlice';
 import { commonBoxStyles } from '../../Styles/MapPageComponents.styles';
