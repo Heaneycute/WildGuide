@@ -8,10 +8,20 @@ interface HuntingCabin {
   id: string;                     // Уникальный идентификатор
   name: string;                   // Название домика
   description: string;            // Описание домика
-  coordinates: [number, number];  // Координаты на карте
+  huntingAreaId: string;          // Привязка к угодью (FK)
   capacity: number;               // Вместимость
-  amenities: string[];           // Удобства
+  buildingType: string;           // Тип строения
+  seasonality: string;            // Сезонность
+  amenities: {                    // Удобства
+    electricity: boolean;         // Электричество
+    heating: boolean;            // Отопление
+    kitchen: boolean;            // Кухня
+    bathroom: boolean;           // Санузел
+  };
+  bookingRules: string;          // Правила бронирования
   price: number;                 // Цена
+  accessibility: string;         // Транспортная доступность
+  coordinates: [number, number]; // Координаты на карте
   availability: boolean;         // Доступность
 }
 

@@ -1,81 +1,82 @@
-/**
- * Слайс для управления охотничьими зонами на карте
- * Отвечает за отображение, создание, редактирование и удаление зон охоты
- * Также управляет состоянием загрузки и обработкой ошибок
- */
-
-// Импорт необходимых зависимостей
-import {
-  createSlice,
-  PayloadAction
-} from '@reduxjs/toolkit';
-import {
-  fetchHuntingAreas,
-  createHuntingArea,
-  updateHuntingArea,
-  deleteHuntingArea,
-  fetchPublicAreas,
-  fetchPrivateAreas
-} from '../../Thunks/MapPage/huntingAreasThunks';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { fetchHuntingAreas, createHuntingArea, updateHuntingArea, deleteHuntingArea, fetchPublicAreas, fetchPrivateAreas} from '../../Thunks/MapPage/huntingAreasThunks';
 import { RootState } from '../../index';
 
-// Определение типа охотничьей зоны
 interface HuntingArea {
-  id: number;          // Уникальный идентификатор зоны
-  name: string;        // Название зоны
-  description: string; // Описание зоны
-  coordinates: number[][]; // Массив координат для отображения на карте
-  userId: number | null;   // ID пользователя-владельца зоны
+  id: number;
+  name: string;
+  description: string;
+  terrainType: string;
+  landscape: string;
+  altitude: number;
+  size: number;
+  allowedHuntingTypes: string[];
+  huntingSeasons: {
+    start: Date;
+    end: Date;
+  }[];
+  restrictions: string[];
+  infrastructure: string[];
+  waterSources: string[];
+  requiredPermits: string[];
+  administrationContacts: {
+    phone: string;
+    email: string;
+    address: string;
+  };
+  coordinates: [number, number][];
+  cabins?: number[];
+  routes?: number[];
+  userId: number | null;
 }
 
-/**
- * Интерфейс состояния слайса
- * Содержит все необходимые данные для управления зонами охоты
- */
 interface HuntingAreasState {
-  areas: HuntingArea[];           // Массив всех зон
-  selectedArea: HuntingArea | null; // Выбранная зона
-  isVisible: boolean;             // Видимость слоя на карте
-  loading: boolean;               // Состояние загрузки
-  error: string | null;           // Ошибки при выполнении операций
+  areas: HuntingArea[];
+  publicAreas: HuntingArea[];
+  privateAreas: HuntingArea[];
+  selectedArea: HuntingArea | null;
+  isVisible: boolean;
+  loading: boolean;
+  error: string | null;
 }
 
-// Начальное состояние слайса
 const initialState: HuntingAreasState = {
   areas: [],
+  publicAreas: [],
+  privateAreas: [],
   selectedArea: null,
   isVisible: true,
   loading: false,
   error: null,
 };
 
-/**
- * Создание слайса для управления охотничьими зонами
- * Содержит редьюсеры для основных операций с зонами
- */
 export const huntingAreasSlice = createSlice({
   name: 'huntingAreas',
   initialState,
   reducers: {
-    // Выбор зоны для просмотра или редактирования
     selectArea: (state, action: PayloadAction<HuntingArea>) => {
       console.log('[HuntingAreas] Выбрана зона:', action.payload);
       state.selectedArea = action.payload;
     },
-    // Очистка выбранной зоны
     clearSelectedArea: (state) => {
       console.log('[HuntingAreas] Очищена выбранная зона');
       state.selectedArea = null;
     },
-    // Управление видимостью слоя зон на карте
     setVisibility: (state, action: PayloadAction<boolean>) => {
       console.log('[HuntingAreas] Изменена видимость слоя:', action.payload);
       state.isVisible = action.payload;
+    },
+    updateAreaData: (state, action: PayloadAction<{ id: number, data: Partial<HuntingArea> }>) => {
+      console.log('[HuntingAreas] Обновление данных зоны:', action.payload);
+      const index = state.areas.findIndex(area => area.id === action.payload.id);
+      if (index !== -1) {
+        state.areas[index] = { ...state.areas[index], ...action.payload.data };
+      }
     }
   },
   extraReducers: (builder) => {
     builder
-      // Загрузка всех зон
+      // Получение всех зон
       .addCase(fetchHuntingAreas.pending, (state) => {
         console.log('[HuntingAreas] Начало загрузки охотничьих зон...');
         state.loading = true;
@@ -91,66 +92,68 @@ export const huntingAreasSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      
-      // Создание новой зоны
-      .addCase(createHuntingArea.pending, (state) => {
-        console.log('[HuntingAreas] Начало создания новой зоны...');
-        state.loading = true;
-        state.error = null;
+      // Публичные зоны
+      .addCase(fetchPublicAreas.fulfilled, (state, action) => {
+        console.log('[HuntingAreas] Загружены публичные зоны:', action.payload);
+        state.publicAreas = action.payload;
+        state.loading = false;
       })
+      // Личные зоны
+      .addCase(fetchPrivateAreas.fulfilled, (state, action) => {
+        console.log('[HuntingAreas] Загружены личные зоны:', action.payload);
+        state.privateAreas = action.payload;
+        state.loading = false;
+      })
+      // Создание зоны
       .addCase(createHuntingArea.fulfilled, (state, action) => {
         console.log('[HuntingAreas] Зона успешно создана:', action.payload);
         state.areas.push(action.payload);
-        state.loading = false;
-      })
-      .addCase(createHuntingArea.rejected, (state, action) => {
-        console.error('[HuntingAreas] Ошибка при создании зоны:', action.payload);
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-
-      // Обновление существующей зоны
-      .addCase(updateHuntingArea.fulfilled, (state, action) => {
-        console.log('[HuntingAreas] Обновление зоны:', action.payload);
-        const index = state.areas.findIndex(area => area.id === action.payload.id);
-        if (index !== -1) {
-          state.areas[index] = action.payload;
+        if (action.payload.userId) {
+          state.privateAreas.push(action.payload);
+        } else {
+          state.publicAreas.push(action.payload);
         }
       })
-
+      // Обновление зоны
+      .addCase(updateHuntingArea.fulfilled, (state, action) => {
+        console.log('[HuntingAreas] Обновление зоны:', action.payload);
+        const updateArea = (areas: HuntingArea[]) => {
+          const index = areas.findIndex(area => area.id === action.payload.id);
+          if (index !== -1) {
+            areas[index] = action.payload;
+          }
+        };
+        
+        updateArea(state.areas);
+        updateArea(state.publicAreas);
+        updateArea(state.privateAreas);
+        
+        if (state.selectedArea?.id === action.payload.id) {
+          state.selectedArea = action.payload;
+        }
+      })
       // Удаление зоны
       .addCase(deleteHuntingArea.fulfilled, (state, action) => {
         console.log('[HuntingAreas] Удаление зоны с ID:', action.payload);
         state.areas = state.areas.filter(area => area.id !== action.payload);
-      })
-
-      // Загрузка публичных зон
-      .addCase(fetchPublicAreas.fulfilled, (state, action) => {
-        console.log('[HuntingAreas] Загружены публичные зоны:', action.payload);
-        state.areas = action.payload;
-        state.loading = false;
-      })
-
-      // Загрузка личных зон пользователя
-      .addCase(fetchPrivateAreas.fulfilled, (state, action) => {
-        console.log('[HuntingAreas] Загружены личные зоны:', action.payload);
-        state.areas = action.payload;
-        state.loading = false;
+        state.publicAreas = state.publicAreas.filter(area => area.id !== action.payload);
+        state.privateAreas = state.privateAreas.filter(area => area.id !== action.payload);
+        
+        if (state.selectedArea?.id === action.payload) {
+          state.selectedArea = null;
+        }
       });
   },
 });
 
-// Экспорт actions для использования в компонентах
-export const { selectArea, clearSelectedArea } = huntingAreasSlice.actions;
+export const { selectArea, clearSelectedArea, setVisibility, updateAreaData } = huntingAreasSlice.actions;
 
-/**
- * Селекторы для получения данных из state
- * Используются в компонентах для доступа к данным слайса
- */
 export const selectAllAreas = (state: RootState) => state.huntingAreas.areas;
+export const selectPublicAreas = (state: RootState) => state.huntingAreas.publicAreas;
+export const selectPrivateAreas = (state: RootState) => state.huntingAreas.privateAreas;
 export const selectSelectedArea = (state: RootState) => state.huntingAreas.selectedArea;
 export const selectAreasLoading = (state: RootState) => state.huntingAreas.loading;
 export const selectAreasError = (state: RootState) => state.huntingAreas.error;
-export const setVisibility = (state: RootState) => state.huntingAreas.selectedArea;
+export const selectAreasVisibility = (state: RootState) => state.huntingAreas.isVisible;
 
 export default huntingAreasSlice.reducer;

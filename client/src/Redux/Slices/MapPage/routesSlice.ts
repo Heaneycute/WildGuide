@@ -8,9 +8,14 @@ interface Route {
   id: string;
   name: string;
   description: string;
-  coordinates: number[][]; // Массив координат для отображения на карте
-  userId: string;         // ID пользователя-создателя маршрута
-  isVerified: boolean;    // Статус верификации маршрута
+  huntingAreaId: string;    // Привязка к угодью (FK)
+  coordinates: number[][]; // Точки маршрута
+  distance: number;       // Расстояние маршрута
+  difficulty: string;    // Сложность маршрута
+  estimatedTime: number; // Расчетное время прохождения
+  season: string[];      // Сезоны для прохождения
+  createdBy: string;     // ID создателя маршрута
+  isVerified: boolean;   // Статус верификации
 }
 
 // Определение состояния слайса
