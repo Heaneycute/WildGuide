@@ -1,4 +1,3 @@
-//index.ts
 import { configureStore } from '@reduxjs/toolkit';
 import huntingAreasReducer from './Slices/MapPage/huntingAreasSlice';
 import routesReducer from './Slices/MapPage/routesSlice';
@@ -8,6 +7,7 @@ import favoritesReducer from './Slices/MapPage/favoritesSlice';
 import commentsReducer from './Slices/MapPage/commentsSlice';
 import layersReducer from './Slices/layersSlice';
 import calendarReducer from './Slices/calendarSlice';
+import animalExampleReducer from './Slices/animalExampleSlice';
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +19,7 @@ export const store = configureStore({
     comments: commentsReducer,
     layers: layersReducer,
     calendar: calendarReducer,
+    animalExample: animalExampleReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

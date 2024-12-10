@@ -2,10 +2,11 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { YMaps, Map } from '@pbe/react-yandex-maps';
-import { mapBoxStyles } from '../../Styles/MapPageComponents.styles';
+import { mapBoxStyles , favoritesListStyles } from '../../Styles/MapPageComponents.styles';
 import { HuntingAreasLayer } from './YandexMap/HuntingAreasLayer';
 import { customMapStyle } from '../../Styles/MapStyles.styles';
 import { clearSelectedArea } from '../../Redux/Slices/MapPage/huntingAreasSlice';
+import FavoritesList from './FavoritesList';
 
 
 interface MapState {
@@ -61,6 +62,9 @@ const YandexMap: React.FC = () => {
           <HuntingAreasLayer visible={true} />
         </Map>
       </YMaps>
+      <Box sx={favoritesListStyles}>
+    <FavoritesList />
+    </Box>
     </Box>
   );
 };
