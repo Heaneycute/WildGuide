@@ -32,6 +32,8 @@ module.exports = {
         allowNull: false
       }
     });
+
+    await queryInterface.addIndex('Users', ['email']);
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('Users');

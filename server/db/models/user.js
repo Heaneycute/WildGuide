@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.PasswordResetToken, {
         foreignKey: 'userId'
       });
+      User.hasMany(models.Comment, {
+        foreignKey: 'userId',
+        as: 'comments'
+      });
     }
   }
   
@@ -70,6 +74,11 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
     timestamps: true,
+    indexes: [
+      {
+        fields: ['email']
+      }
+    ]
   });
   
   return User;
