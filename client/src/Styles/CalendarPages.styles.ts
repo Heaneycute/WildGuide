@@ -57,6 +57,8 @@ const useStyles = makeStyles({
   eventIcon: {
     color: "#8B4513",
     position: "absolute",
+    top: "50%",
+    bottom: "50%",
   },
   modal: {
     position: "absolute",

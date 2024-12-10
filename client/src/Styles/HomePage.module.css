@@ -4,26 +4,32 @@
   box-sizing: border-box;
 }
 
-/* стили со звездочкой не удалять*/
+:root {
+  --index: calc(1vw + 1vh);
+  --text: #e7e7e0;
+  --transition: transform 0.75s cubic-bezier(0.075, 0.5, 0, 1);
+}
 
-.wrapper {
-  background: #000;
-  height: 200vh;
+body {
+  background-color: #010101;
+  line-height: 1.55;
 }
 
 .mainHeader {
-  text-align: center;
-  color: #fff;
-  position: absolute;
-  z-index: 10;
+  position: relative;
 }
 
-.layersTitle {
-  font-size: 3em;
-  text-transform: uppercase;
-  font-weight: 900;
-  color: #fff;
-  text-shadow: 0 0 15px #9d822b;
+.mainHeader::after {
+  content: "";
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height: calc(var(--index) * 10);
+  background-image: url(../img/ground.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  bottom: calc(var(--index) * -4.5);
 }
 
 .layers {
@@ -42,28 +48,64 @@
   position: absolute;
   background-size: cover;
   background-position: center;
-  transition: transform 0.3s ease-out;
+  z-index: 2;
+  transition: var(--transition);
 }
 
-.ground {
-  width: 100%;
-  background-image: url("/img/ground.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+.layers__base {
+  z-index: 0;
+}
+
+.layer__header {
+  z-index: 1;
   position: absolute;
-  z-index: 115;
+  width: 100%;
+  transform: none;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: var(--text);
+  text-shadow: 0 0 15px #9d822b;
+  padding: 20px 0;
+  text-align: center;
 }
 
-.dungeonWrapper {
+.layers__title {
+  font-size: calc(var(--index) * 1.0333);
+  letter-spacing: calc(var(--index) / 2.25);
+}
+
+.layers__caption {
+  font-size: calc(var(--index) / 1.5);
+  letter-spacing: calc(var(--index) / 3.5);
+  margin-top: calc(var(--index) * -0.75);
+}
+
+.mainArticle {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
+  text-align: center;
+  top: -1px;
   z-index: 10;
 }
 
-.dungeon {
-  min-height: 100vh;
-  width: 100%;
-  color: #fff;
-  background-size: cover;
-  background-position: center;
+.mainArticleHeader {
+  text-transform: uppercase;
+  font-size: calc(var(--index) * 1.8);
+  letter-spacing: calc(var(--index) / 7.5);
+  transform: var(--main-article-transform);
+  transition: var(--transition);
+}
+
+.mainArticleParagraph {
+  max-width: calc(var(--index) * 30);
+  font-size: calc(var(--index) * 0.9);
+  margin-top: calc(var(--index) / 1.25);
+  transform: var(--main-article-transform);
+  transition: var(--transition);
 }
