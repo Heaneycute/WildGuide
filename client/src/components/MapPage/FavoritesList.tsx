@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { AppDispatch } from '../../Redux/index';
 import { selectAllFavorites } from '../../Redux/Slices/MapPage/favoritesSlice';
 import { removeFromFavorites, fetchFavorites } from '../../Redux/Thunks/MapPage/favoritesThunks';
-import { IconButton, List, ListItem, ListItemText, Box, Typography } from '@mui/material';
+import { IconButton, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const FavoritesList: React.FC = () => {
@@ -42,9 +42,9 @@ const FavoritesList: React.FC = () => {
   
   if (!favorites.length) {
     return (
-      <Box sx={{ p: 2, textAlign: 'center' }}>
+      <Paper sx={{ p: 2, textAlign: 'center' }}>
         <Typography variant="body1">Список избранного пуст</Typography>
-      </Box>
+      </Paper>
     );
   }
 

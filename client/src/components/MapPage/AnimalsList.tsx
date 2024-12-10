@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import React, { useState, useContext } from 'react';
+import { Box, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Button, Accordion, AccordionSummary, AccordionDetails, Paper } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import TerrainIcon from '@mui/icons-material/Terrain';
 import PetsIcon from '@mui/icons-material/Pets';
-import InfoIcon from '@mui/icons-material/Info';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { commonBoxStyles } from '../../Styles/MapPageComponents.styles';
+import { ThemeContext } from '../../Styles/ThemeContext';
 
 const mockAnimals = {
   animals: [
@@ -63,22 +63,24 @@ const mockAnimals = {
 };
 
 export default function AnimalsList() {
+  const { currentTheme } = useContext(ThemeContext);
   const [selectedDocument, setSelectedDocument] = useState(null);
 
   return (
-    <Box sx={{
+    <Paper sx={{
       ...commonBoxStyles,
       display: 'flex',
       flexDirection: 'column',
       height: '340px',
-      width: '100%'
+      width: '100%',
+      backgroundColor: currentTheme.palette.background.paper
     }}>
       <Box sx={{
         flex: '0 0 auto',
         width: '100%',
         marginBottom: 2
       }}>
-        <Typography variant="h5" color="#ffffff" gutterBottom>
+        <Typography variant="h5" color={currentTheme.palette.text.primary} gutterBottom>
           Список обитаемых животных в этом мире
         </Typography>
       </Box>
@@ -102,33 +104,33 @@ export default function AnimalsList() {
           <Accordion 
             key={animal.id}
             sx={{ 
-              bgcolor: 'rgba(0, 0, 0, 0.3)',
-              color: '#ffffff',
+              backgroundColor: currentTheme.palette.background.default,
+              color: currentTheme.palette.text.primary,
               mb: 1,
               minWidth: 0
             }}
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: '#ffffff' }} />}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: currentTheme.palette.text.primary }} />}>
               <Typography noWrap><b>{animal.name}</b></Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                <PetsIcon sx={{ mr: 1 }} />
+                <PetsIcon sx={{ mr: 1, color: currentTheme.palette.text.primary }} />
                 <Typography>Тип: {animal.type}</Typography>
               </Box>
               
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                <TerrainIcon sx={{ mr: 1 }} />
+                <TerrainIcon sx={{ mr: 1, color: currentTheme.palette.text.primary }} />
                 <Typography>Миграция: {animal.migration}</Typography>
               </Box>
               
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                <CalendarMonthIcon sx={{ mr: 1 }} />
+                <CalendarMonthIcon sx={{ mr: 1, color: currentTheme.palette.text.primary }} />
                 <Typography>Период размножения: {animal.breedingSeason}</Typography>
               </Box>
               
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                <LocalDiningIcon sx={{ mr: 1 }} />
+                <LocalDiningIcon sx={{ mr: 1, color: currentTheme.palette.text.primary }} />
                 <Typography>Питание: {animal.diet}</Typography>
               </Box>
 
@@ -151,7 +153,7 @@ export default function AnimalsList() {
                     alignItems: 'center',
                     cursor: 'pointer',
                     '&:hover': {
-                      bgcolor: 'rgba(255, 255, 255, 0.1)'
+                      backgroundColor: currentTheme.palette.action?.hover
                     },
                     p: 1,
                     borderRadius: 1,
@@ -159,7 +161,7 @@ export default function AnimalsList() {
                   }}
                   onClick={() => setSelectedDocument(req)}
                 >
-                  <InfoOutlinedIcon sx={{ mr: 1 }} />
+                  <InfoOutlinedIcon sx={{ mr: 1, color: currentTheme.palette.text.primary }} />
                   <Typography>• {req.name}</Typography>
                 </Box>
               ))}
@@ -175,16 +177,16 @@ export default function AnimalsList() {
         fullWidth
         PaperProps={{
           sx: {
-            bgcolor: 'rgba(0, 0, 0, 0.8)',
+            backgroundColor: currentTheme.palette.background.paper,
             backdropFilter: 'blur(10px)',
             borderRadius: '16px',
-            color: '#ffffff'
+            color: currentTheme.palette.text.primary
           }
         }}
       >
         {selectedDocument && (
           <>
-            <DialogTitle sx={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <DialogTitle sx={{ borderBottom: `1px solid ${currentTheme.palette.divider}` }}>
               {selectedDocument.name}
             </DialogTitle>
             <DialogContent>
@@ -192,13 +194,13 @@ export default function AnimalsList() {
                 {selectedDocument.description}
               </Typography>
             </DialogContent>
-            <DialogActions sx={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <DialogActions sx={{ borderTop: `1px solid ${currentTheme.palette.divider}` }}>
               <Button
                 onClick={() => setSelectedDocument(null)}
                 sx={{
-                  color: '#ffffff',
+                  color: currentTheme.palette.text.primary,
                   '&:hover': {
-                    bgcolor: 'rgba(255, 255, 255, 0.1)'
+                    backgroundColor: currentTheme.palette.action?.hover
                   }
                 }}
               >
@@ -208,6 +210,6 @@ export default function AnimalsList() {
           </>
         )}
       </Dialog>
-    </Box>
+    </Paper>
   );
 }
