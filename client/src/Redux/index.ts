@@ -1,13 +1,20 @@
+//index.ts
 import { configureStore } from '@reduxjs/toolkit';
 import huntingAreasReducer from './Slices/MapPage/huntingAreasSlice';
-import animalExampleReducer from './Slices/animalExampleSlice';
+import routesReducer from './Slices/MapPage/routesSlice';
+import animalsReducer from './Slices/MapPage/animalsSlice';
+import huntingCabinsReducer from './Slices/MapPage/huntingCabinsSlice';
+import favoritesReducer from './Slices/MapPage/favoritesSlice';
 import layersReducer from './Slices/layersSlice';
 import calendarReducer from './Slices/calendarSlice';
 
 export const store = configureStore({
   reducer: {
     huntingAreas: huntingAreasReducer,
-    animalExample: animalExampleReducer,
+    routes: routesReducer,
+    animals: animalsReducer,
+    huntingCabins: huntingCabinsReducer,
+    favorites: favoritesReducer,
     layers: layersReducer,
     calendar: calendarReducer,
   },
