@@ -5,7 +5,7 @@ import { RootState } from '../../index';
 // Определение интерфейса для элемента избранного
 interface FavoriteItem {
   id: string;                    // Уникальный идентификатор
-  type: 'route' | 'cabin' | 'area' | 'animal'; // Тип элемента
+  type: 'route' | 'cabin' | 'area' | 'animal' | 'weapon'; // Тип элемента
   itemId: string;               // ID связанного элемента
   userId: string;               // ID пользователя
   dateAdded: Date;             // Дата добавления в избранное

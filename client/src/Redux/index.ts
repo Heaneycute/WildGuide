@@ -5,6 +5,7 @@ import routesReducer from './Slices/MapPage/routesSlice';
 import animalsReducer from './Slices/MapPage/animalsSlice';
 import huntingCabinsReducer from './Slices/MapPage/huntingCabinsSlice';
 import favoritesReducer from './Slices/MapPage/favoritesSlice';
+import commentsReducer from './Slices/MapPage/commentsSlice';
 import layersReducer from './Slices/layersSlice';
 import calendarReducer from './Slices/calendarSlice';
 
@@ -15,6 +16,7 @@ export const store = configureStore({
     animals: animalsReducer,
     huntingCabins: huntingCabinsReducer,
     favorites: favoritesReducer,
+    comments: commentsReducer,
     layers: layersReducer,
     calendar: calendarReducer,
   },
