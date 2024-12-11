@@ -75,6 +75,7 @@ export default function SigninPage({ setUser }: SigninPageProps) {
         formData
       );
       setUser(response.data.user);
+      localStorage.setItem('accessToken', response.data.accessToken);
       setAccessToken(response.data.accessToken);
       setSnackbar({
         open: true,

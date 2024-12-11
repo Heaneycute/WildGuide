@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControl, InputLabel, Select, MenuItem, Stack, Paper } from '@mui/material';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
@@ -6,89 +6,76 @@ import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import { ThemeContext } from '../../Styles/ThemeContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAllRoutes } from '../../Redux/Slices/MapPage/routesSlice';
+import { fetchRoutes } from '../../Redux/Thunks/MapPage/routesThunks';
+import { addToFavorites } from '../../Redux/Thunks/MapPage/favoritesThunks';
 
-// Mock data for routes
-const mockRoutes = {
-  routes: [
-    {
-      id: 1,
-      name: "Северный маршрут",
-      length: "5.2 км",
-      difficulty: "средняя", 
-      duration: "2-3 часа",
-      description: "Живописный маршрут через смешанный лес с выходом к озеру",
-      terrain: "Холмистая местность, лесные тропы",
-      seasonality: "Весна-Осень",
-      points: [
-        {
-          name: "Начало маршрута",
-          coordinates: [55.123, 37.456],
-          description: "Парковка у входа в охотничьи угодья"
-        },
-        {
-          name: "Смотровая площадка", 
-          coordinates: [55.125, 37.458],
-          description: "Вышка с видом на долину"
-        },
-        {
-          name: "Привал",
-          coordinates: [55.127, 37.460],
-          description: "Оборудованное место отдыха"
-        }
-      ],
-      warnings: [
-        "Крутой подъем на участке 2-3 км",
-        "Заболоченность в весенний период"
-      ],
-      recommendations: [
-        "Треккинговая обувь",
-        "Запас воды", 
-        "Средства от насекомых"
-      ]
-    },
-    {
-      id: 2,
-      name: "Озерный круг",
-      length: "3.8 км",
-      difficulty: "легкая",
-      duration: "1-2 часа", 
-      description: "Кольцевой маршрут вокруг озера с местами для наблюдения за водоплавающей дичью",
-      terrain: "Равнинная местность",
-      seasonality: "Круглый год",
-      points: [
-        {
-          name: "Стартовая точка",
-          coordinates: [55.130, 37.465],
-          description: "Информационный стенд"
-        },
-        {
-          name: "Укрытие",
-          coordinates: [55.132, 37.467],
-          description: "Скрадок для наблюдения за птицами"
-        }
-      ],
-      warnings: [
-        "Скользкая тропа после дождя"
-      ],
-      recommendations: [
-        "Бинокль",
-        "Фотоаппарат",
-        "Дождевик"
-      ]
-    }
-  ]
-};
+interface Route {
+  id: number;
+  name: string;
+  description: string;
+  distance: number;
+  difficulty: string;
+  estimatedTime: number;
+  season: string;
+  waypoints: {
+    lat: number;
+    lng: number;
+    name: string;
+  }[];
+}
 
 export default function MapRoutesList() {
-  const [selectedRoute, setSelectedRoute] = useState(null);
+  const dispatch = useDispatch();
+  const routes = useSelector(selectAllRoutes);
+  const { currentTheme } = useContext(ThemeContext);
+  const accessToken = localStorage.getItem('accessToken');
+
+  useEffect(() => {
+    dispatch(fetchRoutes());
+  }, [dispatch]);
+
+  const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
   const [filterValues, setFilterValues] = useState({
     difficulty: 'all',
     favorite: false,
     season: 'all'
   });
-  const { currentTheme } = useContext(ThemeContext);
 
-  const handleFilterChange = (field, value) => {
+  const handleAddToFavorites = async (route: Route) => {
+    console.log('Adding to favorites...');
+    console.log('Route data:', route);
+    console.log('Current auth state:', {
+      accessToken,
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    if (!accessToken) {
+      console.error('Access token not found');
+      // TODO: Add user notification about authentication requirement
+      return;
+    }
+
+    try {
+      const favoriteData = {
+        itemType: 'route',
+        itemId: route.id,
+        dateAdded: new Date().toISOString()
+      };
+      
+      console.log('Sending favorite data:', favoriteData);
+      await dispatch(addToFavorites(favoriteData)).unwrap();
+      console.log('Successfully added to favorites');
+    } catch (error) {
+      console.error('Error adding to favorites:', error);
+      // TODO: Add user notification about error
+    }
+  };
+
+  const handleFilterChange = (field: string, value: string) => {
     setFilterValues(prev => ({
       ...prev,
       [field]: value
@@ -158,7 +145,7 @@ export default function MapRoutesList() {
           </FormControl>
         </Box>
 
-        {mockRoutes.routes.map(route => (
+        {routes?.map(route => (
           <Paper 
             key={route.id} 
             elevation={0}
@@ -175,10 +162,14 @@ export default function MapRoutesList() {
             }}
           >
             <Typography color={currentTheme.palette.text.primary}>
-              {route.name} • {route.length}
+              {route.name} • {route.distance} км
             </Typography>
             <Box>
-              <IconButton size="small" sx={{ color: currentTheme.palette.text.primary }}>
+              <IconButton 
+                size="small" 
+                sx={{ color: currentTheme.palette.text.primary }}
+                onClick={() => handleAddToFavorites(route)}
+              >
                 <StarOutlineIcon />
               </IconButton>
               <IconButton 
@@ -228,13 +219,13 @@ export default function MapRoutesList() {
               </DialogTitle>
               <DialogContent>
                 <Typography variant="subtitle1" gutterBottom>
-                  Длина: {selectedRoute.length}
+                  Длина маршрута: {selectedRoute.distance} км
                 </Typography>
                 <Typography variant="subtitle1" gutterBottom>
                   Сложность: {selectedRoute.difficulty}
                 </Typography>
                 <Typography variant="subtitle1" gutterBottom>
-                  Время прохождения: {selectedRoute.duration}
+                  Примерное время: {selectedRoute.estimatedTime} мин
                 </Typography>
                 <Typography variant="body1" paragraph>
                   {selectedRoute.description}
@@ -244,42 +235,21 @@ export default function MapRoutesList() {
                   Характеристики маршрута
                 </Typography>
                 <Typography variant="body1" paragraph>
-                  Тип местности: {selectedRoute.terrain}
-                </Typography>
-                <Typography variant="body1" paragraph>
-                  Сезонность: {selectedRoute.seasonality}
+                  Сезон: {selectedRoute.season}
                 </Typography>
 
                 <Typography variant="h6" gutterBottom>
                   Ключевые точки
                 </Typography>
-                {selectedRoute.points.map((point, index) => (
+                {selectedRoute.waypoints?.map((point, index) => (
                   <Box key={index} sx={{ mb: 1 }}>
                     <Typography variant="subtitle2">
                       {point.name}
                     </Typography>
                     <Typography variant="body2">
-                      {point.description}
+                      Координаты: {point.lat}, {point.lng}
                     </Typography>
                   </Box>
-                ))}
-
-                <Typography variant="h6" gutterBottom>
-                  Предупреждения
-                </Typography>
-                {selectedRoute.warnings.map((warning, index) => (
-                  <Typography key={index} variant="body1">
-                    • {warning}
-                  </Typography>
-                ))}
-
-                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                  Рекомендации
-                </Typography>
-                {selectedRoute.recommendations.map((rec, index) => (
-                  <Typography key={index} variant="body1">
-                    • {rec}
-                  </Typography>
                 ))}
               </DialogContent>
               <DialogActions sx={{ borderTop: `1px solid ${currentTheme.palette.divider}` }}>

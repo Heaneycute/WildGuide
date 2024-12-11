@@ -2,8 +2,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
-
+const token = localStorage.getItem('accessToken');
+axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : '';
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 // Получение всех избранных элементов пользователя
 export const fetchFavorites = createAsyncThunk(
   'favorites/fetch',
