@@ -94,7 +94,7 @@ export default function MapRoutesList() {
     }}>
       <Stack spacing={2} direction="column">
         <Typography variant="h5" color={currentTheme.palette.text.primary}>
-          Список маршрутов зоны
+          Список маршрутов
         </Typography>
         <Button
           variant="contained"
