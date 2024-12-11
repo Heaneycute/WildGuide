@@ -3,22 +3,24 @@ import { Placemark } from '@pbe/react-yandex-maps';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAllAnimals } from '../../../Redux/Slices/MapPage/animalsSlice';
 import { fetchAnimals } from '../../../Redux/Thunks/MapPage/animalsThunks';
-import type { AppDispatch } from '../../../Redux/index';
+import { selectLayerVisibility } from '../../../Redux/Slices/layersSlice';
+import type { AppDispatch, RootState } from '../../../Redux/index';
 
 interface AnimalsLayerProps {
-  visible: boolean;
+  visible?: boolean;
 }
 
-export const AnimalsLayer: React.FC<AnimalsLayerProps> = ({ visible }) => {
+export const AnimalsLayer: React.FC<AnimalsLayerProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
   const animals = useSelector(selectAllAnimals);
+  const isVisible = useSelector((state: RootState) => selectLayerVisibility(state, 'animals'));
 
   useEffect(() => {
     console.log('AnimalsLayer: Загрузка животных...');
     dispatch(fetchAnimals());
   }, [dispatch]);
 
-  if (!visible) return null;
+  if (!isVisible || !animals) return null;
 
   console.log('AnimalsLayer: Текущие животные:', animals);
 

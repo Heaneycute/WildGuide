@@ -3,22 +3,24 @@ import { Polyline } from '@pbe/react-yandex-maps';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAllRoutes } from '../../../Redux/Slices/MapPage/routesSlice';
 import { fetchRoutes } from '../../../Redux/Thunks/MapPage/routesThunks';
-import type { AppDispatch } from '../../../Redux/index';
+import { selectLayerVisibility } from '../../../Redux/Slices/layersSlice';
+import type { AppDispatch, RootState } from '../../../Redux/index';
 
 interface RoutesLayerProps {
-  visible: boolean;
+  visible?: boolean;
 }
 
-export const RoutesLayer: React.FC<RoutesLayerProps> = ({ visible }) => {
+export const RoutesLayer: React.FC<RoutesLayerProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
   const routes = useSelector(selectAllRoutes);
+  const isVisible = useSelector((state: RootState) => selectLayerVisibility(state, 'trails'));
 
   useEffect(() => {
     console.log('RoutesLayer: Загрузка маршрутов...');
     dispatch(fetchRoutes());
   }, [dispatch]);
 
-  if (!visible) return null;
+  if (!isVisible || !routes) return null;
 
   console.log('RoutesLayer: Текущие маршруты:', routes);
 

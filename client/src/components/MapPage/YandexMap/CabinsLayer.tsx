@@ -3,22 +3,23 @@ import { Placemark } from '@pbe/react-yandex-maps';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAllCabins } from '../../../Redux/Slices/MapPage/huntingCabinsSlice';
 import { fetchHuntingCabins } from '../../../Redux/Thunks/MapPage/huntingCabinsThunks';
-import type { AppDispatch } from '../../../Redux/index';
+import type { AppDispatch, RootState } from '../../../Redux/index';
 
 interface CabinsLayerProps {
   visible: boolean;
 }
 
-export const CabinsLayer: React.FC<CabinsLayerProps> = ({ visible }) => {
+export const CabinsLayer: React.FC<CabinsLayerProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
   const cabins = useSelector(selectAllCabins);
+  const isVisible = useSelector((state: RootState) => state.layers.cabins);
 
   useEffect(() => {
     console.log('CabinsLayer: Загрузка домиков...');
     dispatch(fetchHuntingCabins());
   }, [dispatch]);
 
-  if (!visible) return null;
+  if (!isVisible || !cabins) return null;
 
   console.log('CabinsLayer: Текущие домики:', cabins);
 
