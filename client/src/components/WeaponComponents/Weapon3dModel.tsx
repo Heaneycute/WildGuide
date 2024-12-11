@@ -7,10 +7,9 @@ interface Weapon3dModelProps {
 }
 
 const Weapon3dModel: React.FC<Weapon3dModelProps> = ({ modelLink }) => {
-  const { scene } = useGLTF(modelLink);  // Загрузка 3D модели
+  const { scene } = useGLTF(modelLink); 
   const modelRef = useRef<any>();
 
-  // Вращение модели
   useFrame(() => {
     if (modelRef.current) {
       modelRef.current.rotation.y += 0.01;
@@ -19,7 +18,7 @@ const Weapon3dModel: React.FC<Weapon3dModelProps> = ({ modelLink }) => {
 
   return (
     <Suspense fallback={<Html center>Загрузка 3D модели...</Html>}>
-      <primitive ref={modelRef} object={scene} scale={[2, 2, 2]} /> {/* Увеличиваем масштаб модели */}
+      <primitive ref={modelRef} object={scene} scale={[2, 2, 2]} /> 
     </Suspense>
   );
 };
@@ -31,8 +30,7 @@ const Weapon3dCanvas: React.FC<{ modelLink: string }> = ({ modelLink }) => (
     <pointLight position={[10, 10, 10]} intensity={1} />
     <spotLight position={[-10, -10, -10]} angle={0.15} intensity={1} castShadow />
     <OrbitControls enableDamping dampingFactor={0.1} enableZoom />
-    
-          <Environment preset="forest" background={false} />
+    <Environment preset="forest" background={false} />
     <Weapon3dModel modelLink={modelLink} />
   </Canvas>
 );

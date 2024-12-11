@@ -64,7 +64,7 @@ function App() {
         { path: "/fake-email", element: <FakeEmailPage /> },
         { path: "/newpassword", element: <NewPasswordPage /> },
         { path: "/dashboard", element: <Dashboard /> },
-        { path: "/animal", element: <Animal /> },
+        { path: "/animal", element: <Animal />},
         { path: "/calendar", element: <Calendar /> },
         { path: "/map", element: <Map /> },
         { path: "/weapon", element: <Weapon /> },
