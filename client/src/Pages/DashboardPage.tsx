@@ -23,6 +23,7 @@ import { selectSelectedArea } from "../Redux/Slices/MapPage/huntingAreasSlice";
 import YandexMap from "../components/MapPage/YandexMap";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
+import { WeatherWidget } from '../components/WeatherWidget';
 
 export default function Dashboard() {
   const events = useAppSelector((state) => state.calendar.events);
