@@ -83,9 +83,9 @@ export default function Dashboard() {
         setBackpackItems((prev) => [...prev, response.data]);
         setNewItem("");
         setOpenModal(false); 
-        console.error("Ошибка при добавлении вещи в рюкзак:", error);
       } catch (error) {
-  console.error("Ошибка при загрузке рюкзака:", error);
+        console.error("Ошибка при добавлении вещи в рюкзак:", error);
+      }
     }
   };
 
@@ -124,16 +124,8 @@ export default function Dashboard() {
       <Box sx={dashboardGridStyles}>
         <Paper sx={commonBoxStyles}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            <Box
-              sx={{ display: "flex", gap: "20px", alignItems: "flex-start" }}
-            >
-              <Box
-                sx={{
-                  width: "400px",
-                  height: "300px",
-                  border: "1px solid #ccc",
-                }}
-              >
+            <Box sx={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
+              <Box sx={{ width: "400px", height: "300px", border: "1px solid #ccc" }}>
                 <YandexMap />
               </Box>
               <Button
@@ -147,154 +139,62 @@ export default function Dashboard() {
             </Box>
 
             {selectedArea ? (
-              <Box
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr 1fr 1fr",
-                  gap: "10px",
-                }}
-              >
+              <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "10px" }}>
                 <Box>
-                  <Typography variant="h6" color="#ffffff">
-                    Основная информация
-                  </Typography>
-                  <Typography variant="h4" color="#ffffff">
-                    {selectedArea.name}
-                  </Typography>
-                  <Typography variant="body1" color="#ffffff">
-                    {selectedArea.description}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Площадь: {selectedArea.areaSize} га
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Координаты: {selectedArea.coordinates.join(", ")}
-                  </Typography>
+                  <Typography variant="h6" color="#ffffff">Основная информация</Typography>
+                  <Typography variant="h4" color="#ffffff">{selectedArea.name}</Typography>
+                  <Typography variant="body1" color="#ffffff">{selectedArea.description}</Typography>
+                  <Typography variant="body2" color="#ffffff">Площадь: {selectedArea.areaSize} га</Typography>
+                  <Typography variant="body2" color="#ffffff">Координаты: {selectedArea.coordinates.join(", ")}</Typography>
                 </Box>
                 <Box>
-                  <Typography variant="h6" color="#ffffff">
-                    Характеристики местности
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Тип местности: {selectedArea.terrainType}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Ландшафт: {selectedArea.landscape}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Высота над уровнем моря: {selectedArea.elevation} м
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Водные источники:
-                    {selectedArea.waterSources.rivers ? "Реки, " : ""}
-                    {selectedArea.waterSources.lakes ? "Озера, " : ""}
-                    {selectedArea.waterSources.springs ? "Родники" : ""}
-                  </Typography>
+                  <Typography variant="h6" color="#ffffff">Характеристики местности</Typography>
+                  <Typography variant="body2" color="#ffffff">Тип местности: {selectedArea.terrainType}</Typography>
+                  <Typography variant="body2" color="#ffffff">Ландшафт: {selectedArea.landscape}</Typography>
+                  <Typography variant="body2" color="#ffffff">Высота над уровнем моря: {selectedArea.elevation} м</Typography>
+                  <Typography variant="body2" color="#ffffff">Водные источники: {selectedArea.waterSources.rivers ? "Реки, " : ""}{selectedArea.waterSources.lakes ? "Озера, " : ""}{selectedArea.waterSources.springs ? "Родники" : ""}</Typography>
                 </Box>
                 <Box>
-                  <Typography variant="h6" color="#ffffff">
-                    Охота и правила
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Разрешенные типы охоты:{" "}
-                    {selectedArea.allowedHuntingTypes.join(", ")}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Сезон охоты: {selectedArea.huntingSeasons.start} -{" "}
-                    {selectedArea.huntingSeasons.end}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Разрешенное оружие: {selectedArea.allowedWeapons.join(", ")}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Ограничения: {selectedArea.restrictions}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Правила: {selectedArea.rules}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Необходимые разрешения: {selectedArea.requiredPermits}
-                  </Typography>
+                  <Typography variant="h6" color="#ffffff">Охота и правила</Typography>
+                  <Typography variant="body2" color="#ffffff">Разрешенные типы охоты: {selectedArea.allowedHuntingTypes.join(", ")}</Typography>
+                  <Typography variant="body2" color="#ffffff">Сезон охоты: {selectedArea.huntingSeasons.start} - {selectedArea.huntingSeasons.end}</Typography>
+                  <Typography variant="body2" color="#ffffff">Разрешенное оружие: {selectedArea.allowedWeapons.join(", ")}</Typography>
+                  <Typography variant="body2" color="#ffffff">Ограничения: {selectedArea.restrictions}</Typography>
+                  <Typography variant="body2" color="#ffffff">Правила: {selectedArea.rules}</Typography>
+                  <Typography variant="body2" color="#ffffff">Необходимые разрешения: {selectedArea.requiredPermits}</Typography>
                 </Box>
                 <Box>
-                  <Typography variant="h6" color="#ffffff">
-                    Инфраструктура и контакты
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Инфраструктура:
-                    {selectedArea.infrastructure.roads ? "Дороги, " : ""}
-                    {selectedArea.infrastructure.camps ? "Лагеря, " : ""}
-                    {selectedArea.infrastructure.parking ? "Парковка" : ""}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Контакты администрации: Офис:{" "}
-                    {selectedArea.adminContacts.office}, Телефон:{" "}
-                    {selectedArea.adminContacts.email}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    ID зоны: {selectedArea.id}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    Создано:{" "}
-                    {new Date(selectedArea.createdAt).toLocaleDateString()}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    Обновлено:{" "}
-                    {new Date(selectedArea.updatedAt).toLocaleDateString()}
-                  </Typography>
+                  <Typography variant="h6" color="#ffffff">Инфраструктура и контакты</Typography>
+                  <Typography variant="body2" color="#ffffff">Инфраструктура: {selectedArea.infrastructure.roads ? "Дороги, " : ""}{selectedArea.infrastructure.camps ? "Лагеря, " : ""}{selectedArea.infrastructure.parking ? "Парковка" : ""}</Typography>
+                  <Typography variant="body2" color="#ffffff">Контакты администрации: Офис: {selectedArea.adminContacts.office}, Телефон: {selectedArea.adminContacts.email}</Typography>
+                  <Typography variant="body2" color="gray">ID зоны: {selectedArea.id}</Typography>
+                  <Typography variant="body2" color="gray">Создано: {new Date(selectedArea.createdAt).toLocaleDateString()}</Typography>
+                  <Typography variant="body2" color="gray">Обновлено: {new Date(selectedArea.updatedAt).toLocaleDateString()}</Typography>
                   {weatherData && (
                     <Box sx={{ marginTop: "10px", color: "#fff" }}>
-                      <Typography variant="body2">
-                        Погода: {weatherData.weather[0].description}
-                      </Typography>
-                      <Typography variant="body2">
-                        Температура: {weatherData.main.temp}°C
-                      </Typography>
+                      <Typography variant="body2">Погода: {weatherData.weather[0].description}</Typography>
+                      <Typography variant="body2">Температура: {weatherData.main.temp}°C</Typography>
                     </Box>
                   )}
                 </Box>
               </Box>
             ) : (
-              <Typography variant="h6" color="#ffffff">
-                Выберите зону на карте для просмотра информации
-              </Typography>
+              <Typography variant="h6" color="#ffffff">Выберите зону на карте для просмотра информации</Typography>
             )}
           </Box>
         </Paper>
 
         <Box sx={rightBoxStyles}>
           <Paper sx={backpackBoxStyles}>
-            <Typography variant="h6" color="#ffffff" align="center">
-              Рюкзак
-            </Typography>
-            <Button
-              sx={{ width: "10px" }}
-              variant="contained"
-              onClick={() => setOpenModal(true)}
-            >
-              +
-            </Button>
+            <Typography variant="h6" color="#ffffff" align="center">Рюкзак</Typography>
+            <Button sx={{ width: "10px" }} variant="contained" onClick={() => setOpenModal(true)}>+</Button>
             <Box>
               <ul>
                 {backpackItems.map((item, index) => (
-                  <li
-                    key={index}
-                    style={{
-                      color: "#fff",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
+                  <li key={index} style={{ color: "#fff", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     {item.item}
                     <Box sx={{ display: "flex", gap: "10px" }}>
-                      <IconButton
-                        onClick={() => {
-                          setNewItem(item.item);
-                          setEditingItem(item);
-                          setOpenModal(true);
-                        }}
-                      >
+                      <IconButton onClick={() => { setNewItem(item.item); setEditingItem(item); setOpenModal(true); }}>
                         <EditIcon sx={{ opacity: 0.7, color: "#fff" }} />
                       </IconButton>
                       <IconButton onClick={() => handleDeleteItem(item.id)}>
@@ -307,37 +207,22 @@ export default function Dashboard() {
             </Box>
           </Paper>
           <Box sx={cardsGridStyles}>
-            {" "}
             <Paper sx={dashboardCardStyles}>
-              <Typography variant="h6" color="#ffffff" align="center">
-                Календарь
-              </Typography>
+              <Typography variant="h6" color="#ffffff" align="center">Календарь</Typography>
               {upcomingEvent ? (
-                <Typography
-                  variant="body2"
-                  color="#ffffff"
-                  align="center"
-                  sx={{ marginTop: "0.5rem" }}
-                >
+                <Typography variant="body2" color="#ffffff" align="center" sx={{ marginTop: "0.5rem" }}>
                   {`Ближайшее событие: ${upcomingEvent.title}`}
                   <br />
                   {`Дата: ${dayjs(upcomingEvent.date).format("DD.MM.YYYY")}`}
                 </Typography>
               ) : (
-                <Typography
-                  variant="body2"
-                  color="#ffffff"
-                  align="center"
-                  sx={{ marginTop: "0.5rem" }}
-                >
+                <Typography variant="body2" color="#ffffff" align="center" sx={{ marginTop: "0.5rem" }}>
                   Нет ближайших событий
                 </Typography>
               )}
             </Paper>
             <Paper sx={dashboardCardStyles}>
-              <Typography variant="h6" color="#ffffff" align="center">
-                Погода
-              </Typography>
+              <Typography variant="h6" color="#ffffff" align="center">Погода</Typography>
             </Paper>
           </Box>
         </Box>
@@ -345,9 +230,7 @@ export default function Dashboard() {
 
       {/* Модальное окно для добавления и редактирования вещи */}
       <Dialog open={openModal} onClose={() => setOpenModal(false)}>
-        <DialogTitle>
-          {editingItem ? "Редактировать вещь" : "Добавить вещь в рюкзак"}
-        </DialogTitle>
+        <DialogTitle>{editingItem ? "Редактировать вещь" : "Добавить вещь в рюкзак"}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -360,18 +243,12 @@ export default function Dashboard() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenModal(false)} color="primary">
-            Отменить
-          </Button>
-          <Button
-            onClick={editingItem ? handleEditItem : handleAddItem}
-            color="primary"
-          >
+          <Button onClick={() => setOpenModal(false)} color="primary">Отменить</Button>
+          <Button onClick={editingItem ? handleEditItem : handleAddItem} color="primary">
             {editingItem ? "Сохранить" : "Добавить"}
           </Button>
         </DialogActions>
       </Dialog>
     </Box>
   );
-}
 }
