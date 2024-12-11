@@ -1,14 +1,22 @@
-import { Box, Typography, Paper, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Paper,
+  Button,
+  Modal,
+  TextField,
+} from "@mui/material";
 import { useState, useEffect } from "react";
 import { useAppSelector } from "../Redux/hooks";
 import dayjs from "dayjs";
-import axios from "axios";
 import {
   dashboardContainerStyles,
   dashboardGridStyles,
   commonBoxStyles,
   cardsGridStyles,
   dashboardCardStyles,
+  rightBoxStyles,
+  backpackBoxStyles,
 } from "../Styles/DashboardPage.styles";
 import { useSelector } from "react-redux";
 import { selectSelectedArea } from "../Redux/Slices/MapPage/huntingAreasSlice";
@@ -23,6 +31,8 @@ export default function Dashboard() {
 
   const [backpackItems, setBackpackItems] = useState([]);
   const [newItem, setNewItem] = useState("");
+  const [openModal, setOpenModal] = useState(false); // Управление открытием модального окна
+  const [itemToEdit, setItemToEdit] = useState(null); // Элемент для редактирования
 
   const upcomingEvent = events
     .filter((event) => dayjs(event.date).isAfter(dayjs()))
@@ -46,11 +56,48 @@ export default function Dashboard() {
       try {
         const response = await axiosInstance.post("/api/v1/backpack", { item: newItem });
         setBackpackItems((prev) => [...prev, response.data]);
-        setNewItem("");
+        setNewItem(""); // Очистить поле ввода
+        setOpenModal(false); // Закрыть модальное окно
       } catch (error) {
         console.error("Ошибка при добавлении вещи в рюкзак:", error);
       }
     }
+  };
+
+  const handleEditItem = async () => {
+    if (itemToEdit && itemToEdit.item.trim()) {
+      try {
+        const response = await axiosInstance.put(`/api/v1/backpack/${itemToEdit.id}`, { item: itemToEdit.item });
+        setBackpackItems((prev) =>
+          prev.map((item) => (item.id === itemToEdit.id ? response.data : item))
+        );
+        setItemToEdit(null);
+        setOpenModal(false); // Закрыть модальное окно после сохранения
+      } catch (error) {
+        console.error("Ошибка при редактировании вещи:", error);
+      }
+    }
+  };
+
+  const handleDeleteItem = async () => {
+    if (itemToEdit) {
+      try {
+        await axiosInstance.delete(`/api/v1/backpack/${itemToEdit.id}`);
+        setBackpackItems((prev) => prev.filter((item) => item.id !== itemToEdit.id)); // Удаляем элемент
+        setOpenModal(false); // Закрыть модальное окно после удаления
+      } catch (error) {
+        console.error("Ошибка при удалении вещи:", error);
+      }
+    }
+  };
+
+  const handleOpenModal = (item = null) => {
+    if (item) {
+      setItemToEdit(item); // Если передан элемент, редактируем его
+    } else {
+      setItemToEdit({ item: "" }); // Новый элемент для добавления
+    }
+    setOpenModal(true);
   };
 
   return (
@@ -88,57 +135,6 @@ export default function Dashboard() {
               >
                 Перейти к карте
               </Button>
-              <Paper
-                sx={{
-                  width: "300px",
-                  padding: "20px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <Typography variant="h6" color="#ffffff">
-                  Рюкзак
-                </Typography>
-                <Box>
-                  <Typography variant="body2" color="#ffffff">
-                    Добавить вещь:
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      gap: "10px",
-                      marginTop: "10px",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      value={newItem}
-                      onChange={(e) => setNewItem(e.target.value)}
-                      placeholder="Название вещи"
-                      style={{
-                        flex: 1,
-                        padding: "5px",
-                      }}
-                    />
-                    <Button variant="contained" onClick={handleAddItem}>
-                      +
-                    </Button>
-                  </Box>
-                </Box>
-                <Box>
-                  <Typography variant="body2" color="#ffffff">
-                    Вещи:
-                  </Typography>
-                  <ul>
-                    {backpackItems.map((item, index) => (
-                      <li key={index} style={{ color: "#fff" }}>
-                        {item.item}
-                      </li>
-                    ))}
-                  </ul>
-                </Box>
-              </Paper>
             </Box>
 
             {selectedArea ? (
@@ -159,84 +155,6 @@ export default function Dashboard() {
                   <Typography variant="body1" color="#ffffff">
                     {selectedArea.description}
                   </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Площадь: {selectedArea.areaSize} га
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Координаты: {selectedArea.coordinates.join(", ")}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="h6" color="#ffffff">
-                    Характеристики местности
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Тип местности: {selectedArea.terrainType}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Ландшафт: {selectedArea.landscape}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Высота над уровнем моря: {selectedArea.elevation} м
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Водные источники:
-                    {selectedArea.waterSources.rivers ? "Реки, " : ""}
-                    {selectedArea.waterSources.lakes ? "Озера, " : ""}
-                    {selectedArea.waterSources.springs ? "Родники" : ""}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="h6" color="#ffffff">
-                    Охота и правила
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Разрешенные типы охоты:{" "}
-                    {selectedArea.allowedHuntingTypes.join(", ")}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Сезон охоты: {selectedArea.huntingSeasons.start} -{" "}
-                    {selectedArea.huntingSeasons.end}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Разрешенное оружие: {selectedArea.allowedWeapons.join(", ")}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Ограничения: {selectedArea.restrictions}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Правила: {selectedArea.rules}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Необходимые разрешения: {selectedArea.requiredPermits}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="h6" color="#ffffff">
-                    Инфраструктура и контакты
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Инфраструктура:
-                    {selectedArea.infrastructure.roads ? "Дороги, " : ""}
-                    {selectedArea.infrastructure.camps ? "Лагеря, " : ""}
-                    {selectedArea.infrastructure.parking ? "Парковка" : ""}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Контакты администрации: Офис:{" "}
-                    {selectedArea.adminContacts.office}, Телефон:{" "}
-                    {selectedArea.adminContacts.email}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    ID зоны: {selectedArea.id}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    Создано:{" "}
-                    {new Date(selectedArea.createdAt).toLocaleDateString()}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    Обновлено:{" "}
-                    {new Date(selectedArea.updatedAt).toLocaleDateString()}
-                  </Typography>
                 </Box>
               </Box>
             ) : (
@@ -246,75 +164,132 @@ export default function Dashboard() {
             )}
           </Box>
         </Paper>
-        <Box sx={cardsGridStyles}>
-          <Paper sx={dashboardCardStyles}>
-            <Typography variant="h6" color="#ffffff" align="center">
-              Форум
-            </Typography>
-            <Typography variant="body2" color="#ffffff" align="center">
-              Общение и обмен опытом
-            </Typography>
-          </Paper>
-          <Paper sx={dashboardCardStyles}>
-            <Typography variant="h6" color="#ffffff" align="center">
-              Календарь
-            </Typography>
-            {upcomingEvent ? (
-              <Typography
-                variant="body2"
-                color="#ffffff"
-                align="center"
-                sx={{ marginTop: "0.5rem" }}
-              >
-                {`Ближайшее событие: ${upcomingEvent.title}`}
-                <br />
-                {`Дата: ${dayjs(upcomingEvent.date).format("DD.MM.YYYY")}`}
+
+        <Box sx={rightBoxStyles}>
+          <Paper sx={backpackBoxStyles}>
+            <Box>
+              <Typography variant="h6" color="#ffffff">
+                Рюкзак
               </Typography>
-            ) : (
-              <Typography
-                variant="body2"
-                color="#ffffff"
-                align="center"
-                sx={{ marginTop: "0.5rem" }}
-              >
-                Нет ближайших событий
+              <Button variant="contained" onClick={handleOpenModal}>
+                Открыть управление вещами
+              </Button>
+            </Box>
+            <Box>
+              <Typography variant="body2" color="#ffffff">
+                Вещи:
               </Typography>
-            )}
+              <ul>
+                {backpackItems.map((item) => (
+                  <li key={item.id} style={{ color: "#fff" }}>
+                    {item.item}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleOpenModal(item)}
+                      sx={{ marginLeft: "10px" }}
+                    >
+                      Изменить
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </Box>
           </Paper>
-          <Paper sx={dashboardCardStyles}>
-            <Typography variant="h6" color="#ffffff" align="center">
-              Погода
-            </Typography>
-            <Typography variant="body2" color="#ffffff" align="center">
-              Прогноз погоды
-            </Typography>
-          </Paper>
-          <Paper sx={dashboardCardStyles}>
-            <Typography variant="h6" color="#ffffff" align="center">
-              Оружие
-            </Typography>
-            <Typography variant="body2" color="#ffffff" align="center">
-              Выбранное оружие и переход в каталог
-            </Typography>
-          </Paper>
-          <Paper sx={dashboardCardStyles}>
-            <Typography variant="h6" color="#ffffff" align="center">
-              Животные
-            </Typography>
-            <Typography variant="body2" color="#ffffff" align="center">
-              Выбранное животное для охоты и следы и проее переход на
-              характеристики
-            </Typography>
-          </Paper>
-          <Paper sx={dashboardCardStyles}>
-            <Typography variant="h6" color="#ffffff" align="center">
-              Магазин
-            </Typography>
-            <Typography variant="body2" color="#ffffff" align="center">
-              Снаряжение аренда обмен и прочее
-            </Typography>
-          </Paper>
+
+          {/* Модальное окно для добавления или редактирования вещи */}
+          <Modal open={openModal} onClose={() => setOpenModal(false)}>
+            <Box
+              sx={{
+                width: 400,
+                padding: 20,
+                backgroundColor: "white",
+                margin: "auto",
+                marginTop: "100px",
+                borderRadius: "8px",
+              }}
+            >
+              <Typography variant="h6">
+                {itemToEdit?.id ? "Редактировать вещь" : "Добавить вещь"}
+              </Typography>
+              <Box sx={{ marginTop: "20px" }}>
+                <TextField
+                  value={itemToEdit?.item || ""}
+                  onChange={(e) =>
+                    setItemToEdit({ ...itemToEdit, item: e.target.value })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  placeholder="Название вещи"
+                />
+                <Box sx={{ marginTop: "10px", display: "flex", gap: "10px" }}>
+                  <Button
+                    variant="contained"
+                    onClick={itemToEdit?.id ? handleEditItem : handleAddItem}
+                  >
+                    {itemToEdit?.id ? "Сохранить" : "Добавить"}
+                  </Button>
+                  <Button variant="outlined" onClick={() => setOpenModal(false)}>
+                    Отмена
+                  </Button>
+                  {itemToEdit?.id && (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleDeleteItem}
+                      sx={{ marginLeft: "10px" }}
+                    >
+                      Удалить
+                    </Button>
+                  )}
+                </Box>
+              </Box>
+            </Box>
+          </Modal>
         </Box>
+      </Box>
+
+
+
+      <Box sx={cardsGridStyles}>
+        {/* Календарь */}
+        <Paper sx={dashboardCardStyles}>
+          <Typography variant="h6" color="#ffffff" align="center">
+            Календарь
+          </Typography>
+          {upcomingEvent ? (
+            <Typography
+              variant="body2"
+              color="#ffffff"
+              align="center"
+              sx={{ marginTop: "0.5rem" }}
+            >
+              {`Ближайшее событие: ${upcomingEvent.title}`}
+              <br />
+              {`Дата: ${dayjs(upcomingEvent.date).format("DD.MM.YYYY")}`}
+            </Typography>
+          ) : (
+            <Typography
+              variant="body2"
+              color="#ffffff"
+              align="center"
+              sx={{ marginTop: "0.5rem" }}
+            >
+              Нет ближайших событий
+            </Typography>
+          )}
+        </Paper>
+
+        {/* Погода */}
+        <Paper sx={dashboardCardStyles}>
+          <Typography variant="h6" color="#ffffff" align="center">
+            Погода
+          </Typography>
+          <Typography variant="body2" color="#ffffff" align="center">
+            Прогноз погоды
+          </Typography>
+        </Paper>
       </Box>
     </Box>
   );
