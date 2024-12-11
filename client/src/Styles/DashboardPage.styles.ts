@@ -54,7 +54,7 @@ export const backpackBoxStyles: SxProps = {
   display: "flex",
   flexDirection: "column",
   padding: "20px",
-  overflow: "hidden",
+  overflow: "scroll",
 };
 export const cardsGridStyles: SxProps = {
   display: "grid",
