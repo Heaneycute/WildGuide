@@ -24,6 +24,9 @@ const verifyRefreshToken = (req, res, next) => {
 };
 
 const verifyAccessToken = (req, res, next) => {
+  console.log('Headers:', req.headers); // Добавлен лог заголовков
+  console.log('Authorization:', req.headers.authorization); // Добавлен лог токена
+  
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -37,10 +40,12 @@ const verifyAccessToken = (req, res, next) => {
     }
 
     const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    console.log('Decoded token:', decoded); // Добавлен лог расшифрованного токена
     req.user = decoded.user;
     next();
   } catch (error) {
     console.error("Ошибка проверки access token:", error);
+    console.log('Token verification error details:', error); // Добавлен детальный лог ошибки
 
     if (error.name === "TokenExpiredError") {
       return res.status(401).json({ message: "Access token expired" });
@@ -51,16 +56,16 @@ const verifyAccessToken = (req, res, next) => {
   }
 };
 
-  const verifyAdmin = (req, res, next) => {
-    try {
-      if (!res.locals.user || res.locals.user.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required' });
-      }
-      next();
-    } catch (error) {
-      console.error(error);
-      res.status(403).json({ message: 'Admin verification failed' });
+const verifyAdmin = (req, res, next) => {
+  try {
+    if (!res.locals.user || res.locals.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Admin access required' });
     }
-  };
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(403).json({ message: 'Admin verification failed' });
+  }
+};
 
 module.exports = { verifyAccessToken, verifyRefreshToken , verifyAdmin};

@@ -9,6 +9,7 @@ import { ThemeContext } from '../../Styles/ThemeContext';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAllRoutes } from '../../Redux/Slices/MapPage/routesSlice';
 import { fetchRoutes } from '../../Redux/Thunks/MapPage/routesThunks';
+import { addToFavorites } from '../../Redux/Thunks/MapPage/favoritesThunks';
 
 interface Route {
   id: number;
@@ -26,19 +27,53 @@ interface Route {
 }
 
 export default function MapRoutesList() {
-const dispatch = useDispatch();
-const routes = useSelector(selectAllRoutes);
+  const dispatch = useDispatch();
+  const routes = useSelector(selectAllRoutes);
+  const { currentTheme } = useContext(ThemeContext);
+  const accessToken = localStorage.getItem('accessToken');
 
-useEffect(() => {
-  dispatch(fetchRoutes());
-}, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchRoutes());
+  }, [dispatch]);
+
   const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
   const [filterValues, setFilterValues] = useState({
     difficulty: 'all',
     favorite: false,
     season: 'all'
   });
-  const { currentTheme } = useContext(ThemeContext);
+
+  const handleAddToFavorites = async (route: Route) => {
+    console.log('Adding to favorites...');
+    console.log('Route data:', route);
+    console.log('Current auth state:', {
+      accessToken,
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    if (!accessToken) {
+      console.error('Access token not found');
+      // TODO: Add user notification about authentication requirement
+      return;
+    }
+
+    try {
+      const favoriteData = {
+        itemType: 'route',
+        itemId: route.id,
+        dateAdded: new Date().toISOString()
+      };
+      
+      console.log('Sending favorite data:', favoriteData);
+      await dispatch(addToFavorites(favoriteData)).unwrap();
+      console.log('Successfully added to favorites');
+    } catch (error) {
+      console.error('Error adding to favorites:', error);
+      // TODO: Add user notification about error
+    }
+  };
 
   const handleFilterChange = (field: string, value: string) => {
     setFilterValues(prev => ({
@@ -130,7 +165,11 @@ useEffect(() => {
               {route.name} • {route.distance} км
             </Typography>
             <Box>
-              <IconButton size="small" sx={{ color: currentTheme.palette.text.primary }}>
+              <IconButton 
+                size="small" 
+                sx={{ color: currentTheme.palette.text.primary }}
+                onClick={() => handleAddToFavorites(route)}
+              >
                 <StarOutlineIcon />
               </IconButton>
               <IconButton 
