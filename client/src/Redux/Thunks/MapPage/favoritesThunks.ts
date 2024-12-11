@@ -1,32 +1,35 @@
-// src/Redux/Thunks/MapPage/favoritesThunks.ts
+// src/Redux/Thunks/MapPage/favoritesThunks.tsНовая
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const token = localStorage.getItem('accessToken');
-axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : '';
-axios.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// Настройка axios с перехватчиком для авторизации
+const setupAxiosInterceptors = () => {
+  const token = localStorage.getItem('accessToken');
+  axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : '';
+  
+  axios.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
+};
+
+// Инициализация перехватчиков
+setupAxiosInterceptors();
+
 // Получение всех избранных элементов пользователя
 export const fetchFavorites = createAsyncThunk(
   'favorites/fetch',
   async (_, { rejectWithValue }) => {
-    console.log('Отправка GET-запроса для получения избранного...');
     try {
       const response = await axios.get(`${import.meta.env.VITE_API}/favorites`);
-      console.log('Получены данные об избранном:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Ошибка при получении избранного:', error);
       return rejectWithValue('Не удалось загрузить избранное');
     }
   }
@@ -35,15 +38,12 @@ export const fetchFavorites = createAsyncThunk(
 // Добавление нового элемента в избранное
 export const addToFavorites = createAsyncThunk(
   'favorites/add',
-  async (data: any, { rejectWithValue }) => {
-    console.log('Отправка POST-запроса для добавления в избранное...');
-    console.log('Данные для добавления:', data);
+  async (data: any, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_API}/favorites`, data);
-      console.log('Добавлено в избранное:', response.data);
+      await dispatch(fetchFavorites()); // Обновляем весь список после добавления
       return response.data;
     } catch (error) {
-      console.error('Ошибка при добавлении в избранное:', error);
       return rejectWithValue('Не удалось добавить в избранное');
     }
   }
@@ -52,14 +52,12 @@ export const addToFavorites = createAsyncThunk(
 // Удаление элемента из избранного
 export const removeFromFavorites = createAsyncThunk(
   'favorites/remove',
-  async (id: string, { rejectWithValue }) => {
-    console.log(`Отправка DELETE-запроса для удаления из избранного ${id}...`);
+  async (id: string, { dispatch, rejectWithValue }) => {
     try {
       await axios.delete(`${import.meta.env.VITE_API}/favorites/${id}`);
-      console.log('Успешно удалено из избранного');
+      await dispatch(fetchFavorites()); // Обновляем весь список после удаления
       return id;
     } catch (error) {
-      console.error('Ошибка при удалении из избранного:', error);
       return rejectWithValue('Не удалось удалить из избранного');
     }
   }

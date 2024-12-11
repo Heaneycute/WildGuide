@@ -28,6 +28,8 @@ import {
 } from "../Styles/DashboardPage.styles";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import dayjs from "dayjs";
+import { WeatherWidget } from '../components/WeatherWidget';
+
 
 export default function Dashboard() {
   const events = useAppSelector((state) => state.calendar.events);
@@ -223,6 +225,7 @@ export default function Dashboard() {
             </Paper>
             <Paper sx={dashboardCardStyles}>
               <Typography variant="h6" color="#ffffff" align="center">Погода</Typography>
+              <WeatherWidget />
             </Paper>
           </Box>
         </Box>
