@@ -1,5 +1,4 @@
-// FavoritesList.tsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { AppDispatch } from '../../Redux/index';
 import { selectAllFavorites } from '../../Redux/Slices/MapPage/favoritesSlice';
@@ -8,13 +7,18 @@ import { IconButton, List, ListItem, ListItemText, Paper, Typography } from '@mu
 import DeleteIcon from '@mui/icons-material/Delete';
 import { selectAllRoutes } from '../../Redux/Slices/MapPage/routesSlice';
 import { fetchRoutes } from '../../Redux/Thunks/MapPage/routesThunks';
-import { useTheme } from '@mui/material/styles';
+import { ThemeContext } from '../../Styles/ThemeContext';
+
+const commonBoxStyles = {
+  padding: '16px',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+};
 
 const FavoritesList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const favorites = useSelector(selectAllFavorites);
   const routes = useSelector(selectAllRoutes);
-  const currentTheme = useTheme();
+  const { currentTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     dispatch(fetchFavorites());
@@ -51,34 +55,70 @@ const FavoritesList: React.FC = () => {
 
   if (!favorites.length) {
     return (
-      <Paper sx={{ p: 2, textAlign: 'center' }}>
-        <Typography variant="body1">Список избранного пуст</Typography>
+      <Paper sx={{
+        ...commonBoxStyles,
+        backgroundColor: currentTheme.palette.background.paper
+      }}>
+        <Typography 
+          variant="body1" 
+          color={currentTheme.palette.text.primary}
+        >
+          Список избранного пуст
+        </Typography>
       </Paper>
     );
   }
 
   return (
-    <List>
-      {favorites.map((item: any) => (
-        <ListItem
-          key={item.id}
-          secondaryAction={
-            <IconButton 
-              edge="end"
-              onClick={() => handleRemoveFromFavorites(item.id.toString())}
-              color="error"
-              title="Удалить из избранного"
-            >
-              <DeleteIcon />
-            </IconButton>
-          }
-        >
-          <ListItemText
-            primary={getItemContent(item)}
-          />
-        </ListItem>
-      ))}
-    </List>
+    <Paper sx={{
+      ...commonBoxStyles,
+      backgroundColor: currentTheme.palette.background.paper,
+      height: '300px',
+      width: '100%'
+    }}>
+      <List sx={{
+        height: '100%',
+        overflowY: 'auto',
+        '&::-webkit-scrollbar': {
+          width: '8px'
+        },
+        '&::-webkit-scrollbar-track': {
+          background: currentTheme.palette.action?.hover
+        },
+        '&::-webkit-scrollbar-thumb': {
+          background: currentTheme.palette.action?.selected,
+          borderRadius: '4px'
+        }
+      }}>
+        {favorites.map((item: any) => (
+          <ListItem
+            key={item.id}
+            sx={{
+              '&:hover': {
+                bgcolor: currentTheme.palette.action?.hover
+              },
+              borderRadius: 1,
+              mb: 1
+            }}
+            secondaryAction={
+              <IconButton 
+                edge="end"
+                onClick={() => handleRemoveFromFavorites(item.id.toString())}
+                sx={{ color: currentTheme.palette.error.main }}
+                title="Удалить из избранного"
+              >
+                <DeleteIcon />
+              </IconButton>
+            }
+          >
+            <ListItemText
+              primary={getItemContent(item)}
+              sx={{ color: currentTheme.palette.text.primary }}
+            />
+          </ListItem>
+        ))}
+      </List>
+    </Paper>
   );
 };
 
