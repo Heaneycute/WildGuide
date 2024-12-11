@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../index';
 
 interface LayersState {
   hunting: boolean;
@@ -10,24 +11,29 @@ interface LayersState {
 
 const initialState: LayersState = {
   hunting: true,
-  animals: false,
-  cabins: false,
-  trails: false,
+  animals: true,
+  cabins: true,
+  trails: true,
   points: true
 };
 
- const layersSlice = createSlice({
+export const layersSlice = createSlice({
   name: 'layers',
   initialState,
   reducers: {
     toggleLayer: (state, action: PayloadAction<keyof LayersState>) => {
-      state[action.payload] = !state[action.payload];
+      const layer = action.payload;
+      state[layer] = !state[layer];
     },
-    setLayerState: (state, action: PayloadAction<{layer: keyof LayersState; value: boolean}>) => {
-      state[action.payload.layer] = action.payload.value;
+    setLayerVisibility: (state, action: PayloadAction<{layer: keyof LayersState, visible: boolean}>) => {
+      const { layer, visible } = action.payload;
+      state[layer] = visible;
     }
   }
 });
 
-export const { toggleLayer, setLayerState } = layersSlice.actions;
+export const { toggleLayer, setLayerVisibility } = layersSlice.actions;
+
+export const selectLayerVisibility = (state: RootState, layer: keyof LayersState) => state.layers[layer];
+
 export default layersSlice.reducer;

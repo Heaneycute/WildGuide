@@ -2,11 +2,14 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { YMaps, Map } from '@pbe/react-yandex-maps';
-import { mapBoxStyles } from '../../Styles/MapPageComponents.styles';
+import { mapBoxStyles, favoritesListStyles } from '../../Styles/MapPageComponents.styles';
 import { HuntingAreasLayer } from './YandexMap/HuntingAreasLayer';
+import { RoutesLayer } from './YandexMap/RoutesLayer';
+import { CabinsLayer } from './YandexMap/CabinsLayer';
+import { AnimalsLayer } from './YandexMap/AnimalsLayer';
 import { customMapStyle } from '../../Styles/MapStyles.styles';
 import { clearSelectedArea } from '../../Redux/Slices/MapPage/huntingAreasSlice';
-
+import FavoritesList from './FavoritesList';
 
 interface MapState {
   center: [number, number];
@@ -35,6 +38,7 @@ const YandexMap: React.FC = () => {
       dispatch(clearSelectedArea());
     }
   };
+
   const mapState: MapState = {
     center: [59.56, 150.80],
     zoom: 9,
@@ -59,8 +63,14 @@ const YandexMap: React.FC = () => {
           height="100%"
         >
           <HuntingAreasLayer visible={true} />
+          <RoutesLayer visible={true} />
+          <CabinsLayer visible={true} />
+          <AnimalsLayer visible={true} />
         </Map>
       </YMaps>
+      <Box sx={favoritesListStyles}>
+        <FavoritesList />
+      </Box>
     </Box>
   );
 };
