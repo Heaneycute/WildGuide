@@ -1,6 +1,8 @@
 import { Box, Typography, Paper, Button } from "@mui/material";
+import { useState, useEffect } from "react";
 import { useAppSelector } from "../Redux/hooks";
 import dayjs from "dayjs";
+import axios from "axios";
 import {
   dashboardContainerStyles,
   dashboardGridStyles,
@@ -12,16 +14,44 @@ import { useSelector } from "react-redux";
 import { selectSelectedArea } from "../Redux/Slices/MapPage/huntingAreasSlice";
 import YandexMap from "../components/MapPage/YandexMap";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosInstance";
 
 export default function Dashboard() {
   const events = useAppSelector((state) => state.calendar.events);
-
   const selectedArea = useSelector(selectSelectedArea);
   const navigate = useNavigate();
+
+  const [backpackItems, setBackpackItems] = useState([]);
+  const [newItem, setNewItem] = useState("");
 
   const upcomingEvent = events
     .filter((event) => dayjs(event.date).isAfter(dayjs()))
     .sort((a, b) => dayjs(a.date).diff(dayjs(b.date)))[0];
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axiosInstance.get("/api/v1/backpack");
+        setBackpackItems(response.data);
+      } catch (error) {
+        console.error("Ошибка при загрузке рюкзака:", error);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+  const handleAddItem = async () => {
+    if (newItem.trim()) {
+      try {
+        const response = await axiosInstance.post("/api/v1/backpack", { item: newItem });
+        setBackpackItems((prev) => [...prev, response.data]);
+        setNewItem("");
+      } catch (error) {
+        console.error("Ошибка при добавлении вещи в рюкзак:", error);
+      }
+    }
+  };
 
   return (
     <Box sx={dashboardContainerStyles}>
@@ -58,6 +88,57 @@ export default function Dashboard() {
               >
                 Перейти к карте
               </Button>
+              <Paper
+                sx={{
+                  width: "300px",
+                  padding: "20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                }}
+              >
+                <Typography variant="h6" color="#ffffff">
+                  Рюкзак
+                </Typography>
+                <Box>
+                  <Typography variant="body2" color="#ffffff">
+                    Добавить вещь:
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: "10px",
+                      marginTop: "10px",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      value={newItem}
+                      onChange={(e) => setNewItem(e.target.value)}
+                      placeholder="Название вещи"
+                      style={{
+                        flex: 1,
+                        padding: "5px",
+                      }}
+                    />
+                    <Button variant="contained" onClick={handleAddItem}>
+                      +
+                    </Button>
+                  </Box>
+                </Box>
+                <Box>
+                  <Typography variant="body2" color="#ffffff">
+                    Вещи:
+                  </Typography>
+                  <ul>
+                    {backpackItems.map((item, index) => (
+                      <li key={index} style={{ color: "#fff" }}>
+                        {item.item}
+                      </li>
+                    ))}
+                  </ul>
+                </Box>
+              </Paper>
             </Box>
 
             {selectedArea ? (

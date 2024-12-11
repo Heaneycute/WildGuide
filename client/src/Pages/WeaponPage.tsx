@@ -45,7 +45,7 @@ const WeaponGalleryPage: React.FC = () => {
       </Box>
     );
   }
-
+console.log(weapons)
   return (
     <Box sx={pageWrapperStyles}>
       <Box sx={mainContentStyles}>
