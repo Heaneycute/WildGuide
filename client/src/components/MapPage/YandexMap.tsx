@@ -5,6 +5,7 @@ import { YMaps, Map } from '@pbe/react-yandex-maps';
 import { mapBoxStyles, favoritesListStyles } from '../../Styles/MapPageComponents.styles';
 import { HuntingAreasLayer } from './YandexMap/HuntingAreasLayer';
 import { RoutesLayer } from './YandexMap/RoutesLayer';
+import { CabinsLayer } from './YandexMap/CabinsLayer';
 import { customMapStyle } from '../../Styles/MapStyles.styles';
 import { clearSelectedArea } from '../../Redux/Slices/MapPage/huntingAreasSlice';
 import FavoritesList from './FavoritesList';
@@ -62,6 +63,7 @@ const YandexMap: React.FC = () => {
         >
           <HuntingAreasLayer visible={true} />
           <RoutesLayer visible={true} />
+          <CabinsLayer visible={true} />
         </Map>
       </YMaps>
       <Box sx={favoritesListStyles}>
