@@ -11,11 +11,8 @@ const huntingCabinsRouter = require("./hunting-cabins.api.router");
 const routesRouter = require("./routes.api.router");
 const animalsRouter = require("./animals.api.router");
 const favoritesRouter = require("./favorites.api.router");
-<<<<<<< HEAD
 const backpackRouter = require("./backpack.router");
-=======
 const commentsRouter = require("./comments.api.router");
->>>>>>> 3ef4487667c29634bea10b950265cca3c454656b
 
 router.use("/auth/new-password", newPasswordRouter);
 router.use("/auth/reset-password", resetPasswordRouter);
@@ -29,10 +26,7 @@ router.use("/hunting-cabins", huntingCabinsRouter);
 router.use("/routes", routesRouter);
 router.use("/animals", animalsRouter);
 router.use("/favorites", favoritesRouter);
-<<<<<<< HEAD
 router.use("/backpack", backpackRouter);
-=======
 router.use("/comments", commentsRouter);
->>>>>>> 3ef4487667c29634bea10b950265cca3c454656b
 
 module.exports = router;

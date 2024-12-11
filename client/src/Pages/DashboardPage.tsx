@@ -15,6 +15,7 @@ import { selectSelectedArea } from "../Redux/Slices/MapPage/huntingAreasSlice";
 import YandexMap from "../components/MapPage/YandexMap";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
+import { WeatherWidget } from '../components/WeatherWidget';
 
 export default function Dashboard() {
   const events = useAppSelector((state) => state.calendar.events);
@@ -159,85 +160,8 @@ export default function Dashboard() {
                   <Typography variant="body1" color="#ffffff">
                     {selectedArea.description}
                   </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Площадь: {selectedArea.areaSize} га
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Координаты: {selectedArea.coordinates.join(", ")}
-                  </Typography>
                 </Box>
-                <Box>
-                  <Typography variant="h6" color="#ffffff">
-                    Характеристики местности
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Тип местности: {selectedArea.terrainType}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Ландшафт: {selectedArea.landscape}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Высота над уровнем моря: {selectedArea.elevation} м
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Водные источники:
-                    {selectedArea.waterSources.rivers ? "Реки, " : ""}
-                    {selectedArea.waterSources.lakes ? "Озера, " : ""}
-                    {selectedArea.waterSources.springs ? "Родники" : ""}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="h6" color="#ffffff">
-                    Охота и правила
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Разрешенные типы охоты:{" "}
-                    {selectedArea.allowedHuntingTypes.join(", ")}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Сезон охоты: {selectedArea.huntingSeasons.start} -{" "}
-                    {selectedArea.huntingSeasons.end}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Разрешенное оружие: {selectedArea.allowedWeapons.join(", ")}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Ограничения: {selectedArea.restrictions}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Правила: {selectedArea.rules}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Необходимые разрешения: {selectedArea.requiredPermits}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="h6" color="#ffffff">
-                    Инфраструктура и контакты
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Инфраструктура:
-                    {selectedArea.infrastructure.roads ? "Дороги, " : ""}
-                    {selectedArea.infrastructure.camps ? "Лагеря, " : ""}
-                    {selectedArea.infrastructure.parking ? "Парковка" : ""}
-                  </Typography>
-                  <Typography variant="body2" color="#ffffff">
-                    Контакты администрации: Офис:{" "}
-                    {selectedArea.adminContacts.office}, Телефон:{" "}
-                    {selectedArea.adminContacts.email}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    ID зоны: {selectedArea.id}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    Создано:{" "}
-                    {new Date(selectedArea.createdAt).toLocaleDateString()}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    Обновлено:{" "}
-                    {new Date(selectedArea.updatedAt).toLocaleDateString()}
-                  </Typography>
-                </Box>
+                
               </Box>
             ) : (
               <Typography variant="h6" color="#ffffff">
@@ -282,12 +206,10 @@ export default function Dashboard() {
             )}
           </Paper>
           <Paper sx={dashboardCardStyles}>
-            <Typography variant="h6" color="#ffffff" align="center">
-              Погода
-            </Typography>
-            <Typography variant="body2" color="#ffffff" align="center">
-              Прогноз погоды
-            </Typography>
+          <Typography variant="h6" color="#ffffff" align="center">
+            Погода
+          </Typography>
+          <WeatherWidget />
           </Paper>
           <Paper sx={dashboardCardStyles}>
             <Typography variant="h6" color="#ffffff" align="center">
