@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControl, InputLabel, Select, MenuItem, Stack, Paper } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import StarIcon from '@mui/icons-material/Star';
 import { ThemeContext } from '../../Styles/ThemeContext';
@@ -85,18 +84,6 @@ export default function MapRoutesList() {
         <Typography variant="h5" color={currentTheme.palette.text.primary}>
           Список маршрутов
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{
-            '&:hover': {
-              backgroundColor: currentTheme.palette.primary.dark
-            }
-          }}
-        >
-          Добавить маршрут
-        </Button>
-
         <Box sx={{ mb: 2 }}>
           <Box sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
             <IconButton 
@@ -175,9 +162,6 @@ export default function MapRoutesList() {
               </IconButton>
               <IconButton size="small" sx={{ color: currentTheme.palette.text.primary }}>
                 <CommentOutlinedIcon />
-              </IconButton>
-              <IconButton size="small" sx={{ color: currentTheme.palette.text.primary }}>
-                <EditOutlinedIcon />
               </IconButton>
             </Box>
           </Paper>
