@@ -1,6 +1,5 @@
 import React from 'react'
-import { Container, Typography, Box, Paper } from '@mui/material';
-import { authPageContainerStyles } from '../Styles/AuthPages.styles';
+import { Container} from '@mui/material';
 import { Canvas } from "@react-three/fiber";
 import Experience from "../components/AnimalPage/Experience";
 import Overlay from "../components/AnimalPage/Overlay";
@@ -11,7 +10,7 @@ export default function Animal() {
 
   return (
     <Container maxWidth={false} disableGutters style={{width: "100vw", height: "100vh"}} sx={{
-      ...authPageContainerStyles,
+ 
       minHeight: '100vh',
       backgroundColor: 'rgba(0,0,0,0.4)',
       display: 'flex',
