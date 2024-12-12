@@ -1,8 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import axios from 'axios';
 import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControl, InputLabel, Select, MenuItem, Stack, Paper } from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -11,8 +8,7 @@ import { ThemeContext } from '../../Styles/ThemeContext';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAllRoutes } from '../../Redux/Slices/MapPage/routesSlice';
 import { fetchRoutes } from '../../Redux/Thunks/MapPage/routesThunks';
-import { addToFavorites } from '../../Redux/Thunks/MapPage/favoritesThunks';
-import { removeFromFavorites, fetchFavorites } from '../../Redux/Thunks/MapPage/favoritesThunks';
+import { FavoriteStar } from './FavoriteStar';
 
 interface Route {
   id: number;
@@ -36,48 +32,11 @@ export default function MapRoutesList() {
   const accessToken = localStorage.getItem('accessToken');
   const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
   const [filterValues, setFilterValues] = useState({ difficulty: 'all', favorite: false, season: 'all'});
-  const [favorites, setFavorites] = useState<{[key: string]: boolean}>({});
 
   useEffect(() => {
     dispatch(fetchRoutes());
   }, [dispatch]);
 
-
-  const handleAddToFavorites = async (route: Route) => {
-    const isFavorite = favorites[route.id];
-
-    if (!accessToken) {
-      console.error('Access token not found');
-      return;
-    }
-  
-    try {
-      if (isFavorite) {
-        const response = await axios.get(`${import.meta.env.VITE_API}/favorites`);
-        const favoriteItem = response.data.find(item => 
-          item.itemId === route.id && item.itemType === 'route'
-        );
-        
-        if (favoriteItem) {
-          await dispatch(removeFromFavorites(favoriteItem.id));
-          await dispatch(fetchFavorites()); // Добавляем обновление списка
-          setFavorites(prev => ({...prev, [route.id]: false}));
-        }
-      } else {
-        const favoriteData = {
-          itemType: 'route',
-          itemId: route.id,
-          dateAdded: new Date().toISOString()
-        };
-        await dispatch(addToFavorites(favoriteData));
-        await dispatch(fetchFavorites()); // Добавляем обновление списка
-        setFavorites(prev => ({...prev, [route.id]: true}));
-      }
-    } catch (error) {
-      console.error('Error managing favorites:', error);
-    }
-  
-  };
 
   const handleFilterChange = (field: string, value: string) => {
     setFilterValues(prev => ({
@@ -177,13 +136,7 @@ export default function MapRoutesList() {
               {route.name} • {route.distance} км
             </Typography>
             <Box>
-              <IconButton 
-                size="small" 
-                sx={{ color: currentTheme.palette.text.primary }}
-                onClick={() => handleAddToFavorites(route)}
-              >
-                {favorites[route.id] ? <StarIcon sx={{ color: '#ff4444' }}/> : <StarOutlineIcon />}
-              </IconButton>
+            <FavoriteStar routeId={route.id} />
               <IconButton 
                 size="small" 
                 sx={{ color: currentTheme.palette.text.primary }}
