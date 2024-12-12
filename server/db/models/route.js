@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       comment: 'Расчетное время в минутах'
     },
     season: {
-      type: DataTypes.ENUM('spring', 'summer', 'fall', 'winter'),
+      type: DataTypes.ENUM('spring', 'summer', 'fall', 'зима'),
       allowNull: false,
       comment: 'Сезон использования маршрута'
     },

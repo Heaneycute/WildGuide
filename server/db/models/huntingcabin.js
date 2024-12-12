@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       comment: 'Тип постройки: permanent - постоянная, temporary - временная'
     },
     usageSeason: {
-      type: DataTypes.ENUM('spring', 'summer', 'fall', 'winter', 'all-year','spring-fall','summer-fall'),
+      type: DataTypes.ENUM('spring', 'summer', 'fall', 'зима', 'all-year','spring-fall','summer-fall'),
       allowNull: false
     },
     hasElectricity: {
