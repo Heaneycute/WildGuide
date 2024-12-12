@@ -5,7 +5,6 @@ import {
   Lightformer,
   Sphere,
 } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
 import { Scene } from "./Scene";
 import * as THREE from "three";
 
@@ -20,7 +19,7 @@ export const scenes = [
     range: 660,
   },
   {
-    path: "models/free_realistic_bear.glb",
+    path: "models/bear2.glb",
     mainColor: "#E6ECF5",
     name: "Model 3",
     description: "The car of the future",
@@ -28,7 +27,7 @@ export const scenes = [
     range: 576,
   },
   {
-    path: "models/deer_scene-v1.glb",
+    path: "models/deer.glb",
     mainColor: "#E6ECF5",
     name: "Semi",
     description: "The Future of Trucking",
