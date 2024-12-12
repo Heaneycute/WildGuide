@@ -96,14 +96,15 @@ export default function MapRoutesList() {
   return (
     <Paper sx={{
       height: '100%',
+      width: '100%',
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       justifyContent: 'center',
       padding: '20px',
       overflow: 'hidden',
       backgroundColor: currentTheme.palette.background.paper
     }}>
-      <Stack spacing={2} direction="column">
+      <Stack spacing={2} direction="column" sx={{ width: '100%' }}>
         <Typography variant="h5" color={currentTheme.palette.text.primary}>
           Список маршрутов
         </Typography>
