@@ -10,6 +10,7 @@ import { selectAllRoutes } from '../../Redux/Slices/MapPage/routesSlice';
 import { selectAllFavorites } from '../../Redux/Slices/MapPage/favoritesSlice';
 import { fetchRoutes } from '../../Redux/Thunks/MapPage/routesThunks';
 import { FavoriteStar } from './FavoriteStar';
+import CommentDialog from './Comments/CommentDialog';
 
 interface Route {
   id: number;
@@ -35,6 +36,8 @@ export default function MapRoutesList() {
   const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
   const [filterValues, setFilterValues] = useState({ difficulty: 'all', favorite: false, season: 'all'});
   const [showFavoritesFirst, setShowFavoritesFirst] = useState(false);
+  const [commentDialogOpen, setCommentDialogOpen] = useState(false);
+  const [selectedRouteForComments, setSelectedRouteForComments] = useState<number | null>(null);
 
   useEffect(() => {
     dispatch(fetchRoutes());
@@ -45,6 +48,11 @@ export default function MapRoutesList() {
       ...prev,
       [field]: value
     }));
+  };
+
+  const handleCommentClick = (routeId: number) => {
+    setSelectedRouteForComments(routeId);
+    setCommentDialogOpen(true);
   };
 
   const filteredRoutes = routes?.filter(route => {
@@ -112,7 +120,6 @@ export default function MapRoutesList() {
               </Select>
             </FormControl>
           </Box>
-
           <FormControl fullWidth sx={{ mb: 1 }}>
             <InputLabel sx={{ color: currentTheme.palette.text.primary }}>Сезон</InputLabel>
             <Select
@@ -127,14 +134,13 @@ export default function MapRoutesList() {
               <MenuItem value="spring">Весна</MenuItem>
               <MenuItem value="summer">Лето</MenuItem>
               <MenuItem value="fall">Осень</MenuItem>
-              <MenuItem value="зима">Зима</MenuItem>
+              <MenuItem value="winter">Зима</MenuItem>
             </Select>
           </FormControl>
         </Box>
-
         {sortedAndFilteredRoutes?.map(route => (
           <Paper 
-            key={route.id} 
+            key={route.id}
             elevation={0}
             sx={{
               display: 'flex',
@@ -152,7 +158,7 @@ export default function MapRoutesList() {
               {route.name} • {route.distance} км
             </Typography>
             <Box>
-            <FavoriteStar routeId={route.id} />
+              <FavoriteStar routeId={route.id} />
               <IconButton 
                 size="small" 
                 sx={{ color: currentTheme.palette.text.primary }}
@@ -160,13 +166,16 @@ export default function MapRoutesList() {
               >
                 <InfoOutlinedIcon />
               </IconButton>
-              <IconButton size="small" sx={{ color: currentTheme.palette.text.primary }}>
+              <IconButton 
+                size="small" 
+                sx={{ color: currentTheme.palette.text.primary }}
+                onClick={() => handleCommentClick(route.id)}
+              >
                 <CommentOutlinedIcon />
               </IconButton>
             </Box>
           </Paper>
         ))}
-
         <Dialog
           open={Boolean(selectedRoute)}
           onClose={() => setSelectedRoute(null)}
@@ -185,7 +194,7 @@ export default function MapRoutesList() {
               <DialogTitle sx={{ borderBottom: `1px solid ${currentTheme.palette.divider}` }}>
                 {selectedRoute.name}
                 <IconButton 
-                  sx={{ 
+                  sx={{
                     position: 'absolute',
                     right: 8,
                     top: 8,
@@ -215,7 +224,6 @@ export default function MapRoutesList() {
                 <Typography variant="body1" paragraph>
                   Сезон: {selectedRoute.season}
                 </Typography>
-
                 <Typography variant="h6" gutterBottom>
                   Ключевые точки
                 </Typography>
@@ -231,9 +239,9 @@ export default function MapRoutesList() {
                 ))}
               </DialogContent>
               <DialogActions sx={{ borderTop: `1px solid ${currentTheme.palette.divider}` }}>
-                <Button 
+                <Button
                   onClick={() => setSelectedRoute(null)}
-                  sx={{ 
+                  sx={{
                     color: currentTheme.palette.text.primary,
                     '&:hover': {
                       backgroundColor: currentTheme.palette.action?.hover
@@ -246,6 +254,18 @@ export default function MapRoutesList() {
             </>
           )}
         </Dialog>
+
+        {selectedRouteForComments && (
+          <CommentDialog
+            open={commentDialogOpen}
+            onClose={() => {
+              setCommentDialogOpen(false);
+              setSelectedRouteForComments(null);
+            }}
+            itemType="route"
+            itemId={selectedRouteForComments}
+          />
+        )}
       </Stack>
     </Paper>
   );

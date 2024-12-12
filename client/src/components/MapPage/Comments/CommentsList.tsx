@@ -16,7 +16,7 @@ interface CommentsListProps {
 const CommentsList: React.FC<CommentsListProps> = ({ itemType, itemId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const comments = useSelector(selectAllComments);
-  const currentUserId = useSelector((state: any) => state.auth.user?.id);
+  const currentUserId = useSelector((state: any) => state.auth?.user?.id || null);
 
   useEffect(() => {
     dispatch(fetchComments({ itemType, itemId }));
