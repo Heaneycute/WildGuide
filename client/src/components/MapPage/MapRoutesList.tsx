@@ -4,9 +4,11 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
+import StarIcon from '@mui/icons-material/Star';
 import { ThemeContext } from '../../Styles/ThemeContext';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAllRoutes } from '../../Redux/Slices/MapPage/routesSlice';
+import { selectAllFavorites } from '../../Redux/Slices/MapPage/favoritesSlice';
 import { fetchRoutes } from '../../Redux/Thunks/MapPage/routesThunks';
 import { FavoriteStar } from './FavoriteStar';
 
@@ -28,15 +30,16 @@ interface Route {
 export default function MapRoutesList() {
   const dispatch = useDispatch();
   const routes = useSelector(selectAllRoutes);
+  const favorites = useSelector(selectAllFavorites);
   const { currentTheme } = useContext(ThemeContext);
   const accessToken = localStorage.getItem('accessToken');
   const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
   const [filterValues, setFilterValues] = useState({ difficulty: 'all', favorite: false, season: 'all'});
+  const [showFavoritesFirst, setShowFavoritesFirst] = useState(false);
 
   useEffect(() => {
     dispatch(fetchRoutes());
   }, [dispatch]);
-
 
   const handleFilterChange = (field: string, value: string) => {
     setFilterValues(prev => ({
@@ -50,7 +53,22 @@ export default function MapRoutesList() {
     const matchesSeason = filterValues.season === 'all' || route.season === filterValues.season;
     return matchesDifficulty && matchesSeason;
   });
-  
+
+  const sortedAndFilteredRoutes = filteredRoutes?.sort((a, b) => {
+    const aIsFavorite = favorites.some(fav => 
+      fav.itemType === 'route' && fav.itemId === a.id
+    );
+    const bIsFavorite = favorites.some(fav => 
+      fav.itemType === 'route' && fav.itemId === b.id
+    );
+    
+    if (showFavoritesFirst) {
+      if (aIsFavorite && !bIsFavorite) return -1;
+      if (!aIsFavorite && bIsFavorite) return 1;
+    }
+    
+    return a.name.localeCompare(b.name);
+  });
 
   return (
     <Paper sx={{
@@ -80,22 +98,33 @@ export default function MapRoutesList() {
         </Button>
 
         <Box sx={{ mb: 2 }}>
-          <FormControl fullWidth sx={{ mb: 1 }}>
-            <InputLabel sx={{ color: currentTheme.palette.text.primary }}>Сложность</InputLabel>
-            <Select
-              value={filterValues.difficulty}
-              onChange={(e) => handleFilterChange('difficulty', e.target.value)}
+          <Box sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
+            <IconButton 
+              onClick={() => setShowFavoritesFirst(!showFavoritesFirst)}
               sx={{ 
-                color: currentTheme.palette.text.primary,
-                '& .MuiSelect-icon': { color: currentTheme.palette.text.primary }
+                color: showFavoritesFirst ? '#ff4444' : currentTheme.palette.text.primary,
+                mr: 2 
               }}
             >
-              <MenuItem value="all">Все</MenuItem>
-              <MenuItem value="easy">Легкая</MenuItem>
-              <MenuItem value="medium">Средняя</MenuItem>
-              <MenuItem value="hard">Сложная</MenuItem>
-            </Select>
-          </FormControl>
+              <StarIcon />
+            </IconButton>
+            <FormControl fullWidth sx={{ mb: 1 }}>
+              <InputLabel sx={{ color: currentTheme.palette.text.primary }}>Сложность</InputLabel>
+              <Select
+                value={filterValues.difficulty}
+                onChange={(e) => handleFilterChange('difficulty', e.target.value)}
+                sx={{ 
+                  color: currentTheme.palette.text.primary,
+                  '& .MuiSelect-icon': { color: currentTheme.palette.text.primary }
+                }}
+              >
+                <MenuItem value="all">Все</MenuItem>
+                <MenuItem value="easy">Легкая</MenuItem>
+                <MenuItem value="medium">Средняя</MenuItem>
+                <MenuItem value="hard">Сложная</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
 
           <FormControl fullWidth sx={{ mb: 1 }}>
             <InputLabel sx={{ color: currentTheme.palette.text.primary }}>Сезон</InputLabel>
@@ -116,7 +145,7 @@ export default function MapRoutesList() {
           </FormControl>
         </Box>
 
-        {filteredRoutes?.map(route => (
+        {sortedAndFilteredRoutes?.map(route => (
           <Paper 
             key={route.id} 
             elevation={0}
