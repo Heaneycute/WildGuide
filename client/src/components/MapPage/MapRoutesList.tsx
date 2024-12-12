@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControl, InputLabel, Select, MenuItem, Stack, Paper } from '@mui/material';
+import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
@@ -10,6 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAllRoutes } from '../../Redux/Slices/MapPage/routesSlice';
 import { fetchRoutes } from '../../Redux/Thunks/MapPage/routesThunks';
 import { addToFavorites } from '../../Redux/Thunks/MapPage/favoritesThunks';
+import { removeFromFavorites, fetchFavorites } from '../../Redux/Thunks/MapPage/favoritesThunks';
 
 interface Route {
   id: number;
@@ -31,48 +34,49 @@ export default function MapRoutesList() {
   const routes = useSelector(selectAllRoutes);
   const { currentTheme } = useContext(ThemeContext);
   const accessToken = localStorage.getItem('accessToken');
+  const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
+  const [filterValues, setFilterValues] = useState({ difficulty: 'all', favorite: false, season: 'all'});
+  const [favorites, setFavorites] = useState<{[key: string]: boolean}>({});
 
   useEffect(() => {
     dispatch(fetchRoutes());
   }, [dispatch]);
 
-  const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
-  const [filterValues, setFilterValues] = useState({
-    difficulty: 'all',
-    favorite: false,
-    season: 'all'
-  });
 
   const handleAddToFavorites = async (route: Route) => {
-    console.log('Adding to favorites...');
-    console.log('Route data:', route);
-    console.log('Current auth state:', {
-      accessToken,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
+    const isFavorite = favorites[route.id];
 
     if (!accessToken) {
       console.error('Access token not found');
-      // TODO: Add user notification about authentication requirement
       return;
     }
-
+  
     try {
-      const favoriteData = {
-        itemType: 'route',
-        itemId: route.id,
-        dateAdded: new Date().toISOString()
-      };
-      
-      console.log('Sending favorite data:', favoriteData);
-      await dispatch(addToFavorites(favoriteData)).unwrap();
-      console.log('Successfully added to favorites');
+      if (isFavorite) {
+        const response = await axios.get(`${import.meta.env.VITE_API}/favorites`);
+        const favoriteItem = response.data.find(item => 
+          item.itemId === route.id && item.itemType === 'route'
+        );
+        
+        if (favoriteItem) {
+          await dispatch(removeFromFavorites(favoriteItem.id));
+          await dispatch(fetchFavorites()); // Добавляем обновление списка
+          setFavorites(prev => ({...prev, [route.id]: false}));
+        }
+      } else {
+        const favoriteData = {
+          itemType: 'route',
+          itemId: route.id,
+          dateAdded: new Date().toISOString()
+        };
+        await dispatch(addToFavorites(favoriteData));
+        await dispatch(fetchFavorites()); // Добавляем обновление списка
+        setFavorites(prev => ({...prev, [route.id]: true}));
+      }
     } catch (error) {
-      console.error('Error adding to favorites:', error);
-      // TODO: Add user notification about error
+      console.error('Error managing favorites:', error);
     }
+  
   };
 
   const handleFilterChange = (field: string, value: string) => {
@@ -94,7 +98,7 @@ export default function MapRoutesList() {
     }}>
       <Stack spacing={2} direction="column">
         <Typography variant="h5" color={currentTheme.palette.text.primary}>
-          Список маршрутов зоны
+          Список маршрутов
         </Typography>
         <Button
           variant="contained"
@@ -170,7 +174,7 @@ export default function MapRoutesList() {
                 sx={{ color: currentTheme.palette.text.primary }}
                 onClick={() => handleAddToFavorites(route)}
               >
-                <StarOutlineIcon />
+                {favorites[route.id] ? <StarIcon sx={{ color: '#ff4444' }}/> : <StarOutlineIcon />}
               </IconButton>
               <IconButton 
                 size="small" 

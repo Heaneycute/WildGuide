@@ -1,46 +1,36 @@
-import {
-  Box,
-  Typography,
-  Paper,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  IconButton,
-} from "@mui/material";
+// src/Pages/DashboardPage.tsx
+import { Box, Typography, Paper } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { selectSelectedArea } from '../Redux/Slices/MapPage/huntingAreasSlice';
+import YandexMapMini from '../components/MapPage/YandexMapMini';
+import FavoritesListMini from '../components/MapPage/FavoritesListMini';
+import { WeatherWidget } from '../components/WeatherWidget';
 import { useState, useEffect } from "react";
 import { useAppSelector } from "../Redux/hooks";
-import { useSelector } from "react-redux";
-import { selectSelectedArea } from "../Redux/Slices/MapPage/huntingAreasSlice";
-import YandexMap from "../components/MapPage/YandexMap";
-import { useNavigate } from "react-router-dom";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, IconButton } from "@mui/material";
 import axiosInstance from "../axiosInstance";
+import dayjs from "dayjs";
 import {
-  backpackBoxStyles,
-  cardsGridStyles,
-  commonBoxStyles,
-  dashboardCardStyles,
   dashboardContainerStyles,
   dashboardGridStyles,
-  rightBoxStyles,
-} from "../Styles/DashboardPage.styles";
-import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
-import dayjs from "dayjs";
-import { WeatherWidget } from '../components/WeatherWidget';
-
+  leftColumnStyles,
+  mapInfoStyles,
+  mapContainerStyles,
+  middleColumnStyles,
+  rightColumnStyles,
+  backpackStyles,
+  bottomRowStyles,
+  weatherCalendarStyles
+} from '../Styles/DashboardPage.styles';
 
 export default function Dashboard() {
-  const events = useAppSelector((state) => state.calendar.events);
   const selectedArea = useSelector(selectSelectedArea);
-  const navigate = useNavigate();
-
+  const events = useAppSelector((state) => state.calendar.events);
   const [backpackItems, setBackpackItems] = useState([]);
   const [newItem, setNewItem] = useState("");
-  const [openModal, setOpenModal] = useState(false); 
-  const [editingItem, setEditingItem] = useState(null); 
-  const [weatherData, setWeatherData] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
 
   const upcomingEvent = events
     .filter((event) => dayjs(event.date).isAfter(dayjs()))
@@ -55,26 +45,8 @@ export default function Dashboard() {
         console.error("Ошибка при загрузке рюкзака:", error);
       }
     };
-
     fetchItems();
   }, []);
-
-  useEffect(() => {
-    if (selectedArea && selectedArea.coordinates.length) {
-      const fetchWeather = async () => {
-        const [lat, lon] = selectedArea.coordinates;
-        try {
-          const response = await axiosInstance.get(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=YOUR_API_KEY&units=metric`
-          );
-          setWeatherData(response.data);
-        } catch (error) {
-          console.error("Ошибка при загрузке погоды:", error);
-        }
-      };
-      fetchWeather();
-    }
-  }, [selectedArea]);
 
   const handleAddItem = async () => {
     if (newItem.trim()) {
@@ -84,7 +56,7 @@ export default function Dashboard() {
         });
         setBackpackItems((prev) => [...prev, response.data]);
         setNewItem("");
-        setOpenModal(false); 
+        setOpenModal(false);
       } catch (error) {
         console.error("Ошибка при добавлении вещи в рюкзак:", error);
       }
@@ -105,7 +77,7 @@ export default function Dashboard() {
         );
         setNewItem("");
         setEditingItem(null);
-        setOpenModal(false); // Закрытие модального окна
+        setOpenModal(false);
       } catch (error) {
         console.error("Ошибка при редактировании вещи в рюкзаке:", error);
       }
@@ -124,70 +96,37 @@ export default function Dashboard() {
   return (
     <Box sx={dashboardContainerStyles}>
       <Box sx={dashboardGridStyles}>
-        <Paper sx={commonBoxStyles}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            <Box sx={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
-              <Box sx={{ width: "400px", height: "300px", border: "1px solid #ccc" }}>
-                <YandexMap />
-              </Box>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => navigate("/map")}
-                sx={{ minWidth: "150px" }}
-              >
-                Перейти к карте
-              </Button>
-            </Box>
-
+        {/* Левая колонка */}
+        <Box sx={leftColumnStyles}>
+          {/* Информация о выбранной зоне */}
+          <Paper sx={mapInfoStyles}>
             {selectedArea ? (
-              <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "10px" }}>
-                <Box>
-                  <Typography variant="h6" color="#ffffff">Основная информация</Typography>
-                  <Typography variant="h4" color="#ffffff">{selectedArea.name}</Typography>
-                  <Typography variant="body1" color="#ffffff">{selectedArea.description}</Typography>
-                  <Typography variant="body2" color="#ffffff">Площадь: {selectedArea.areaSize} га</Typography>
-                  <Typography variant="body2" color="#ffffff">Координаты: {selectedArea.coordinates.join(", ")}</Typography>
-                </Box>
-                <Box>
-                  <Typography variant="h6" color="#ffffff">Характеристики местности</Typography>
-                  <Typography variant="body2" color="#ffffff">Тип местности: {selectedArea.terrainType}</Typography>
-                  <Typography variant="body2" color="#ffffff">Ландшафт: {selectedArea.landscape}</Typography>
-                  <Typography variant="body2" color="#ffffff">Высота над уровнем моря: {selectedArea.elevation} м</Typography>
-                  <Typography variant="body2" color="#ffffff">Водные источники: {selectedArea.waterSources.rivers ? "Реки, " : ""}{selectedArea.waterSources.lakes ? "Озера, " : ""}{selectedArea.waterSources.springs ? "Родники" : ""}</Typography>
-                </Box>
-                <Box>
-                  <Typography variant="h6" color="#ffffff">Охота и правила</Typography>
-                  <Typography variant="body2" color="#ffffff">Разрешенные типы охоты: {selectedArea.allowedHuntingTypes.join(", ")}</Typography>
-                  <Typography variant="body2" color="#ffffff">Сезон охоты: {selectedArea.huntingSeasons.start} - {selectedArea.huntingSeasons.end}</Typography>
-                  <Typography variant="body2" color="#ffffff">Разрешенное оружие: {selectedArea.allowedWeapons.join(", ")}</Typography>
-                  <Typography variant="body2" color="#ffffff">Ограничения: {selectedArea.restrictions}</Typography>
-                  <Typography variant="body2" color="#ffffff">Правила: {selectedArea.rules}</Typography>
-                  <Typography variant="body2" color="#ffffff">Необходимые разрешения: {selectedArea.requiredPermits}</Typography>
-                </Box>
-                <Box>
-                  <Typography variant="h6" color="#ffffff">Инфраструктура и контакты</Typography>
-                  <Typography variant="body2" color="#ffffff">Инфраструктура: {selectedArea.infrastructure.roads ? "Дороги, " : ""}{selectedArea.infrastructure.camps ? "Лагеря, " : ""}{selectedArea.infrastructure.parking ? "Парковка" : ""}</Typography>
-                  <Typography variant="body2" color="#ffffff">Контакты администрации: Офис: {selectedArea.adminContacts.office}, Телефон: {selectedArea.adminContacts.email}</Typography>
-                  <Typography variant="body2" color="gray">ID зоны: {selectedArea.id}</Typography>
-                  <Typography variant="body2" color="gray">Создано: {new Date(selectedArea.createdAt).toLocaleDateString()}</Typography>
-                  <Typography variant="body2" color="gray">Обновлено: {new Date(selectedArea.updatedAt).toLocaleDateString()}</Typography>
-                  {weatherData && (
-                    <Box sx={{ marginTop: "10px", color: "#fff" }}>
-                      <Typography variant="body2">Погода: {weatherData.weather[0].description}</Typography>
-                      <Typography variant="body2">Температура: {weatherData.main.temp}°C</Typography>
-                    </Box>
-                  )}
-                </Box>
-              </Box>
+              <>
+                <Typography variant="h6">Основная информация</Typography>
+                <Typography variant="h4">{selectedArea.name}</Typography>
+                <Typography>{selectedArea.description}</Typography>
+                <Typography>Площадь: {selectedArea.areaSize} га</Typography>
+              </>
             ) : (
-              <Typography variant="h6" color="#ffffff">Выберите зону на карте для просмотра информации</Typography>
+              <Typography>Выберите зону на карте</Typography>
             )}
-          </Box>
+          </Paper>
+          
+          {/* Карта */}
+          <Paper sx={mapContainerStyles}>
+            <YandexMapMini />
+          </Paper>
+        </Box>
+
+        {/* Центральная колонка - Избранное */}
+        <Paper sx={middleColumnStyles}>
+          <FavoritesListMini />
         </Paper>
 
-        <Box sx={rightBoxStyles}>
-          <Paper sx={backpackBoxStyles}>
+        {/* Правая колонка */}
+        <Box sx={rightColumnStyles}>
+          {/* Рюкзак */}
+          <Paper sx={backpackStyles}>
             <Typography variant="h6" color="#ffffff" align="center">Рюкзак</Typography>
             <Button sx={{ width: "10px" }} variant="contained" onClick={() => setOpenModal(true)}>+</Button>
             <Box>
@@ -208,8 +147,10 @@ export default function Dashboard() {
               </ul>
             </Box>
           </Paper>
-          <Box sx={cardsGridStyles}>
-            <Paper sx={dashboardCardStyles}>
+
+          {/* Погода и календарь */}
+          <Box sx={bottomRowStyles}>
+            <Paper sx={weatherCalendarStyles}>
               <Typography variant="h6" color="#ffffff" align="center">Календарь</Typography>
               {upcomingEvent ? (
                 <Typography variant="body2" color="#ffffff" align="center" sx={{ marginTop: "0.5rem" }}>
@@ -223,7 +164,7 @@ export default function Dashboard() {
                 </Typography>
               )}
             </Paper>
-            <Paper sx={dashboardCardStyles}>
+            <Paper sx={weatherCalendarStyles}>
               <Typography variant="h6" color="#ffffff" align="center">Погода</Typography>
               <WeatherWidget />
             </Paper>

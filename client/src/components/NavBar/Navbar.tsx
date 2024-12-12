@@ -90,7 +90,7 @@ export default function Navbar({ user, setUser }: NavbarProps) {
               display: { xs: 'none', sm: 'block' }
             }}
           >
-            WildGuide
+            НА ОХОТУ
           </Typography>
         </Stack>
 

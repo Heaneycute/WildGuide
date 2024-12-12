@@ -81,7 +81,7 @@ export default function AnimalsList() {
         marginBottom: 2
       }}>
         <Typography variant="h5" color={currentTheme.palette.text.primary} gutterBottom>
-          Список обитаемых животных в этом мире
+          Список обитаемых животных
         </Typography>
       </Box>
 

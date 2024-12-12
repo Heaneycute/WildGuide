@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Dashboard from "./DashboardPage";
 import styles from "../Styles/HomePage.module.css";
+import { User } from '../types';
+import { Container, Typography, Stack, Paper } from '@mui/material';
 
-const HomePage: React.FC = () => {
+
+type NavbarProps = {
+  user?: User;
+};
+const HomePage: React.FC = ({ user }: NavbarProps) => {
   const [scrollTop, setScrollTop] = useState(0);
 
   const handleScroll = () => {
@@ -28,9 +33,12 @@ const HomePage: React.FC = () => {
               }}
             >
               <div className={styles.layers__caption}>
-                Добро пожаловать на Wild Guide
+              {user && user.username ? `Привет, ${user.username}!` : 
+              'Добро пожаловать!'
+              } 
               </div>
-              <div className={styles.layers__title}>Сообщество охотников</div>
+              <div className={styles.layers__title}>ты на лучшем портале</div>
+              <div className={styles.layers__title}>для охотников</div>
             </div>
             <div
               className={`${styles.layer} ${styles.layers__base}`}
@@ -63,12 +71,21 @@ const HomePage: React.FC = () => {
           }}
         >
           <div className={styles.mainArticleContent}>
-            <h2 className={styles.mainArticleHeader}>Заголовок</h2>
+            <h2 className={styles.mainArticleHeader}>СОБЕРЕМСЯ НА ОХОТУ ВМЕСТЕ</h2>
             <p className={styles.mainArticleParagraph}>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Omnis
-              error provident dignissimos facere. Repellendus tempore autem qui!
-              Quia magnam tempora esse id necessitatibus corrupti mollitia
-              expedita sapiente cum rerum, ut dicta laboriosam!
+            Удобное управление снаряжением при планировании охоты, не надо держать все в голове.
+            </p>
+            <p className={styles.mainArticleParagraph}>
+            Интерактивные карты с актуальной информацией об охотничьих зонах, домиках и маршрутах с отзывами.
+            </p>
+            <p className={styles.mainArticleParagraph}>
+            Инструмент для выбора оружия под конкретные зоны и тип добычи.
+            </p>
+            <p className={styles.mainArticleParagraph}>
+            Отслеживание погодных условий и планирование событий.
+            </p>
+            <p className={styles.mainArticleParagraph}>
+            Возможность делиться опытом и координировать охоту с другими участниками через систему чатов, форумов и личных сообщений. Создание групп охотников для совместных выездов и обмена информацией о местах охоты. 
             </p>
           </div>
         </article>

@@ -38,10 +38,10 @@ export const fetchFavorites = createAsyncThunk(
 // Добавление нового элемента в избранное
 export const addToFavorites = createAsyncThunk(
   'favorites/add',
-  async (data: any, { dispatch, rejectWithValue }) => {
+  async (data: any, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_API}/favorites`, data);
-      await dispatch(fetchFavorites()); // Обновляем весь список после добавления
+      // await dispatch(fetchFavorites()); // Обновляем весь список после добавления
       return response.data;
     } catch (error) {
       return rejectWithValue('Не удалось добавить в избранное');

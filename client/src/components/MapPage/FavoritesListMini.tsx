@@ -14,7 +14,7 @@ const commonBoxStyles = {
   boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
 };
 
-const FavoritesList: React.FC = () => {
+const FavoritesListMini: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const favorites = useSelector(selectAllFavorites);
   const routes = useSelector(selectAllRoutes);
@@ -70,14 +70,7 @@ const FavoritesList: React.FC = () => {
   }
 
   return (
-    <Paper sx={{
-      ...commonBoxStyles,
-      backgroundColor: currentTheme.palette.background.paper,
-      height: '300px',
-      width: '100%'
-    }}>
       <List sx={{
-        height: '100%',
         overflowY: 'auto',
         '&::-webkit-scrollbar': {
           width: '8px'
@@ -118,8 +111,7 @@ const FavoritesList: React.FC = () => {
           </ListItem>
         ))}
       </List>
-    </Paper>
   );
 };
 
-export default FavoritesList;
+export default FavoritesListMini;
