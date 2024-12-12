@@ -86,17 +86,25 @@ export default function MapRoutesList() {
     }));
   };
 
+  const filteredRoutes = routes?.filter(route => {
+    const matchesDifficulty = filterValues.difficulty === 'all' || route.difficulty === filterValues.difficulty;
+    const matchesSeason = filterValues.season === 'all' || route.season === filterValues.season;
+    return matchesDifficulty && matchesSeason;
+  });
+  
+
   return (
     <Paper sx={{
       height: '100%',
+      width: '100%',
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       justifyContent: 'center',
       padding: '20px',
       overflow: 'hidden',
       backgroundColor: currentTheme.palette.background.paper
     }}>
-      <Stack spacing={2} direction="column">
+      <Stack spacing={2} direction="column" sx={{ width: '100%' }}>
         <Typography variant="h5" color={currentTheme.palette.text.primary}>
           Список маршрутов
         </Typography>
@@ -143,13 +151,13 @@ export default function MapRoutesList() {
               <MenuItem value="all">Все сезоны</MenuItem>
               <MenuItem value="spring">Весна</MenuItem>
               <MenuItem value="summer">Лето</MenuItem>
-              <MenuItem value="autumn">Осень</MenuItem>
-              <MenuItem value="winter">Зима</MenuItem>
+              <MenuItem value="fall">Осень</MenuItem>
+              <MenuItem value="зима">Зима</MenuItem>
             </Select>
           </FormControl>
         </Box>
 
-        {routes?.map(route => (
+        {filteredRoutes?.map(route => (
           <Paper 
             key={route.id} 
             elevation={0}

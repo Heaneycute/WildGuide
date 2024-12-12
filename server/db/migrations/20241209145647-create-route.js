@@ -46,7 +46,7 @@ module.exports = {
         comment: 'Расчетное время в минутах'
       },
       season: {
-        type: Sequelize.ENUM('spring', 'summer', 'fall', 'winter'),
+        type: Sequelize.ENUM('spring', 'summer', 'fall', 'зима'),
         allowNull: false,
         comment: 'Сезон использования маршрута'
       },
