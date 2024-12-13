@@ -210,18 +210,6 @@ export default function ZoneInfo() {
                   >
                     <InfoOutlinedIcon fontSize="small" />
                   </IconButton>
-                  <IconButton 
-                    size="small" 
-                    sx={{ color: currentTheme.palette.text.primary }}
-                  >
-                    <StarOutlineIcon fontSize="small" />
-                  </IconButton>
-                  <IconButton 
-                    size="small" 
-                    sx={{ color: currentTheme.palette.text.primary }}
-                  >
-                    <CommentOutlinedIcon fontSize="small" />
-                  </IconButton>
                 </Stack>
               </Box>
             ))}

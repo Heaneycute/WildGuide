@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControl, InputLabel, Select, MenuItem, Stack, Paper } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import StarIcon from '@mui/icons-material/Star';
 import { ThemeContext } from '../../Styles/ThemeContext';
@@ -159,9 +158,6 @@ export default function MapRoutesList() {
                 onClick={() => setSelectedRoute(route)}
               >
                 <InfoOutlinedIcon />
-              </IconButton>
-              <IconButton size="small" sx={{ color: currentTheme.palette.text.primary }}>
-                <CommentOutlinedIcon />
               </IconButton>
             </Box>
           </Paper>
