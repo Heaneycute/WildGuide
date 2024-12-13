@@ -250,25 +250,7 @@ export default function SignupPage({ setUser }: SignupPageProps) {
               >
                 Зарегистрироваться
               </Button>
-              <Divider sx={{ my: 2 }}>или</Divider>
-              <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  startIcon={<Google />}
-                  onClick={() => handleSocialSignup('google')}
-                >
-                  Google
-                </Button>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  startIcon={<GitHub />}
-                  onClick={() => handleSocialSignup('github')}
-                >
-                  GitHub
-                </Button>
-              </Box>
+              
               <Typography align="center" variant="body2">
                 Уже есть аккаунт?{' '}
                 <Button

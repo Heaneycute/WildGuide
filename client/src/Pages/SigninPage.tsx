@@ -206,25 +206,7 @@ export default function SigninPage({ setUser }: SigninPageProps) {
               >
                 Войти
               </Button>
-              <Divider sx={{ my: 2 }}>или</Divider>
-              <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  startIcon={<Google />}
-                  onClick={() => handleSocialLogin('google')}
-                >
-                  Google
-                </Button>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  startIcon={<GitHub />}
-                  onClick={() => handleSocialLogin('github')}
-                >
-                  GitHub
-                </Button>
-              </Box>
+        
               <Typography align="center" variant="body2">
                 Нет аккаунта?{' '}
                 <Button

@@ -378,7 +378,7 @@ export const pinkTheme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#FF80AB",
+          backgroundColor: "#F8BBD0",
           backdropFilter: "blur(10px)",
           borderBottom: "1px solid rgba(219, 112, 147, 0.2)",
           borderRadius: "0 0 16px 16px",
