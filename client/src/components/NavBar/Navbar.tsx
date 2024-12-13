@@ -135,9 +135,6 @@ export default function Navbar({ user, setUser }: NavbarProps) {
             <WeaponIcon />
           </Button>
           
-          <Button color="inherit" component={RouterLink} to="/exemplereduxpage">
-            <ExampleIcon />
-          </Button>
 
           <IconButton onClick={handleThemeMenu}>
             <PaletteIcon />
@@ -148,11 +145,11 @@ export default function Navbar({ user, setUser }: NavbarProps) {
           open={Boolean(themeMenu)}
           onClose={() => setThemeMenu(null)}
         >
-          <MenuItem onClick={() => handleThemeSelect('brown')}>Коричневая</MenuItem>
-          <MenuItem onClick={() => handleThemeSelect('green')}>Зеленая</MenuItem>
-          <MenuItem onClick={() => handleThemeSelect('white')}>Белая</MenuItem>
-          <MenuItem onClick={() => handleThemeSelect('yellow')}>Желтая</MenuItem>
-          <MenuItem onClick={() => handleThemeSelect('pink')}>Розовая</MenuItem>
+          <MenuItem onClick={() => handleThemeSelect('brown')}>Весна</MenuItem>
+          <MenuItem onClick={() => handleThemeSelect('green')}>Лето</MenuItem>
+          <MenuItem onClick={() => handleThemeSelect('white')}>Зима</MenuItem>
+          <MenuItem onClick={() => handleThemeSelect('yellow')}>Осень</MenuItem>
+          <MenuItem onClick={() => handleThemeSelect('pink')}>* Барби</MenuItem>
 
         </Menu>
 

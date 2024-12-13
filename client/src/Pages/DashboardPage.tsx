@@ -127,19 +127,19 @@ export default function Dashboard() {
         <Box sx={rightColumnStyles}>
           {/* Рюкзак */}
           <Paper sx={backpackStyles}>
-            <Typography variant="h6" color="#ffffff" align="center">Рюкзак</Typography>
+            <Typography variant="h6"  align="center">Рюкзак</Typography>
             <Button sx={{ width: "10px" }} variant="contained" onClick={() => setOpenModal(true)}>+</Button>
             <Box>
               <ul>
                 {backpackItems.map((item, index) => (
-                  <li key={index} style={{ color: "#fff", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <li key={index} style={{  display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     {item.item}
                     <Box sx={{ display: "flex", gap: "10px" }}>
                       <IconButton onClick={() => { setNewItem(item.item); setEditingItem(item); setOpenModal(true); }}>
-                        <EditIcon sx={{ opacity: 0.7, color: "#fff" }} />
+                        <EditIcon sx={{ opacity: 0.7}} />
                       </IconButton>
                       <IconButton onClick={() => handleDeleteItem(item.id)}>
-                        <DeleteIcon sx={{ opacity: 0.7, color: "#fff" }} />
+                        <DeleteIcon sx={{ opacity: 0.7 }} />
                       </IconButton>
                     </Box>
                   </li>
@@ -151,21 +151,21 @@ export default function Dashboard() {
           {/* Погода и календарь */}
           <Box sx={bottomRowStyles}>
             <Paper sx={weatherCalendarStyles}>
-              <Typography variant="h6" color="#ffffff" align="center">Календарь</Typography>
+              <Typography variant="h6"  align="center">Календарь</Typography>
               {upcomingEvent ? (
-                <Typography variant="body2" color="#ffffff" align="center" sx={{ marginTop: "0.5rem" }}>
+                <Typography variant="body2"  align="center" sx={{ marginTop: "0.5rem" }}>
                   {`Ближайшее событие: ${upcomingEvent.title}`}
                   <br />
                   {`Дата: ${dayjs(upcomingEvent.date).format("DD.MM.YYYY")}`}
                 </Typography>
               ) : (
-                <Typography variant="body2" color="#ffffff" align="center" sx={{ marginTop: "0.5rem" }}>
+                <Typography variant="body2"  align="center" sx={{ marginTop: "0.5rem" }}>
                   Нет ближайших событий
                 </Typography>
               )}
             </Paper>
             <Paper sx={weatherCalendarStyles}>
-              <Typography variant="h6" color="#ffffff" align="center">Погода</Typography>
+              <Typography variant="h6" align="center">Погода</Typography>
               <WeatherWidget />
             </Paper>
           </Box>

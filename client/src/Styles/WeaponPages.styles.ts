@@ -36,7 +36,7 @@ export const upContentStyles: SxProps = {
   display: "flex",
   flexDirection: "row",
   gap: "20px",
-  height: "calc(100vh - 70px)",
+  height: "80%",
   position: "relative",
   zIndex: 1,
 };
